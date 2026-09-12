@@ -1,6 +1,8 @@
 package io.github.erkamyaman.foldable
 
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
@@ -24,6 +26,13 @@ data class FoldState(
 class Foldable(private val activity: Activity) {
 
     private val tracker = WindowInfoTracker.getOrCreate(activity)
+
+    fun isDeviceFoldable(): Boolean {
+        if (tracker.supportedPostures.isNotEmpty()) return true
+
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+            activity.packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_HINGE_ANGLE)
+    }
 
     fun foldStates(): Flow<FoldState> =
         tracker.windowLayoutInfo(activity).map(::toFoldState).distinctUntilChanged()

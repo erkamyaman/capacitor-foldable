@@ -10,9 +10,14 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "FoldablePlugin"
     public let jsName = "Foldable"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "isDeviceFoldable", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFoldState", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Foldable()
+
+    @objc func isDeviceFoldable(_ call: CAPPluginCall) {
+        call.resolve(["foldable": implementation.isDeviceFoldable()])
+    }
 
     /// - TODO: Return a real posture once Apple ships public foldable APIs.
     @objc func getFoldState(_ call: CAPPluginCall) {

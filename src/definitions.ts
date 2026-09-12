@@ -46,6 +46,20 @@ export interface FoldState {
 
 export interface FoldablePlugin {
   /**
+   * Whether this device has a fold at all.
+   *
+   * Use it to decide once, at startup, whether any fold-aware layout work is
+   * worth doing. A fold state of `'flat'` cannot answer this on its own: an
+   * ordinary phone and a foldable shut on its cover display both report
+   * `{ state: 'flat' }`.
+   *
+   * Always `false` on iOS and web.
+   *
+   * @since 0.0.1
+   */
+  isDeviceFoldable(): Promise<{ foldable: boolean }>;
+
+  /**
    * Read the current fold state of the device.
    *
    * Resolves with `{ state: 'flat' }` on devices and platforms that expose no

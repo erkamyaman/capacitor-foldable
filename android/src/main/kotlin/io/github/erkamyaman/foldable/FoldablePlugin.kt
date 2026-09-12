@@ -45,6 +45,12 @@ class FoldablePlugin : Plugin() {
     }
 
     @PluginMethod
+    fun isDeviceFoldable(call: PluginCall) {
+        val foldable = implementation?.isDeviceFoldable() ?: false
+        call.resolve(JSObject().put("foldable", foldable))
+    }
+
+    @PluginMethod
     fun getFoldState(call: PluginCall) {
         lastKnownState?.let {
             call.resolve(it.toJSObject())

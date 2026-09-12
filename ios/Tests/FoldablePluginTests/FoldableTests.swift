@@ -2,6 +2,10 @@ import XCTest
 @testable import FoldablePlugin
 
 class FoldableTests: XCTestCase {
+    func testIsDeviceFoldableReportsFalseStub() {
+        XCTAssertFalse(Foldable().isDeviceFoldable())
+    }
+
     func testGetFoldStateReportsFlatStub() {
         let implementation = Foldable()
 

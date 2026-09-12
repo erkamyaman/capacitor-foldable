@@ -53,6 +53,10 @@ payload after a display switch. Treat the event as the current state rather than
 ```typescript
 import { Foldable } from 'capacitor-foldable';
 
+// Decide once whether any fold-aware work is worth doing.
+const { foldable } = await Foldable.isDeviceFoldable();
+if (!foldable) return;
+
 const { state, hingeOrientation, occludedBounds } = await Foldable.getFoldState();
 
 if (state === 'half-opened' && hingeOrientation === 'vertical') {
@@ -74,6 +78,10 @@ await handle.remove();
 
 ### Notes on the Android behaviour
 
+- `isDeviceFoldable()` reads `WindowInfoTracker.supportedPostures`, falling back to the
+  `FEATURE_SENSOR_HINGE_ANGLE` system feature on API 30+. You need it because a fold state of
+  `'flat'` is ambiguous: an ordinary phone and a foldable shut on its cover display produce the
+  same payload.
 - `hingeOrientation` is relative to the **window**, not the device. The hinge does not move when
   you rotate, but the window does, so the same physical posture reports `vertical` in portrait and
   `horizontal` in landscape. That is what you want: a half-opened device is a book layout in portrait
@@ -122,6 +130,7 @@ Note that the emulator's hinge is seamless (`hw.sensor.hinge.areas` has width 0)
 
 <docgen-index>
 
+* [`isDeviceFoldable()`](#isdevicefoldable)
 * [`getFoldState()`](#getfoldstate)
 * [`addListener('foldStateChange', ...)`](#addlistenerfoldstatechange-)
 * [Interfaces](#interfaces)
@@ -130,6 +139,28 @@ Note that the emulator's hinge is seamless (`hw.sensor.hinge.areas` has width 0)
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### isDeviceFoldable()
+
+```typescript
+isDeviceFoldable() => Promise<{ foldable: boolean; }>
+```
+
+Whether this device has a fold at all.
+
+Use it to decide once, at startup, whether any fold-aware layout work is
+worth doing. A fold state of `'flat'` cannot answer this on its own: an
+ordinary phone and a foldable shut on its cover display both report
+`{ state: 'flat' }`.
+
+Always `false` on iOS and web.
+
+**Returns:** <code>Promise&lt;{ foldable: boolean; }&gt;</code>
+
+**Since:** 0.0.1
+
+--------------------
+
 
 ### getFoldState()
 

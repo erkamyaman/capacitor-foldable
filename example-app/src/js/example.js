@@ -111,6 +111,9 @@ window.visualViewport?.addEventListener('resize', () => {
   console.log(TAG, `keyboard ${open ? 'open' : 'closed'} inset=${inset} visualViewport=${Math.round(window.visualViewport.width)}x${Math.round(window.visualViewport.height)}`);
 });
 
+const { foldable } = await Foldable.isDeviceFoldable();
+console.log(TAG, `isDeviceFoldable() → ${foldable}`);
+
 console.log(TAG, 'booting, calling getFoldState()');
 
 try {
