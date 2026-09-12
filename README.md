@@ -12,15 +12,20 @@ around the fold instead of underneath it.
 | -------- | ------ | --------- |
 | Android  | Implemented | [`androidx.window`](https://developer.android.com/jetpack/androidx/releases/window) `WindowInfoTracker` |
 | iOS      | Stub | Placeholder pending Apple's foldable APIs. `getFoldState()` always resolves to `{ state: 'flat' }` and `foldStateChange` never fires. |
-| Web      | Stub | No fold API exists. `getFoldState()` always resolves to `{ state: 'flat' }` and `foldStateChange` never fires. |
+| Web      | Stub | No web fold API exists. Keeps `ionic serve` and dev servers working instead of throwing `Unimplemented`. |
 
-iOS support is a placeholder pending Apple's foldable APIs. Nothing here reads
-private or unreleased Apple SDKs; the iOS source is marked with `TODO`s and will
-be filled in once public APIs ship.
+Both stubs resolve rather than throw, so you can call `getFoldState()`
+unconditionally and treat `'flat'` as the "nothing to work around" case, and
+`isDeviceFoldable()` returns `false`.
 
-Because every platform resolves `getFoldState()` and no platform throws
-`Unimplemented`, you can call it unconditionally and treat `'flat'` as the
-"nothing to work around" case.
+The iOS source is marked with `TODO`s and reads no private or unreleased Apple
+SDKs; it will be filled in once public APIs ship.
+
+There is no web fallback to reach for in the meantime. Measured in Chrome 133's
+Android WebView: `navigator.devicePosture` is undefined, `visualViewport.segments`
+is undefined, and `(device-posture: ...)` and `(horizontal-viewport-segments: ...)`
+never match, not even the values a non-folding display should satisfy. A native
+plugin is currently the only way to read posture.
 
 ## Install
 

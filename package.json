@@ -7,15 +7,16 @@
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
-    "android/src/main/",
+    "CapacitorFoldable.podspec",
+    "LICENSE",
+    "Package.swift",
     "android/build.gradle",
+    "android/src/main/",
     "dist/",
     "ios/Sources",
-    "ios/Tests",
-    "Package.swift",
-    "CapacitorFoldable.podspec"
+    "ios/Tests"
   ],
-  "author": "Kam <erkamyaman35@gmail.com>",
+  "author": "Erkam Yaman <erkamyaman35@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -27,7 +28,18 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "foldable",
+    "fold",
+    "foldables",
+    "hinge",
+    "dual-screen",
+    "posture",
+    "large-screen",
+    "android",
+    "ios",
+    "pixel-fold",
+    "iphone-duo"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
