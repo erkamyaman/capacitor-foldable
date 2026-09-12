@@ -2,24 +2,248 @@
 <html lang="en" dir="ltr" class="hydrated">
   <head>
     <meta charset="UTF-8" />
-    <title>Example Capacitor App</title>
+    <title>capacitor-foldable</title>
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <meta name="format-detection" content="telephone=no" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --ink: #16181d;
+        --muted: #6b7280;
+        --ground: #f4f4f5;
+        --card: #ffffff;
+        --line: #e4e4e7;
+        --accent: #2563eb;
+        --accent-ink: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #f3f4f6;
+          --muted: #9ca3af;
+          --ground: #0e0f12;
+          --card: #1a1c21;
+          --line: #2d2f36;
+          --accent: #60a5fa;
+          --accent-ink: #0e0f12;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font: 14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: var(--ink);
+        background: var(--ground);
+      }
+      #app {
+        display: grid;
+        grid-template-rows: 1fr;
+        gap: 12px;
+        min-height: 100dvh;
+        padding: 12px;
+        padding-top: calc(env(safe-area-inset-top) + 12px);
+      }
+      body.tabletop #app {
+        grid-template-rows: 1fr 1fr;
+        height: 100dvh;
+      }
+      body.book #app {
+        grid-template-columns: 1fr 1fr;
+        height: 100dvh;
+      }
+      .pane {
+        min-height: 0;
+        overflow-y: auto;
+      }
+      body:not(.tabletop):not(.book) .pane {
+        overflow-y: visible;
+      }
+      h1 {
+        font-size: 16px;
+        margin: 4px 0 2px;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 12px;
+      }
+      .card:last-child {
+        margin-bottom: 0;
+      }
+      .state {
+        font-size: 24px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+      dl {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 4px 14px;
+        margin: 0;
+      }
+      dt {
+        color: var(--muted);
+      }
+      dd {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+      }
+      h2 {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--muted);
+        margin: 0 0 10px;
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 10px 0 4px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        font: inherit;
+        color: var(--ink);
+        background: var(--ground);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: 2px solid var(--accent);
+        outline-offset: -1px;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 72px;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 14px;
+      }
+      button {
+        font: inherit;
+        font-weight: 600;
+        border: 0;
+        border-radius: 8px;
+        padding: 11px 18px;
+        background: var(--accent);
+        color: var(--accent-ink);
+      }
+      button.ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--line);
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-variant-numeric: tabular-nums;
+      }
+      li {
+        padding: 6px 0;
+        border-top: 1px solid var(--line);
+      }
+      li:first-child {
+        border-top: 0;
+      }
+      time {
+        color: var(--muted);
+        margin-right: 10px;
+      }
+      #hinge {
+        position: fixed;
+        background: color-mix(in srgb, var(--accent) 30%, transparent);
+        border: 1px solid var(--accent);
+        pointer-events: none;
+        z-index: 10;
+      }
+    </style>
   </head>
   <body>
-    <main>
-      <h1>Capacitor Test Plugin Project</h1>
-      <p>
-        This project can be used to test out the functionality of your plugin. Nothing in the
-        <em>example-app/</em> folder will be published to npm when using this template, so you can create away!
-      </p>
-      <label for="echoInput">Echo Text:</label>
-      <input type="text" id="echoInput" name="echoInput" value="Hello World!" />
-      <button onclick="testEcho()">Click Me!</button>
-    </main>
+    <div id="app">
+      <section class="pane" id="paneTop">
+        <h1>capacitor-foldable</h1>
+        <p class="sub" id="layoutNote">Fold the device to see the layout react.</p>
+
+        <div class="card">
+          <p class="state" id="state">…</p>
+          <dl>
+            <dt>hingeOrientation</dt>
+            <dd id="orientation">—</dd>
+            <dt>occludedBounds</dt>
+            <dd id="bounds">—</dd>
+            <dt>window</dt>
+            <dd id="window">—</dd>
+            <dt>rotation</dt>
+            <dd id="rotation">—</dd>
+            <dt>keyboard</dt>
+            <dd id="keyboard">closed</dd>
+          </dl>
+        </div>
+
+        <div class="card">
+          <h2>foldStateChange events</h2>
+          <ul id="log">
+            <li>Waiting…</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="pane" id="paneBottom">
+        <div class="card">
+          <h2>Compose</h2>
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Ada Lovelace" autocomplete="name" />
+
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="ada@example.com" autocomplete="email" inputmode="email" />
+
+          <label for="topic">Topic</label>
+          <select id="topic">
+            <option>Bug report</option>
+            <option>Feature request</option>
+            <option>Question</option>
+          </select>
+
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Type here and watch the keyboard open…"></textarea>
+
+          <div class="row">
+            <button id="send" type="button">Send</button>
+            <button id="clear" type="button" class="ghost">Clear</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Submitted</h2>
+          <ul id="sent">
+            <li>Nothing yet</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <div id="hinge" hidden></div>
 
     <script src="./js/example.js" type="module"></script>
   </body>

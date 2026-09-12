@@ -2,14 +2,13 @@ import XCTest
 @testable import FoldablePlugin
 
 class FoldableTests: XCTestCase {
-    func testEcho() {
-        // This is an example of a functional test case for a plugin.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-
+    func testGetFoldStateReportsFlatStub() {
         let implementation = Foldable()
-        let value = "Hello, World!"
-        let result = implementation.echo(value)
 
-        XCTAssertEqual(value, result)
+        let result = implementation.getFoldState()
+
+        XCTAssertEqual(result["state"] as? String, "flat")
+        XCTAssertNil(result["hingeOrientation"])
+        XCTAssertNil(result["occludedBounds"])
     }
 }
