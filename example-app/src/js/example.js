@@ -4,6 +4,7 @@ const TAG = '[foldable]';
 
 const $ = (id) => document.getElementById(id);
 const els = {
+  foldable: $('foldable'),
   state: $('state'),
   orientation: $('orientation'),
   hingeBounds: $('hingeBounds'),
@@ -134,7 +135,8 @@ window.visualViewport?.addEventListener('resize', () => {
   console.log(TAG, `keyboard ${open ? 'open' : 'closed'} inset=${inset} visualViewport=${Math.round(window.visualViewport.width)}x${Math.round(window.visualViewport.height)}`);
 });
 
-const { foldable } = await Foldable.isDeviceFoldable();
+const { foldable, supportsTabletop } = await Foldable.isDeviceFoldable();
+els.foldable.textContent = foldable ? `yes${supportsTabletop ? ' · tabletop capable' : ''}` : 'no';
 console.log(TAG, `isDeviceFoldable() → ${foldable}`);
 
 await installFoldablePolyfill();
