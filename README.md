@@ -25,17 +25,13 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 ## Do you need this plugin?
 
-Web views already resize with the window and expose `env(safe-area-inset-*)`, so a responsive layout that pads with every safe-area inset adapts to foldables, iPhone Duo included, without any plugin.
+Web views already resize with the window, so a responsive layout that pads with every safe-area inset adapts to foldables without a plugin. Use this one when your app needs to know what CSS can't tell it:
 
-Use this plugin when your app needs to know something CSS can't tell it:
-
-- **Where the fold is**, and whether it splits the screen: `getFoldState()`, `window.viewport.segments`, or CSS variables and classes.
-- **How the device is held**, folded like a laptop or a book: `getFoldState().posture`, `navigator.devicePosture`.
-- **The hinge angle**, for effects and interactions: `getHingeAngle()`.
-- **Outer or inner display, and Material window size classes**: `getSizeClass()`.
-- **The outer display on Android foldables**: rear display and dual-screen modes.
-
-Google Play ranks apps that follow its large screen quality guidelines higher and marks them with an "Optimized for large screens" badge, so getting foldables right also pays off in the store.
+- **Where the fold is**, and whether it splits the screen.
+- **How the device is held**: flat, tabletop or book.
+- **The hinge angle**, for effects and interactions.
+- **Outer or inner display**, and Material window size classes.
+- **The outer display on Android foldables**: rear display and dual screen.
 
 ## Installation
 
@@ -49,62 +45,18 @@ npx cap sync
 ```typescript
 import { Foldable } from 'capacitor-foldable';
 
-const { foldable } = await Foldable.isDeviceFoldable();
-
-if (foldable) {
-  Foldable.addListener('foldStateChange', ({ state, hingeOrientation }) => {
-    // update your layout
-  });
-}
-```
-
-## Examples
-
-Tabletop (video on top, controls below) or book (list on the left, detail on the right):
-```typescript
 const { posture } = await Foldable.getFoldState(); // 'flat' | 'tabletop' | 'book'
-```
 
-Keep content out of the hinge:
-```typescript
-if (occludedBounds) {
-  el.style.marginTop = `${occludedBounds.y + occludedBounds.height}px`;
-}
-```
-
-Outer or inner display, the way Apple's iPhone Duo guidelines recommend telling them apart:
-```typescript
-const { horizontal } = await Foldable.getSizeClass(); // 'compact' on the outer display, 'regular' on the inner one
-```
-
-Material window size classes, for navigation that changes from a bottom bar to a rail to a drawer:
-```typescript
-const { widthClass } = await Foldable.getSizeClass(); // 'compact' | 'medium' | 'expanded' | 'large' | 'extraLarge'
-```
-
-Show something on the outer display of an Android foldable while the app stays on the inner one:
-```typescript
-const { dualScreen } = await Foldable.getDisplayModes();
-
-if (dualScreen === 'available') {
-  await Foldable.startDualScreen({ url: 'cover.html' });
-}
-```
-
-Or move the whole app to the outer display, for selfies with the rear cameras, with `startRearDisplay()`.
-
-Hinge angle (`180` when flat, `null` without a hinge sensor):
-```typescript
-const { angle } = await Foldable.getHingeAngle();
-
-Foldable.addListener('hingeAngleChange', ({ angle }) => {
-  lid.style.transform = `rotateX(${180 - angle}deg)`;
+Foldable.addListener('foldStateChange', ({ posture }) => {
+  document.documentElement.dataset.posture = posture;
 });
 ```
 
+More in [Examples](docs/examples.md).
+
 ## Web standard APIs
 
-Chrome ships the [Device Posture API](https://developer.mozilla.org/docs/Web/API/Device_Posture_API) and the [Viewport Segments API](https://developer.mozilla.org/docs/Web/API/Viewport_Segments_API), but Android's WebView has both turned off, so they are missing inside Capacitor apps. `installFoldablePolyfill()` fills them in from the native fold state, so you can write the same code that runs in Chrome:
+Chrome ships the [Device Posture API](https://developer.mozilla.org/docs/Web/API/Device_Posture_API) and the [Viewport Segments API](https://developer.mozilla.org/docs/Web/API/Viewport_Segments_API), but Android's WebView has both turned off. `installFoldablePolyfill()` fills them in from the native fold state, and mirrors the CSS features as classes and variables on `<html>`:
 
 ```typescript
 import { installFoldablePolyfill } from 'capacitor-foldable';
@@ -112,77 +64,22 @@ import { installFoldablePolyfill } from 'capacitor-foldable';
 await installFoldablePolyfill();
 
 navigator.devicePosture.type; // 'continuous' | 'folded'
-navigator.devicePosture.addEventListener('change', updateLayout);
-
-window.viewport.segments; // DOMRect[], two entries when the fold splits the web view
+window.viewport.segments; // two DOMRects when the fold splits the web view
 ```
-
-It runs in native apps only. The JavaScript APIs step aside once a web view enables them natively. On iOS it reports an unfolded device until iPhone Duo support lands.
-
-### CSS
-
-CSS media features and `env()` can't be polyfilled, so `installFoldablePolyfill()` also mirrors them as classes and custom properties on `<html>`, kept up to date as the device folds and the window resizes:
 
 | Standard CSS | With the polyfill |
 | --- | --- |
 | `@media (device-posture: folded)` | `.device-posture-folded` |
-| `@media (device-posture: continuous)` | `.device-posture-continuous` |
 | `@media (horizontal-viewport-segments: 2)` | `.horizontal-viewport-segments-2` |
 | `@media (vertical-viewport-segments: 2)` | `.vertical-viewport-segments-2` |
 | `env(viewport-segment-width 0 0)` | `var(--viewport-segment-width-0-0)` |
 
-Every `env(viewport-segment-*)` value (`top`, `left`, `bottom`, `right`, `width` and `height`) has a matching variable. A book layout that keeps content off a vertical fold:
+## Guides
 
-```css
-.horizontal-viewport-segments-2 .layout {
-  display: grid;
-  grid-template-columns:
-    var(--viewport-segment-width-0-0)
-    calc(var(--viewport-segment-left-1-0) - var(--viewport-segment-right-0-0))
-    var(--viewport-segment-width-1-0);
-}
-```
-
-> [!NOTE]
-> `window.viewport.segments` has no change event of its own. Read it again on the `devicePosture` `change` event and on `resize`.
-
-> [!NOTE]
-> `hingeOrientation` and `hingeBounds` rotate with the window, so on a foldable `foldStateChange` also fires when the device rotates.
-
-> [!NOTE]
-> A foldable shut on its cover display reports `flat`, same as a regular phone. Use `isDeviceFoldable()` to tell them apart.
-
-## Layout tips
-
-These follow Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) guidelines and apply to Android foldables too.
-
-- **Pad with every safe-area inset, not only the top one.** On iPhone Duo the status bar and toolbars move to the side of the display, and foldable cutouts are rarely symmetric. Prefer Capacitor's injected `--safe-area-inset-*` variables (Capacitor 8.3 and later), because `env(safe-area-inset-*)` returns wrong values in Android WebView before version 140:
-  ```css
-  padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
-  padding-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
-  padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
-  padding-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
-  ```
-- **Don't rely on orientation locks.** iPhone Duo's inner display ignores them, and so does Android 17 for apps targeting API level 37 on any display wider than 600dp: `android:screenOrientation`, `resizeableActivity`, aspect ratio limits and `@capacitor/screen-orientation`'s `lock()` all stop applying there. Games are exempt through `android:appCategory`, and Google Play requires API level 37 from August 2027.
-- **Keep buttons and other interactive elements off the fold** while `isSeparating` is `true`. Scrolling content can cross it.
-- **Prefer an even number of grid columns**, so content divides cleanly at the fold.
-- **Make small adjustments as the device folds** instead of rearranging the whole layout.
-
-## Testing on Android
-
-- **Emulator.** Create a foldable virtual device in Android Studio, such as Pixel 9 Pro Fold, and use its fold and unfold controls. From a terminal, `adb emu fold` and `adb emu unfold` do the same, and `adb emu sensor set hinge-angle0 90` sets the hinge angle.
-- **Any window size.** The Resizable emulator switches between phone, foldable and tablet sizes without restarting the app, which exercises `sizeClassChange`.
-- **Android 17 orientation rules.** Turn them on for your app without targeting API level 37: `adb shell am compat enable UNIVERSAL_RESIZABLE_BY_DEFAULT your.app.id`.
-- **Rear display and dual-screen modes** need a foldable that offers them, such as a Pixel Fold. `getDisplayModes()` tells you whether the device you are on does.
-
-## Roadmap: iPhone Duo
-
-iPhone Duo support needs the iOS 27.1 SDK, which ships with Xcode 27.1. Planned:
-
-- `getFoldState()` and `window.viewport.segments` from the fold's reserved region.
-- `getHingeAngle()` and `hingeAngleChange` from the hinge.
-- `activeDisplay` (inner or outer), and `cameraBounds` from the camera reserved regions, on `FoldState`. Android already reports `cameraBounds` from the display cutouts.
-- **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` will report `{ verticalBarEdge: 'leading' | 'trailing' | null }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android.
+- [Examples](docs/examples.md)
+- [Layout tips](docs/layout-tips.md)
+- [Testing on Android](docs/testing-android.md)
+- [Roadmap: iPhone Duo](docs/roadmap-iphone-duo.md)
 
 ## API
 
