@@ -88,7 +88,7 @@ navigator.devicePosture.addEventListener('change', updateLayout);
 window.viewport.segments; // DOMRect[], two entries when the fold splits the web view
 ```
 
-It only runs on Android, and it leaves native implementations alone, so it steps aside once WebView enables the APIs.
+It runs in native apps only, and it leaves native implementations alone, so it steps aside once a web view enables the APIs. On iOS it reports an unfolded device until iPhone Duo support lands.
 
 > [!NOTE]
 > Only the JavaScript APIs are filled in. CSS `@media (device-posture)`, `@media (horizontal-viewport-segments)`, `@media (vertical-viewport-segments)` and `env(viewport-segment-*)` can't be polyfilled.
@@ -101,6 +101,26 @@ It only runs on Android, and it leaves native implementations alone, so it steps
 
 > [!NOTE]
 > A foldable shut on its cover display reports `flat`, same as a regular phone. Use `isDeviceFoldable()` to tell them apart.
+
+## Layout tips
+
+These follow Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) guidelines and apply to Android foldables too.
+
+- **Pad with every safe-area inset, not only the top one.** On iPhone Duo the status bar and toolbars move to the side of the display:
+  ```css
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  ```
+- **Keep buttons and other interactive elements off the fold** while `isSeparating` is `true`. Scrolling content can cross it.
+- **Prefer an even number of grid columns**, so content divides cleanly at the fold.
+- **Make small adjustments as the device folds** instead of rearranging the whole layout.
+
+## Roadmap: iPhone Duo
+
+iPhone Duo support needs the iOS 27.1 SDK, which ships with Xcode 27.1. Planned:
+
+- `getFoldState()` and `window.viewport.segments` from the fold's reserved region.
+- `getHingeAngle()` and `hingeAngleChange` from the hinge.
+- **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` will report `{ verticalBarEdge: 'leading' | 'trailing' | null }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android.
 
 ## API
 

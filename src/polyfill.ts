@@ -44,7 +44,7 @@ class DevicePosturePolyfill extends EventTarget implements DevicePosture {
 }
 
 export async function install(plugin: FoldablePlugin): Promise<void> {
-  if (Capacitor.getPlatform() !== 'android') return;
+  if (!Capacitor.isNativePlatform()) return;
 
   let fold: FoldState | null = null;
 

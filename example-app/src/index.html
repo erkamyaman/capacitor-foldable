@@ -44,8 +44,8 @@
         grid-template-rows: 1fr;
         gap: 12px;
         min-height: 100dvh;
-        padding: 12px;
-        padding-top: calc(env(safe-area-inset-top) + 12px);
+        padding: calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 12px)
+          calc(env(safe-area-inset-bottom) + 12px) calc(env(safe-area-inset-left) + 12px);
       }
       body.tabletop #app {
         grid-template-rows: 1fr 1fr;
