@@ -8,6 +8,7 @@ const els = {
   orientation: $('orientation'),
   hingeBounds: $('hingeBounds'),
   bounds: $('bounds'),
+  sizeClass: $('sizeClass'),
   angle: $('angle'),
   posture: $('posture'),
   segments: $('segments'),
@@ -139,6 +140,19 @@ console.log(TAG, `polyfill installed: devicePosture=${navigator.devicePosture?.t
 navigator.devicePosture?.addEventListener('change', () => {
   console.log(TAG, `devicePosture change → ${navigator.devicePosture.type} segments=${window.viewport.segments.length}`);
   renderWebApis();
+});
+
+const renderSizeClass = ({ horizontal, vertical }) => {
+  els.sizeClass.textContent = `${horizontal} width · ${vertical} height`;
+};
+
+const sizeClass = await Foldable.getSizeClass();
+console.log(TAG, `getSizeClass() → ${JSON.stringify(sizeClass)}`);
+renderSizeClass(sizeClass);
+
+await Foldable.addListener('sizeClassChange', (next) => {
+  console.log(TAG, `sizeClassChange: ${JSON.stringify(next)}`);
+  renderSizeClass(next);
 });
 
 const { angle } = await Foldable.getHingeAngle();

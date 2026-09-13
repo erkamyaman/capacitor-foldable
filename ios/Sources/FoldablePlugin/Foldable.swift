@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 /// Stub implementation.
 ///
@@ -17,5 +18,13 @@ import Foundation
 
     @objc public func getHingeAngle() -> [String: Any] {
         return ["angle": NSNull()]
+    }
+
+    @objc public func sizeClass(horizontal: UIUserInterfaceSizeClass, vertical: UIUserInterfaceSizeClass) -> [String: String] {
+        return ["horizontal": name(of: horizontal), "vertical": name(of: vertical)]
+    }
+
+    private func name(of sizeClass: UIUserInterfaceSizeClass) -> String {
+        return sizeClass == .regular ? "regular" : "compact"
     }
 }

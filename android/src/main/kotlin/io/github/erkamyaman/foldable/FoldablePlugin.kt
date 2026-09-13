@@ -30,11 +30,15 @@ class FoldablePlugin : Plugin() {
     private var lastKnownState: FoldState? = null
     private var hingeAngleJob: Job? = null
     private var lastKnownAngle: Float? = null
+    private var lastSizeClass: SizeClass? = null
 
     override fun load() {
         val activity = this.activity ?: return
         val implementation = Foldable(activity, bridge.webView)
         this.implementation = implementation
+
+        lastSizeClass = implementation.sizeClass()
+        bridge.webView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> notifySizeClassIfChanged() }
 
         val owner = activity as? LifecycleOwner ?: return
         scope.launch {
@@ -118,6 +122,20 @@ class FoldablePlugin : Plugin() {
         }
     }
 
+    @PluginMethod
+    fun getSizeClass(call: PluginCall) {
+        val sizeClass = implementation?.sizeClass() ?: sizeClassOf(0f, 0f)
+        call.resolve(sizeClass.toJSObject())
+    }
+
+    private fun notifySizeClassIfChanged() {
+        val sizeClass = implementation?.sizeClass() ?: return
+        if (sizeClass == lastSizeClass) return
+
+        lastSizeClass = sizeClass
+        notifyListeners(SIZE_CLASS_CHANGE, sizeClass.toJSObject())
+    }
+
     private fun updateHingeAngleUpdates() {
         if (!hasListeners(HINGE_ANGLE_CHANGE)) {
             hingeAngleJob?.cancel()
@@ -155,6 +173,11 @@ class FoldablePlugin : Plugin() {
         occludedBounds?.let { put("occludedBounds", it.toJSObject()) }
     }
 
+    private fun SizeClass.toJSObject(): JSObject = JSObject().apply {
+        put("horizontal", horizontal)
+        put("vertical", vertical)
+    }
+
     private fun FoldBounds.toJSObject(): JSObject = JSObject().apply {
         put("x", x)
         put("y", y)
@@ -166,5 +189,6 @@ class FoldablePlugin : Plugin() {
         const val FIRST_EMISSION_TIMEOUT_MS = 1_000L
         const val HINGE_ANGLE_CHANGE = "hingeAngleChange"
         const val HINGE_ANGLE_FRAME_MS = 16L
+        const val SIZE_CLASS_CHANGE = "sizeClassChange"
     }
 }

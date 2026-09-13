@@ -1,3 +1,4 @@
+import UIKit
 import XCTest
 @testable import FoldablePlugin
 
@@ -15,6 +16,13 @@ class FoldableTests: XCTestCase {
         XCTAssertEqual(result["isSeparating"] as? Bool, false)
         XCTAssertNil(result["hingeOrientation"])
         XCTAssertNil(result["occludedBounds"])
+    }
+
+    func testSizeClassNamesUIKitSizeClasses() {
+        let result = Foldable().sizeClass(horizontal: .regular, vertical: .compact)
+
+        XCTAssertEqual(result["horizontal"], "regular")
+        XCTAssertEqual(result["vertical"], "compact")
     }
 
     func testGetHingeAngleReportsNullStub() {

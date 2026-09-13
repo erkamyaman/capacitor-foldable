@@ -12,6 +12,7 @@ import android.view.View
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
+import androidx.window.layout.WindowMetricsCalculator
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -34,6 +35,46 @@ data class FoldState(
     }
 }
 
+data class SizeClass(val horizontal: String, val vertical: String)
+
+private const val REGULAR_WIDTH_DP = 600f
+private const val REGULAR_HEIGHT_DP = 480f
+
+internal fun sizeClassOf(widthDp: Float, heightDp: Float) = SizeClass(
+    horizontal = if (widthDp >= REGULAR_WIDTH_DP) "regular" else "compact",
+    vertical = if (heightDp >= REGULAR_HEIGHT_DP) "regular" else "compact"
+)
+
+internal fun foldStateOf(fold: FoldingFeature?, density: Float, offsetX: Int, offsetY: Int): FoldState {
+    fold ?: return FoldState.FLAT
+
+    val state = when (fold.state) {
+        FoldingFeature.State.HALF_OPENED -> "half-opened"
+        else -> "flat"
+    }
+
+    val orientation = when (fold.orientation) {
+        FoldingFeature.Orientation.HORIZONTAL -> "horizontal"
+        else -> "vertical"
+    }
+
+    val rect = fold.bounds
+    val bounds = FoldBounds(
+        x = ((rect.left - offsetX) / density).roundToInt(),
+        y = ((rect.top - offsetY) / density).roundToInt(),
+        width = ((rect.right - rect.left) / density).roundToInt(),
+        height = ((rect.bottom - rect.top) / density).roundToInt()
+    )
+
+    val occluded = if (fold.occlusionType == FoldingFeature.OcclusionType.FULL) {
+        bounds
+    } else {
+        null
+    }
+
+    return FoldState(state, orientation, bounds, occluded, fold.isSeparating)
+}
+
 class Foldable(private val activity: Activity, private val webView: View) {
 
     private val tracker = WindowInfoTracker.getOrCreate(activity)
@@ -53,6 +94,12 @@ class Foldable(private val activity: Activity, private val webView: View) {
     }
 
     fun hasHingeSensor(): Boolean = hingeSensor != null
+
+    fun sizeClass(): SizeClass {
+        val bounds = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity).bounds
+        val density = activity.resources.displayMetrics.density
+        return sizeClassOf(bounds.width() / density, bounds.height() / density)
+    }
 
     fun foldStates(): Flow<FoldState> =
         tracker.windowLayoutInfo(activity).map(::toFoldState).distinctUntilChanged()
@@ -75,38 +122,12 @@ class Foldable(private val activity: Activity, private val webView: View) {
     }
 
     private fun toFoldState(info: WindowLayoutInfo): FoldState {
-        val fold = info.displayFeatures.filterIsInstance<FoldingFeature>().firstOrNull()
-            ?: return FoldState.FLAT
-
-        val state = when (fold.state) {
-            FoldingFeature.State.HALF_OPENED -> "half-opened"
-            else -> "flat"
-        }
-
-        val orientation = when (fold.orientation) {
-            FoldingFeature.Orientation.HORIZONTAL -> "horizontal"
-            else -> "vertical"
-        }
-
-        val bounds = toCssPixels(fold.bounds)
-
-        val occluded = if (fold.occlusionType == FoldingFeature.OcclusionType.FULL) {
-            bounds
-        } else {
-            null
-        }
-
-        return FoldState(state, orientation, bounds, occluded, fold.isSeparating)
-    }
-
-    private fun toCssPixels(bounds: android.graphics.Rect): FoldBounds {
-        val density = activity.resources.displayMetrics.density
         val webViewOffset = IntArray(2).also(webView::getLocationInWindow)
-        return FoldBounds(
-            x = ((bounds.left - webViewOffset[0]) / density).roundToInt(),
-            y = ((bounds.top - webViewOffset[1]) / density).roundToInt(),
-            width = (bounds.width() / density).roundToInt(),
-            height = (bounds.height() / density).roundToInt()
+        return foldStateOf(
+            info.displayFeatures.filterIsInstance<FoldingFeature>().firstOrNull(),
+            activity.resources.displayMetrics.density,
+            webViewOffset[0],
+            webViewOffset[1]
         )
     }
 }

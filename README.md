@@ -20,8 +20,19 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
 | Android  | Supported | API 24, `compileSdk` 34 |
-| iOS      | Not yet, waiting on Apple's iPhone Duo SDK | iOS 15 |
+| iOS      | Size classes only; fold data waits on Apple's iPhone Duo SDK | iOS 15 |
 | Web      | Stub, returns `flat` | |
+
+## Do you need this plugin?
+
+Web views already resize with the window and expose `env(safe-area-inset-*)`, so a responsive layout that pads with every safe-area inset adapts to foldables, iPhone Duo included, without any plugin.
+
+Use this plugin when your app needs to know something CSS can't tell it:
+
+- **Where the fold is**, and whether it splits the screen: `getFoldState()`, `window.viewport.segments`.
+- **How the device is held**, folded like a laptop or a book: `getFoldState()`, `navigator.devicePosture`.
+- **The hinge angle**, for effects and interactions: `getHingeAngle()`.
+- **Outer or inner display**: `getSizeClass()`.
 
 ## Installation
 
@@ -62,6 +73,11 @@ Keep content out of the hinge:
 if (occludedBounds) {
   el.style.marginTop = `${occludedBounds.y + occludedBounds.height}px`;
 }
+```
+
+Outer or inner display, the way Apple's iPhone Duo guidelines recommend telling them apart:
+```typescript
+const { horizontal } = await Foldable.getSizeClass(); // 'compact' on the outer display, 'regular' on the inner one
 ```
 
 Hinge angle (`180` when flat, `null` without a hinge sensor):
@@ -129,8 +145,10 @@ iPhone Duo support needs the iOS 27.1 SDK, which ships with Xcode 27.1. Planned:
 * [`isDeviceFoldable()`](#isdevicefoldable)
 * [`getFoldState()`](#getfoldstate)
 * [`getHingeAngle()`](#gethingeangle)
+* [`getSizeClass()`](#getsizeclass)
 * [`addListener('foldStateChange', ...)`](#addlistenerfoldstatechange-)
 * [`addListener('hingeAngleChange', ...)`](#addlistenerhingeanglechange-)
+* [`addListener('sizeClassChange', ...)`](#addlistenersizeclasschange-)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -186,6 +204,24 @@ hinge angle sensor, and always on iOS and web.
 --------------------
 
 
+### getSizeClass()
+
+```typescript
+getSizeClass() => Promise<SizeClass>
+```
+
+Read the window's size classes, the signal Apple's iPhone Duo guidelines
+recommend for telling the outer display (compact width) from the inner one
+(regular width). On iOS these are UIKit's size classes; on Android and web
+they come from the window size.
+
+**Returns:** <code>Promise&lt;<a href="#sizeclass">SizeClass</a>&gt;</code>
+
+**Since:** 0.0.1
+
+--------------------
+
+
 ### addListener('foldStateChange', ...)
 
 ```typescript
@@ -229,6 +265,27 @@ one of these listeners is registered. Never fires on iOS and web.
 --------------------
 
 
+### addListener('sizeClassChange', ...)
+
+```typescript
+addListener(eventName: 'sizeClassChange', listenerFunc: (sizeClass: SizeClass) => void) => Promise<PluginListenerHandle>
+```
+
+Listen for size class changes, such as unfolding the device, rotating it or
+resizing the window. On iOS this needs iOS 17 or later.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'sizeClassChange'</code>                                          |
+| **`listenerFunc`** | <code>(sizeClass: <a href="#sizeclass">SizeClass</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.0.1
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -241,6 +298,14 @@ one of these listeners is registered. Never fires on iOS and web.
 | **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                               | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                        | 0.0.1 |
 | **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code> | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold. | 0.0.1 |
 | **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code> | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                        | 0.0.1 |
+
+
+#### SizeClass
+
+| Prop             | Type                                | Description                                                                                                                                                                                                         | Since |
+| ---------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`horizontal`** | <code>'compact' \| 'regular'</code> | Width size class of the window: `'compact'` on a phone and on the outer display of a foldable, `'regular'` on the inner display, tablets and wide windows. On Android and web `'regular'` starts at 600 CSS pixels. | 0.0.1 |
+| **`vertical`**   | <code>'compact' \| 'regular'</code> | Height size class of the window: `'compact'` on a phone in landscape. On Android and web `'regular'` starts at 480 CSS pixels.                                                                                      | 0.0.1 |
 
 
 #### PluginListenerHandle

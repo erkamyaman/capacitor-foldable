@@ -42,6 +42,25 @@ export interface FoldState {
   occludedBounds?: { x: number; y: number; width: number; height: number };
 }
 
+export interface SizeClass {
+  /**
+   * Width size class of the window: `'compact'` on a phone and on the outer
+   * display of a foldable, `'regular'` on the inner display, tablets and wide
+   * windows. On Android and web `'regular'` starts at 600 CSS pixels.
+   *
+   * @since 0.0.1
+   */
+  horizontal: 'compact' | 'regular';
+
+  /**
+   * Height size class of the window: `'compact'` on a phone in landscape. On
+   * Android and web `'regular'` starts at 480 CSS pixels.
+   *
+   * @since 0.0.1
+   */
+  vertical: 'compact' | 'regular';
+}
+
 export interface FoldablePlugin {
   /**
    * Whether the device has a fold at all. Always `false` on iOS and web.
@@ -68,6 +87,16 @@ export interface FoldablePlugin {
   getHingeAngle(): Promise<{ angle: number | null }>;
 
   /**
+   * Read the window's size classes, the signal Apple's iPhone Duo guidelines
+   * recommend for telling the outer display (compact width) from the inner one
+   * (regular width). On iOS these are UIKit's size classes; on Android and web
+   * they come from the window size.
+   *
+   * @since 0.0.1
+   */
+  getSizeClass(): Promise<SizeClass>;
+
+  /**
    * Listen for fold state changes. On a foldable this also fires when the
    * device rotates, because `hingeOrientation` and `hingeBounds` rotate with
    * the window.
@@ -85,5 +114,16 @@ export interface FoldablePlugin {
   addListener(
     eventName: 'hingeAngleChange',
     listenerFunc: (event: { angle: number }) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for size class changes, such as unfolding the device, rotating it or
+   * resizing the window. On iOS this needs iOS 17 or later.
+   *
+   * @since 0.0.1
+   */
+  addListener(
+    eventName: 'sizeClassChange',
+    listenerFunc: (sizeClass: SizeClass) => void,
   ): Promise<PluginListenerHandle>;
 }
