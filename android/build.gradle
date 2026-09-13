@@ -5,11 +5,11 @@ ext {
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.7.0'
     androidxCoreKTXVersion = project.hasProperty('androidxCoreKTXVersion') ? rootProject.ext.androidxCoreKTXVersion : '1.15.0'
     androidxWindowVersion = project.hasProperty('androidxWindowVersion') ? rootProject.ext.androidxWindowVersion : '1.5.1'
-    androidxLifecycleVersion = project.hasProperty('androidxLifecycleVersion') ? rootProject.ext.androidxLifecycleVersion : '2.9.4'
+    androidxLifecycleVersion = project.hasProperty('androidxLifecycleVersion') ? rootProject.ext.androidxLifecycleVersion : '2.8.7'
 }
 
 buildscript {
-    ext.kotlin_version = project.hasProperty("kotlin_version") ? rootProject.ext.kotlin_version : '2.2.20'
+    ext.kotlin_version = project.hasProperty("kotlin_version") ? rootProject.ext.kotlin_version : '2.1.21'
     repositories {
         google()
         mavenCentral()
