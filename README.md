@@ -13,7 +13,7 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 | Capacitor | Plugin |
 | --------- | ------ |
-| v7.x, v8.x | v0.0.1 |
+| v7.x, v8.x | v8.x |
 
 ### Supported Platforms
 
@@ -117,7 +117,7 @@ open like a laptop. Both `false` on iOS and web.
 
 **Returns:** <code>Promise&lt;{ foldable: boolean; supportsTabletop: boolean; }&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -134,7 +134,7 @@ fold information.
 
 **Returns:** <code>Promise&lt;<a href="#foldstate">FoldState</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -151,7 +151,7 @@ hinge angle sensor, and always on iOS and web.
 
 **Returns:** <code>Promise&lt;{ angle: number | null; }&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -170,7 +170,7 @@ size.
 
 **Returns:** <code>Promise&lt;<a href="#sizeclass">SizeClass</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -186,7 +186,7 @@ are `'unsupported'` on iOS and web.
 
 **Returns:** <code>Promise&lt;<a href="#displaymodes">DisplayModes</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -201,7 +201,7 @@ Move the app to the outer display. Android asks the user to confirm first,
 and the promise resolves once the app has moved. Rejects when rear display
 mode is not `'available'`. Only on Android.
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -214,7 +214,7 @@ stopRearDisplay() => Promise<void>
 
 Move the app back to the inner display.
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -235,7 +235,7 @@ replaces the page. Only on Android.
 | ------------- | ----------------------------- |
 | **`options`** | <code>{ url: string; }</code> |
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -248,7 +248,7 @@ stopDualScreen() => Promise<void>
 
 Close the page on the outer display.
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -270,7 +270,7 @@ the window.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -291,7 +291,7 @@ one of these listeners is registered. Never fires on iOS and web.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -314,7 +314,7 @@ size classes may not update `widthClass` and `heightClass` until then.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -335,7 +335,7 @@ the user folded or unfolded the device. Never fires on iOS and web.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 8.0.0
 
 --------------------
 
@@ -347,32 +347,32 @@ the user folded or unfolded the device. Never fires on iOS and web.
 
 | Prop                   | Type                                                                    | Description                                                                                                                                                                                                                                                        | Since |
 | ---------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`state`**            | <code>'flat' \| 'half-opened' \| 'closed'</code>                        | Posture of the fold. `'closed'` is never reported today: a device shut on its cover display reports `'flat'`.                                                                                                                                                      | 0.0.1 |
-| **`isSeparating`**     | <code>boolean</code>                                                    | Whether the fold splits the web view into two areas: `true` when half-opened, or when the hinge has a physical gap.                                                                                                                                                | 0.0.1 |
-| **`posture`**          | <code>'flat' \| 'tabletop' \| 'book'</code>                             | How the device is held: `'tabletop'` when half-opened with a horizontal hinge, like a laptop, `'book'` when half-opened with a vertical hinge, and `'flat'` otherwise.                                                                                             | 0.0.1 |
-| **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                                 | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                                                                                                                                                 | 0.0.1 |
-| **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code>   | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold.                                                                                                                          | 0.0.1 |
-| **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code>   | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                                                                                                                                                 | 0.0.1 |
-| **`activeDisplay`**    | <code>'inner' \| 'outer'</code>                                         | Which display is showing the app, on a device with an inner and an outer display such as iPhone Duo. Omitted when the platform doesn't report it, which today is always.                                                                                           | 0.0.1 |
-| **`cameraBounds`**     | <code>{ x: number; y: number; width: number; height: number; }[]</code> | Areas of the web view covered by a front-facing camera, in CSS pixels. On Android these are the display cutouts. On iPhone Duo they will be the outer camera and the under-display inner camera while in use, once iOS support lands. Omitted when there are none. | 0.0.1 |
+| **`state`**            | <code>'flat' \| 'half-opened' \| 'closed'</code>                        | Posture of the fold. `'closed'` is never reported today: a device shut on its cover display reports `'flat'`.                                                                                                                                                      | 8.0.0 |
+| **`isSeparating`**     | <code>boolean</code>                                                    | Whether the fold splits the web view into two areas: `true` when half-opened, or when the hinge has a physical gap.                                                                                                                                                | 8.0.0 |
+| **`posture`**          | <code>'flat' \| 'tabletop' \| 'book'</code>                             | How the device is held: `'tabletop'` when half-opened with a horizontal hinge, like a laptop, `'book'` when half-opened with a vertical hinge, and `'flat'` otherwise.                                                                                             | 8.0.0 |
+| **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                                 | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                                                                                                                                                 | 8.0.0 |
+| **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code>   | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold.                                                                                                                          | 8.0.0 |
+| **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code>   | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                                                                                                                                                 | 8.0.0 |
+| **`activeDisplay`**    | <code>'inner' \| 'outer'</code>                                         | Which display is showing the app, on a device with an inner and an outer display such as iPhone Duo. Omitted when the platform doesn't report it, which today is always.                                                                                           | 8.0.0 |
+| **`cameraBounds`**     | <code>{ x: number; y: number; width: number; height: number; }[]</code> | Areas of the web view covered by a front-facing camera, in CSS pixels. On Android these are the display cutouts. On iPhone Duo they will be the outer camera and the under-display inner camera while in use, once iOS support lands. Omitted when there are none. | 8.0.0 |
 
 
 #### SizeClass
 
 | Prop              | Type                                                                        | Description                                                                                                                                                                                                         | Since |
 | ----------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`horizontal`**  | <code>'compact' \| 'regular'</code>                                         | Width size class of the window: `'compact'` on a phone and on the outer display of a foldable, `'regular'` on the inner display, tablets and wide windows. On Android and web `'regular'` starts at 600 CSS pixels. | 0.0.1 |
-| **`vertical`**    | <code>'compact' \| 'regular'</code>                                         | Height size class of the window: `'compact'` on a phone in landscape. On Android and web `'regular'` starts at 480 CSS pixels.                                                                                      | 0.0.1 |
-| **`widthClass`**  | <code>'compact' \| 'medium' \| 'expanded' \| 'large' \| 'extraLarge'</code> | Material window width class, from the window width in CSS pixels: `'compact'` below 600, `'medium'` below 840, `'expanded'` below 1200, `'large'` below 1600 and `'extraLarge'` from 1600.                          | 0.0.1 |
-| **`heightClass`** | <code>'compact' \| 'medium' \| 'expanded'</code>                            | Material window height class, from the window height in CSS pixels: `'compact'` below 480, `'medium'` below 900 and `'expanded'` from 900.                                                                          | 0.0.1 |
+| **`horizontal`**  | <code>'compact' \| 'regular'</code>                                         | Width size class of the window: `'compact'` on a phone and on the outer display of a foldable, `'regular'` on the inner display, tablets and wide windows. On Android and web `'regular'` starts at 600 CSS pixels. | 8.0.0 |
+| **`vertical`**    | <code>'compact' \| 'regular'</code>                                         | Height size class of the window: `'compact'` on a phone in landscape. On Android and web `'regular'` starts at 480 CSS pixels.                                                                                      | 8.0.0 |
+| **`widthClass`**  | <code>'compact' \| 'medium' \| 'expanded' \| 'large' \| 'extraLarge'</code> | Material window width class, from the window width in CSS pixels: `'compact'` below 600, `'medium'` below 840, `'expanded'` below 1200, `'large'` below 1600 and `'extraLarge'` from 1600.                          | 8.0.0 |
+| **`heightClass`** | <code>'compact' \| 'medium' \| 'expanded'</code>                            | Material window height class, from the window height in CSS pixels: `'compact'` below 480, `'medium'` below 900 and `'expanded'` from 900.                                                                          | 8.0.0 |
 
 
 #### DisplayModes
 
 | Prop              | Type                                                            | Description                                                                                                                                       | Since |
 | ----------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`rearDisplay`** | <code><a href="#displaymodestatus">DisplayModeStatus</a></code> | Rear display mode moves the app to the outer display, so people can frame a photo with the rear cameras. Only on Android foldables that offer it. | 0.0.1 |
-| **`dualScreen`**  | <code><a href="#displaymodestatus">DisplayModeStatus</a></code> | Dual-screen mode shows a second page on the outer display while the app stays on the inner one. Only on Android foldables that offer it.          | 0.0.1 |
+| **`rearDisplay`** | <code><a href="#displaymodestatus">DisplayModeStatus</a></code> | Rear display mode moves the app to the outer display, so people can frame a photo with the rear cameras. Only on Android foldables that offer it. | 8.0.0 |
+| **`dualScreen`**  | <code><a href="#displaymodestatus">DisplayModeStatus</a></code> | Dual-screen mode shows a second page on the outer display while the app stays on the inner one. Only on Android foldables that offer it.          | 8.0.0 |
 
 
 #### PluginListenerHandle

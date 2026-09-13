@@ -5,7 +5,7 @@ export interface FoldState {
    * Posture of the fold. `'closed'` is never reported today: a device shut on
    * its cover display reports `'flat'`.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   state: 'flat' | 'half-opened' | 'closed';
 
@@ -13,7 +13,7 @@ export interface FoldState {
    * Whether the fold splits the web view into two areas: `true` when
    * half-opened, or when the hinge has a physical gap.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   isSeparating: boolean;
 
@@ -22,7 +22,7 @@ export interface FoldState {
    * hinge, like a laptop, `'book'` when half-opened with a vertical hinge, and
    * `'flat'` otherwise.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   posture: 'flat' | 'tabletop' | 'book';
 
@@ -30,7 +30,7 @@ export interface FoldState {
    * Direction of the hinge relative to the window, so it flips when the device
    * rotates. Omitted when there is no fold.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   hingeOrientation?: 'horizontal' | 'vertical';
 
@@ -38,7 +38,7 @@ export interface FoldState {
    * Position of the fold in CSS pixels, relative to the web view. Zero wide (or
    * zero tall) on a seamless fold. Omitted when there is no fold.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   hingeBounds?: { x: number; y: number; width: number; height: number };
 
@@ -46,7 +46,7 @@ export interface FoldState {
    * Area of the web view the hinge covers, in CSS pixels. Only present on
    * devices with a physical gap.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   occludedBounds?: { x: number; y: number; width: number; height: number };
 
@@ -55,7 +55,7 @@ export interface FoldState {
    * display such as iPhone Duo. Omitted when the platform doesn't report it,
    * which today is always.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   activeDisplay?: 'inner' | 'outer';
 
@@ -65,7 +65,7 @@ export interface FoldState {
    * camera and the under-display inner camera while in use, once iOS support
    * lands. Omitted when there are none.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   cameraBounds?: { x: number; y: number; width: number; height: number }[];
 }
@@ -76,7 +76,7 @@ export interface SizeClass {
    * display of a foldable, `'regular'` on the inner display, tablets and wide
    * windows. On Android and web `'regular'` starts at 600 CSS pixels.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   horizontal: 'compact' | 'regular';
 
@@ -84,7 +84,7 @@ export interface SizeClass {
    * Height size class of the window: `'compact'` on a phone in landscape. On
    * Android and web `'regular'` starts at 480 CSS pixels.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   vertical: 'compact' | 'regular';
 
@@ -93,7 +93,7 @@ export interface SizeClass {
    * `'compact'` below 600, `'medium'` below 840, `'expanded'` below 1200,
    * `'large'` below 1600 and `'extraLarge'` from 1600.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   widthClass: 'compact' | 'medium' | 'expanded' | 'large' | 'extraLarge';
 
@@ -101,7 +101,7 @@ export interface SizeClass {
    * Material window height class, from the window height in CSS pixels:
    * `'compact'` below 480, `'medium'` below 900 and `'expanded'` from 900.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   heightClass: 'compact' | 'medium' | 'expanded';
 }
@@ -113,7 +113,7 @@ export interface DisplayModes {
    * Rear display mode moves the app to the outer display, so people can frame a
    * photo with the rear cameras. Only on Android foldables that offer it.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   rearDisplay: DisplayModeStatus;
 
@@ -121,7 +121,7 @@ export interface DisplayModes {
    * Dual-screen mode shows a second page on the outer display while the app
    * stays on the inner one. Only on Android foldables that offer it.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   dualScreen: DisplayModeStatus;
 }
@@ -131,7 +131,7 @@ export interface FoldablePlugin {
    * Whether the device has a fold at all, and whether it can be propped half
    * open like a laptop. Both `false` on iOS and web.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   isDeviceFoldable(): Promise<{ foldable: boolean; supportsTabletop: boolean }>;
 
@@ -140,7 +140,7 @@ export interface FoldablePlugin {
    * `{ state: 'flat', isSeparating: false, posture: 'flat' }` when there is no
    * fold information.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   getFoldState(): Promise<FoldState>;
 
@@ -149,7 +149,7 @@ export interface FoldablePlugin {
    * closed, `180` when flat. Resolves to `{ angle: null }` on devices without a
    * hinge angle sensor, and always on iOS and web.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   getHingeAngle(): Promise<{ angle: number | null }>;
 
@@ -160,7 +160,7 @@ export interface FoldablePlugin {
    * `vertical` are UIKit's size classes; everything else comes from the window
    * size.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   getSizeClass(): Promise<SizeClass>;
 
@@ -168,7 +168,7 @@ export interface FoldablePlugin {
    * Read which of the foldable display modes the device offers right now. Both
    * are `'unsupported'` on iOS and web.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   getDisplayModes(): Promise<DisplayModes>;
 
@@ -177,14 +177,14 @@ export interface FoldablePlugin {
    * and the promise resolves once the app has moved. Rejects when rear display
    * mode is not `'available'`. Only on Android.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   startRearDisplay(): Promise<void>;
 
   /**
    * Move the app back to the inner display.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   stopRearDisplay(): Promise<void>;
 
@@ -195,14 +195,14 @@ export interface FoldablePlugin {
    * to Capacitor plugins. Calling this again while dual-screen mode is active
    * replaces the page. Only on Android.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   startDualScreen(options: { url: string }): Promise<void>;
 
   /**
    * Close the page on the outer display.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   stopDualScreen(): Promise<void>;
 
@@ -211,7 +211,7 @@ export interface FoldablePlugin {
    * device rotates, because `hingeOrientation` and `hingeBounds` rotate with
    * the window.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   addListener(eventName: 'foldStateChange', listenerFunc: (state: FoldState) => void): Promise<PluginListenerHandle>;
 
@@ -219,7 +219,7 @@ export interface FoldablePlugin {
    * Listen for hinge angle changes. The hinge sensor only runs while at least
    * one of these listeners is registered. Never fires on iOS and web.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   addListener(
     eventName: 'hingeAngleChange',
@@ -232,7 +232,7 @@ export interface FoldablePlugin {
    * (iOS 17 or later) or the device rotates, so a resize that keeps the same
    * size classes may not update `widthClass` and `heightClass` until then.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   addListener(
     eventName: 'sizeClassChange',
@@ -243,7 +243,7 @@ export interface FoldablePlugin {
    * Listen for changes to the display modes, including a mode ending because
    * the user folded or unfolded the device. Never fires on iOS and web.
    *
-   * @since 0.0.1
+   * @since 8.0.0
    */
   addListener(
     eventName: 'displayModeChange',

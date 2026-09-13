@@ -1,6 +1,6 @@
 {
   "name": "capacitor-foldable",
-  "version": "0.0.1",
+  "version": "8.0.0",
   "description": "Fold-state and dual-display APIs for foldable devices in Capacitor apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
