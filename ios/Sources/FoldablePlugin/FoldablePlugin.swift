@@ -121,9 +121,11 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
         lastSizeClass = currentSizeClass()
         let traits: [UITrait] = [UITraitHorizontalSizeClass.self, UITraitVerticalSizeClass.self]
-        _ = view.registerForTraitChanges(traits) { [weak self] (_: UIView, _: UITraitCollection) in
-            self?.notifySizeClassIfChanged()
-            self?.notifyFoldStateIfChanged()
+        MainActor.assumeIsolated {
+            _ = view.registerForTraitChanges(traits) { [weak self] (_: UIView, _: UITraitCollection) in
+                self?.notifySizeClassIfChanged()
+                self?.notifyFoldStateIfChanged()
+            }
         }
     }
 

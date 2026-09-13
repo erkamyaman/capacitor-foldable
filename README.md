@@ -13,14 +13,14 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 | Capacitor | Plugin |
 | --------- | ------ |
-| v8.x      | v0.0.1 |
+| v7.x, v8.x | v0.0.1 |
 
 ### Supported Platforms
 
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
-| Android  | Supported | API 24, `compileSdk` 34 |
-| iOS      | Size classes only; fold data waits on Apple's iPhone Duo SDK | iOS 15 |
+| Android  | Supported | API 23, `compileSdk` 34 |
+| iOS      | Size classes only; fold data waits on Apple's iPhone Duo SDK | iOS 14 |
 | Web      | Stub, returns `flat` | |
 
 ## Do you need this plugin?
