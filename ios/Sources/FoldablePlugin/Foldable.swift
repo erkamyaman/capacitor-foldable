@@ -13,6 +13,7 @@ struct NativeFold {
 
 protocol FoldProvider {
     var isFoldable: Bool { get }
+    var supportsTabletop: Bool { get }
     func fold(in view: UIView?) -> NativeFold?
     func hingeAngle() -> Double?
     func observe(_ view: UIView, onChange: @escaping () -> Void)
@@ -23,6 +24,7 @@ protocol FoldProvider {
 ///   rather than guessing at private or unreleased APIs.
 struct UnsupportedFoldProvider: FoldProvider {
     var isFoldable: Bool { false }
+    var supportsTabletop: Bool { false }
 
     func fold(in view: UIView?) -> NativeFold? {
         return nil
@@ -51,12 +53,20 @@ struct UnsupportedFoldProvider: FoldProvider {
         return provider.isFoldable
     }
 
+    @objc public func supportsTabletop() -> Bool {
+        return provider.supportsTabletop
+    }
+
     public func getFoldState(in view: UIView? = nil) -> [String: Any] {
         guard let fold = provider.fold(in: view) else {
-            return ["state": "flat", "isSeparating": false]
+            return ["state": "flat", "isSeparating": false, "posture": "flat"]
         }
 
-        var result: [String: Any] = ["state": fold.state, "isSeparating": fold.isSeparating]
+        var result: [String: Any] = [
+            "state": fold.state,
+            "isSeparating": fold.isSeparating,
+            "posture": posture(of: fold)
+        ]
         result["hingeOrientation"] = fold.hingeOrientation
         result["hingeBounds"] = fold.hingeBounds.map(bounds(of:))
         result["occludedBounds"] = fold.occludedBounds.map(bounds(of:))
@@ -75,12 +85,41 @@ struct UnsupportedFoldProvider: FoldProvider {
         provider.observe(view, onChange: onChange)
     }
 
-    @objc public func sizeClass(horizontal: UIUserInterfaceSizeClass, vertical: UIUserInterfaceSizeClass) -> [String: String] {
-        return ["horizontal": name(of: horizontal), "vertical": name(of: vertical)]
+    @objc public func sizeClass(
+        horizontal: UIUserInterfaceSizeClass,
+        vertical: UIUserInterfaceSizeClass,
+        width: CGFloat,
+        height: CGFloat
+    ) -> [String: String] {
+        return [
+            "horizontal": name(of: horizontal),
+            "vertical": name(of: vertical),
+            "widthClass": widthClass(of: width),
+            "heightClass": heightClass(of: height)
+        ]
     }
 
     private func name(of sizeClass: UIUserInterfaceSizeClass) -> String {
         return sizeClass == .regular ? "regular" : "compact"
+    }
+
+    private func widthClass(of width: CGFloat) -> String {
+        if width >= 1600 { return "extraLarge" }
+        if width >= 1200 { return "large" }
+        if width >= 840 { return "expanded" }
+        if width >= 600 { return "medium" }
+        return "compact"
+    }
+
+    private func heightClass(of height: CGFloat) -> String {
+        if height >= 900 { return "expanded" }
+        if height >= 480 { return "medium" }
+        return "compact"
+    }
+
+    private func posture(of fold: NativeFold) -> String {
+        guard fold.state == "half-opened" else { return "flat" }
+        return fold.hingeOrientation == "horizontal" ? "tabletop" : "book"
     }
 
     private func bounds(of rect: CGRect) -> [String: Int] {

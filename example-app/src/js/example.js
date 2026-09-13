@@ -9,6 +9,8 @@ const els = {
   hingeBounds: $('hingeBounds'),
   bounds: $('bounds'),
   sizeClass: $('sizeClass'),
+  rearDisplay: $('rearDisplay'),
+  dualScreen: $('dualScreen'),
   angle: $('angle'),
   posture: $('posture'),
   segments: $('segments'),
@@ -55,7 +57,7 @@ function applyLayout(fold) {
 }
 
 function render(fold) {
-  els.state.textContent = fold.state;
+  els.state.textContent = `${fold.state} · ${fold.posture}`;
   els.orientation.textContent = fold.hingeOrientation ?? '—';
   els.window.textContent = `${window.innerWidth} × ${window.innerHeight}`;
 
@@ -162,6 +164,39 @@ els.angle.textContent = angle === null ? 'no sensor' : `${Math.round(angle)}°`;
 await Foldable.addListener('hingeAngleChange', (event) => {
   console.log(TAG, `hingeAngleChange: ${event.angle}`);
   els.angle.textContent = `${Math.round(event.angle)}°`;
+});
+
+const renderDisplayModes = ({ rearDisplay, dualScreen }) => {
+  els.rearDisplay.textContent = rearDisplay;
+  els.dualScreen.textContent = dualScreen;
+};
+
+renderDisplayModes(await Foldable.getDisplayModes());
+await Foldable.addListener('displayModeChange', (modes) => {
+  console.log(TAG, `displayModeChange: ${JSON.stringify(modes)}`);
+  renderDisplayModes(modes);
+});
+
+$('rear').addEventListener('click', async () => {
+  const { rearDisplay } = await Foldable.getDisplayModes();
+  try {
+    await (rearDisplay === 'active' ? Foldable.stopRearDisplay() : Foldable.startRearDisplay());
+  } catch (err) {
+    console.error(TAG, 'rear display:', err?.message ?? err);
+  }
+});
+
+const coverPage = `data:text/html,${encodeURIComponent(
+  '<h1 style="font:600 40px system-ui;text-align:center;margin-top:40vh">Hello from the outer display</h1>',
+)}`;
+
+$('dual').addEventListener('click', async () => {
+  const { dualScreen } = await Foldable.getDisplayModes();
+  try {
+    await (dualScreen === 'active' ? Foldable.stopDualScreen() : Foldable.startDualScreen({ url: coverPage }));
+  } catch (err) {
+    console.error(TAG, 'dual screen:', err?.message ?? err);
+  }
 });
 
 console.log(TAG, 'booting, calling getFoldState()');

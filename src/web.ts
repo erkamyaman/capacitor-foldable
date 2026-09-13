@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { FoldablePlugin, FoldState, SizeClass } from './definitions';
+import type { DisplayModes, FoldablePlugin, FoldState, SizeClass } from './definitions';
 import { sizeClassOf } from './size-class';
 
 export class FoldableWeb extends WebPlugin implements FoldablePlugin {
@@ -10,19 +10,19 @@ export class FoldableWeb extends WebPlugin implements FoldablePlugin {
     super();
     window.addEventListener('resize', () => {
       const next = sizeClassOf(window.innerWidth, window.innerHeight);
-      if (next.horizontal === this.sizeClass.horizontal && next.vertical === this.sizeClass.vertical) return;
+      if (JSON.stringify(next) === JSON.stringify(this.sizeClass)) return;
 
       this.sizeClass = next;
       this.notifyListeners('sizeClassChange', next);
     });
   }
 
-  async isDeviceFoldable(): Promise<{ foldable: boolean }> {
-    return { foldable: false };
+  async isDeviceFoldable(): Promise<{ foldable: boolean; supportsTabletop: boolean }> {
+    return { foldable: false, supportsTabletop: false };
   }
 
   async getFoldState(): Promise<FoldState> {
-    return { state: 'flat', isSeparating: false };
+    return { state: 'flat', isSeparating: false, posture: 'flat' };
   }
 
   async getHingeAngle(): Promise<{ angle: number | null }> {
@@ -31,5 +31,25 @@ export class FoldableWeb extends WebPlugin implements FoldablePlugin {
 
   async getSizeClass(): Promise<SizeClass> {
     return sizeClassOf(window.innerWidth, window.innerHeight);
+  }
+
+  async getDisplayModes(): Promise<DisplayModes> {
+    return { rearDisplay: 'unsupported', dualScreen: 'unsupported' };
+  }
+
+  async startRearDisplay(): Promise<void> {
+    throw this.unavailable('Rear display mode is only available on Android.');
+  }
+
+  stopRearDisplay(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  async startDualScreen(): Promise<void> {
+    throw this.unavailable('Dual-screen mode is only available on Android.');
+  }
+
+  stopDualScreen(): Promise<void> {
+    return Promise.resolve();
   }
 }

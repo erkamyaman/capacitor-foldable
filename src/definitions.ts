@@ -18,6 +18,15 @@ export interface FoldState {
   isSeparating: boolean;
 
   /**
+   * How the device is held: `'tabletop'` when half-opened with a horizontal
+   * hinge, like a laptop, `'book'` when half-opened with a vertical hinge, and
+   * `'flat'` otherwise.
+   *
+   * @since 0.0.1
+   */
+  posture: 'flat' | 'tabletop' | 'book';
+
+  /**
    * Direction of the hinge relative to the window, so it flips when the device
    * rotates. Omitted when there is no fold.
    *
@@ -51,10 +60,10 @@ export interface FoldState {
   activeDisplay?: 'inner' | 'outer';
 
   /**
-   * Areas of the web view covered by a front-facing camera, such as iPhone Duo's
-   * outer camera or its under-display inner camera while in use, in CSS pixels.
-   * Omitted when there are none or the platform doesn't report them, which
-   * today is always.
+   * Areas of the web view covered by a front-facing camera, in CSS pixels. On
+   * Android these are the display cutouts. On iPhone Duo they will be the outer
+   * camera and the under-display inner camera while in use, once iOS support
+   * lands. Omitted when there are none.
    *
    * @since 0.0.1
    */
@@ -78,19 +87,58 @@ export interface SizeClass {
    * @since 0.0.1
    */
   vertical: 'compact' | 'regular';
+
+  /**
+   * Material window width class, from the window width in CSS pixels:
+   * `'compact'` below 600, `'medium'` below 840, `'expanded'` below 1200,
+   * `'large'` below 1600 and `'extraLarge'` from 1600.
+   *
+   * @since 0.0.1
+   */
+  widthClass: 'compact' | 'medium' | 'expanded' | 'large' | 'extraLarge';
+
+  /**
+   * Material window height class, from the window height in CSS pixels:
+   * `'compact'` below 480, `'medium'` below 900 and `'expanded'` from 900.
+   *
+   * @since 0.0.1
+   */
+  heightClass: 'compact' | 'medium' | 'expanded';
+}
+
+export type DisplayModeStatus = 'unsupported' | 'unavailable' | 'available' | 'active';
+
+export interface DisplayModes {
+  /**
+   * Rear display mode moves the app to the outer display, so people can frame a
+   * photo with the rear cameras. Only on Android foldables that offer it.
+   *
+   * @since 0.0.1
+   */
+  rearDisplay: DisplayModeStatus;
+
+  /**
+   * Dual-screen mode shows a second page on the outer display while the app
+   * stays on the inner one. Only on Android foldables that offer it.
+   *
+   * @since 0.0.1
+   */
+  dualScreen: DisplayModeStatus;
 }
 
 export interface FoldablePlugin {
   /**
-   * Whether the device has a fold at all. Always `false` on iOS and web.
+   * Whether the device has a fold at all, and whether it can be propped half
+   * open like a laptop. Both `false` on iOS and web.
    *
    * @since 0.0.1
    */
-  isDeviceFoldable(): Promise<{ foldable: boolean }>;
+  isDeviceFoldable(): Promise<{ foldable: boolean; supportsTabletop: boolean }>;
 
   /**
-   * Read the current fold state. Resolves to `{ state: 'flat', isSeparating: false }`
-   * when there is no fold information.
+   * Read the current fold state. Resolves to
+   * `{ state: 'flat', isSeparating: false, posture: 'flat' }` when there is no
+   * fold information.
    *
    * @since 0.0.1
    */
@@ -106,14 +154,57 @@ export interface FoldablePlugin {
   getHingeAngle(): Promise<{ angle: number | null }>;
 
   /**
-   * Read the window's size classes, the signal Apple's iPhone Duo guidelines
-   * recommend for telling the outer display (compact width) from the inner one
-   * (regular width). On iOS these are UIKit's size classes; on Android and web
-   * they come from the window size.
+   * Read the window's size classes: Apple's compact and regular, the signal its
+   * iPhone Duo guidelines recommend for telling the outer display from the inner
+   * one, and Material's width and height classes. On iOS `horizontal` and
+   * `vertical` are UIKit's size classes; everything else comes from the window
+   * size.
    *
    * @since 0.0.1
    */
   getSizeClass(): Promise<SizeClass>;
+
+  /**
+   * Read which of the foldable display modes the device offers right now. Both
+   * are `'unsupported'` on iOS and web.
+   *
+   * @since 0.0.1
+   */
+  getDisplayModes(): Promise<DisplayModes>;
+
+  /**
+   * Move the app to the outer display. Android asks the user to confirm first,
+   * and the promise resolves once the app has moved. Rejects when rear display
+   * mode is not `'available'`. Only on Android.
+   *
+   * @since 0.0.1
+   */
+  startRearDisplay(): Promise<void>;
+
+  /**
+   * Move the app back to the inner display.
+   *
+   * @since 0.0.1
+   */
+  stopRearDisplay(): Promise<void>;
+
+  /**
+   * Show a page on the outer display while the app stays on the inner one. A
+   * relative `url` resolves against the app's own URL, so `'cover.html'` loads a
+   * page bundled with the app. The page runs in its own web view without access
+   * to Capacitor plugins. Calling this again while dual-screen mode is active
+   * replaces the page. Only on Android.
+   *
+   * @since 0.0.1
+   */
+  startDualScreen(options: { url: string }): Promise<void>;
+
+  /**
+   * Close the page on the outer display.
+   *
+   * @since 0.0.1
+   */
+  stopDualScreen(): Promise<void>;
 
   /**
    * Listen for fold state changes. On a foldable this also fires when the
@@ -137,12 +228,25 @@ export interface FoldablePlugin {
 
   /**
    * Listen for size class changes, such as unfolding the device, rotating it or
-   * resizing the window. On iOS this needs iOS 17 or later.
+   * resizing the window. On iOS this fires when UIKit's size classes change
+   * (iOS 17 or later) or the device rotates, so a resize that keeps the same
+   * size classes may not update `widthClass` and `heightClass` until then.
    *
    * @since 0.0.1
    */
   addListener(
     eventName: 'sizeClassChange',
     listenerFunc: (sizeClass: SizeClass) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for changes to the display modes, including a mode ending because
+   * the user folded or unfolded the device. Never fires on iOS and web.
+   *
+   * @since 0.0.1
+   */
+  addListener(
+    eventName: 'displayModeChange',
+    listenerFunc: (modes: DisplayModes) => void,
   ): Promise<PluginListenerHandle>;
 }

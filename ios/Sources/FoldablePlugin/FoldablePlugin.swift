@@ -14,7 +14,12 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "isDeviceFoldable", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFoldState", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getHingeAngle", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getSizeClass", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getSizeClass", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDisplayModes", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startRearDisplay", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stopRearDisplay", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startDualScreen", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stopDualScreen", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Foldable()
     private var lastSizeClass: [String: String]?
@@ -35,7 +40,10 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func isDeviceFoldable(_ call: CAPPluginCall) {
-        call.resolve(["foldable": implementation.isDeviceFoldable()])
+        call.resolve([
+            "foldable": implementation.isDeviceFoldable(),
+            "supportsTabletop": implementation.supportsTabletop()
+        ])
     }
 
     @objc func getFoldState(_ call: CAPPluginCall) {
@@ -56,13 +64,39 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc func getDisplayModes(_ call: CAPPluginCall) {
+        call.resolve(["rearDisplay": "unsupported", "dualScreen": "unsupported"])
+    }
+
+    @objc func startRearDisplay(_ call: CAPPluginCall) {
+        call.unavailable("Rear display mode is only available on Android.")
+    }
+
+    @objc func stopRearDisplay(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    @objc func startDualScreen(_ call: CAPPluginCall) {
+        call.unavailable("Dual-screen mode is only available on Android.")
+    }
+
+    @objc func stopDualScreen(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
     private func currentFoldState() -> [String: Any] {
         return implementation.getFoldState(in: bridge?.webView)
     }
 
     private func currentSizeClass() -> [String: String] {
         let traits = bridge?.viewController?.traitCollection ?? UITraitCollection.current
-        return implementation.sizeClass(horizontal: traits.horizontalSizeClass, vertical: traits.verticalSizeClass)
+        let size = bridge?.viewController?.view.bounds.size ?? .zero
+        return implementation.sizeClass(
+            horizontal: traits.horizontalSizeClass,
+            vertical: traits.verticalSizeClass,
+            width: size.width,
+            height: size.height
+        )
     }
 
     private func observeChanges() {
@@ -80,6 +114,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             queue: .main
         ) { [weak self] _ in
             self?.notifyFoldStateIfChanged()
+            self?.notifySizeClassIfChanged()
         }
 
         guard #available(iOS 17.0, *) else { return }
