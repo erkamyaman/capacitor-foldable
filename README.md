@@ -29,7 +29,7 @@ Web views already resize with the window and expose `env(safe-area-inset-*)`, so
 
 Use this plugin when your app needs to know something CSS can't tell it:
 
-- **Where the fold is**, and whether it splits the screen: `getFoldState()`, `window.viewport.segments`.
+- **Where the fold is**, and whether it splits the screen: `getFoldState()`, `window.viewport.segments`, or CSS variables and classes.
 - **How the device is held**, folded like a laptop or a book: `getFoldState()`, `navigator.devicePosture`.
 - **The hinge angle**, for effects and interactions: `getHingeAngle()`.
 - **Outer or inner display**: `getSizeClass()`.
@@ -104,10 +104,31 @@ navigator.devicePosture.addEventListener('change', updateLayout);
 window.viewport.segments; // DOMRect[], two entries when the fold splits the web view
 ```
 
-It runs in native apps only, and it leaves native implementations alone, so it steps aside once a web view enables the APIs. On iOS it reports an unfolded device until iPhone Duo support lands.
+It runs in native apps only. The JavaScript APIs step aside once a web view enables them natively. On iOS it reports an unfolded device until iPhone Duo support lands.
 
-> [!NOTE]
-> Only the JavaScript APIs are filled in. CSS `@media (device-posture)`, `@media (horizontal-viewport-segments)`, `@media (vertical-viewport-segments)` and `env(viewport-segment-*)` can't be polyfilled.
+### CSS
+
+CSS media features and `env()` can't be polyfilled, so `installFoldablePolyfill()` also mirrors them as classes and custom properties on `<html>`, kept up to date as the device folds and the window resizes:
+
+| Standard CSS | With the polyfill |
+| --- | --- |
+| `@media (device-posture: folded)` | `.device-posture-folded` |
+| `@media (device-posture: continuous)` | `.device-posture-continuous` |
+| `@media (horizontal-viewport-segments: 2)` | `.horizontal-viewport-segments-2` |
+| `@media (vertical-viewport-segments: 2)` | `.vertical-viewport-segments-2` |
+| `env(viewport-segment-width 0 0)` | `var(--viewport-segment-width-0-0)` |
+
+Every `env(viewport-segment-*)` value (`top`, `left`, `bottom`, `right`, `width` and `height`) has a matching variable. A book layout that keeps content off a vertical fold:
+
+```css
+.horizontal-viewport-segments-2 .layout {
+  display: grid;
+  grid-template-columns:
+    var(--viewport-segment-width-0-0)
+    calc(var(--viewport-segment-left-1-0) - var(--viewport-segment-right-0-0))
+    var(--viewport-segment-width-1-0);
+}
+```
 
 > [!NOTE]
 > `window.viewport.segments` has no change event of its own. Read it again on the `devicePosture` `change` event and on `resize`.
@@ -136,6 +157,7 @@ iPhone Duo support needs the iOS 27.1 SDK, which ships with Xcode 27.1. Planned:
 
 - `getFoldState()` and `window.viewport.segments` from the fold's reserved region.
 - `getHingeAngle()` and `hingeAngleChange` from the hinge.
+- `activeDisplay` (inner or outer) and `cameraBounds` (areas covered by a front-facing camera) on `FoldState`.
 - **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` will report `{ verticalBarEdge: 'leading' | 'trailing' | null }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android.
 
 ## API
@@ -291,13 +313,15 @@ resizing the window. On iOS this needs iOS 17 or later.
 
 #### FoldState
 
-| Prop                   | Type                                                                  | Description                                                                                                                               | Since |
-| ---------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`state`**            | <code>'flat' \| 'half-opened' \| 'closed'</code>                      | Posture of the fold. `'closed'` is never reported today: a device shut on its cover display reports `'flat'`.                             | 0.0.1 |
-| **`isSeparating`**     | <code>boolean</code>                                                  | Whether the fold splits the web view into two areas: `true` when half-opened, or when the hinge has a physical gap.                       | 0.0.1 |
-| **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                               | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                        | 0.0.1 |
-| **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code> | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold. | 0.0.1 |
-| **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code> | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                        | 0.0.1 |
+| Prop                   | Type                                                                    | Description                                                                                                                                                                                                                                      | Since |
+| ---------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`state`**            | <code>'flat' \| 'half-opened' \| 'closed'</code>                        | Posture of the fold. `'closed'` is never reported today: a device shut on its cover display reports `'flat'`.                                                                                                                                    | 0.0.1 |
+| **`isSeparating`**     | <code>boolean</code>                                                    | Whether the fold splits the web view into two areas: `true` when half-opened, or when the hinge has a physical gap.                                                                                                                              | 0.0.1 |
+| **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                                 | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                                                                                                                               | 0.0.1 |
+| **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code>   | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold.                                                                                                        | 0.0.1 |
+| **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code>   | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                                                                                                                               | 0.0.1 |
+| **`activeDisplay`**    | <code>'inner' \| 'outer'</code>                                         | Which display is showing the app, on a device with an inner and an outer display such as iPhone Duo. Omitted when the platform doesn't report it, which today is always.                                                                         | 0.0.1 |
+| **`cameraBounds`**     | <code>{ x: number; y: number; width: number; height: number; }[]</code> | Areas of the web view covered by a front-facing camera, such as iPhone Duo's outer camera or its under-display inner camera while in use, in CSS pixels. Omitted when there are none or the platform doesn't report them, which today is always. | 0.0.1 |
 
 
 #### SizeClass

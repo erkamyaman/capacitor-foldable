@@ -40,6 +40,25 @@ export interface FoldState {
    * @since 0.0.1
    */
   occludedBounds?: { x: number; y: number; width: number; height: number };
+
+  /**
+   * Which display is showing the app, on a device with an inner and an outer
+   * display such as iPhone Duo. Omitted when the platform doesn't report it,
+   * which today is always.
+   *
+   * @since 0.0.1
+   */
+  activeDisplay?: 'inner' | 'outer';
+
+  /**
+   * Areas of the web view covered by a front-facing camera, such as iPhone Duo's
+   * outer camera or its under-display inner camera while in use, in CSS pixels.
+   * Omitted when there are none or the platform doesn't report them, which
+   * today is always.
+   *
+   * @since 0.0.1
+   */
+  cameraBounds?: { x: number; y: number; width: number; height: number }[];
 }
 
 export interface SizeClass {

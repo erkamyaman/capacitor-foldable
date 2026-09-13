@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 
+import { CSS_CLASSES, cssFor } from './css';
 import type { FoldablePlugin, FoldState } from './definitions';
 import { splitViewport } from './segments';
 
@@ -43,22 +44,28 @@ class DevicePosturePolyfill extends EventTarget implements DevicePosture {
   }
 }
 
-export async function install(plugin: FoldablePlugin): Promise<void> {
-  if (!Capacitor.isNativePlatform()) return;
+const postureOf = (fold: FoldState | null): DevicePostureType =>
+  fold?.state === 'half-opened' ? 'folded' : 'continuous';
 
+let installation: Promise<void> | null = null;
+
+export function install(plugin: FoldablePlugin): Promise<void> {
+  if (!Capacitor.isNativePlatform()) return Promise.resolve();
+
+  installation ??= run(plugin);
+  return installation;
+}
+
+async function run(plugin: FoldablePlugin): Promise<void> {
   let fold: FoldState | null = null;
+  const currentSegments = () => splitViewport(fold, window.innerWidth, window.innerHeight);
 
-  const needsViewport = !('Viewport' in window);
-  if (needsViewport) {
+  if (!('Viewport' in window)) {
     Object.defineProperty(window, 'viewport', {
       configurable: true,
       value: {
         get segments() {
-          return Object.freeze(
-            splitViewport(fold, window.innerWidth, window.innerHeight).map(
-              (rect) => new DOMRect(rect.x, rect.y, rect.width, rect.height),
-            ),
-          );
+          return Object.freeze(currentSegments().map((rect) => new DOMRect(rect.x, rect.y, rect.width, rect.height)));
         },
       },
     });
@@ -69,13 +76,24 @@ export async function install(plugin: FoldablePlugin): Promise<void> {
     Object.defineProperty(navigator, 'devicePosture', { configurable: true, value: posture });
   }
 
-  if (!needsViewport && !posture) return;
+  const root = document.documentElement;
+  let variables: string[] = [];
+
+  const applyCss = () => {
+    const css = cssFor(currentSegments(), postureOf(fold));
+    for (const name of variables) root.style.removeProperty(name);
+    variables = Object.keys(css.variables);
+    for (const name of variables) root.style.setProperty(name, css.variables[name]);
+    for (const name of CSS_CLASSES) root.classList.toggle(name, css.classes.includes(name));
+  };
 
   const apply = (next: FoldState) => {
     fold = next;
-    posture?.update(next.state === 'half-opened' ? 'folded' : 'continuous');
+    posture?.update(postureOf(next));
+    applyCss();
   };
 
+  window.addEventListener('resize', applyCss);
   await plugin.addListener('foldStateChange', apply);
   apply(await plugin.getFoldState());
 }

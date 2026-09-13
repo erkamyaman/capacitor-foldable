@@ -18,10 +18,19 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     ]
     private let implementation = Foldable()
     private var lastSizeClass: [String: String]?
+    private var lastFoldState: [String: Any]?
+    private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
         DispatchQueue.main.async { [weak self] in
-            self?.observeSizeClass()
+            self?.observeChanges()
+        }
+    }
+
+    deinit {
+        if let orientationObserver = orientationObserver {
+            NotificationCenter.default.removeObserver(orientationObserver)
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
         }
     }
 
@@ -29,9 +38,11 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve(["foldable": implementation.isDeviceFoldable()])
     }
 
-    /// - TODO: Return a real posture once Apple ships public foldable APIs.
     @objc func getFoldState(_ call: CAPPluginCall) {
-        call.resolve(implementation.getFoldState())
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            call.resolve(self.currentFoldState())
+        }
     }
 
     @objc func getHingeAngle(_ call: CAPPluginCall) {
@@ -45,19 +56,48 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    private func currentFoldState() -> [String: Any] {
+        return implementation.getFoldState(in: bridge?.webView)
+    }
+
     private func currentSizeClass() -> [String: String] {
         let traits = bridge?.viewController?.traitCollection ?? UITraitCollection.current
         return implementation.sizeClass(horizontal: traits.horizontalSizeClass, vertical: traits.verticalSizeClass)
     }
 
-    private func observeSizeClass() {
-        guard #available(iOS 17.0, *), let view = bridge?.viewController?.view else { return }
+    private func observeChanges() {
+        guard let view = bridge?.viewController?.view else { return }
+
+        lastFoldState = currentFoldState()
+        implementation.observeChanges(in: view) { [weak self] in
+            self?.notifyFoldStateIfChanged()
+        }
+
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        orientationObserver = NotificationCenter.default.addObserver(
+            forName: UIDevice.orientationDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.notifyFoldStateIfChanged()
+        }
+
+        guard #available(iOS 17.0, *) else { return }
 
         lastSizeClass = currentSizeClass()
         let traits: [UITrait] = [UITraitHorizontalSizeClass.self, UITraitVerticalSizeClass.self]
         _ = view.registerForTraitChanges(traits) { [weak self] (_: UIView, _: UITraitCollection) in
             self?.notifySizeClassIfChanged()
+            self?.notifyFoldStateIfChanged()
         }
+    }
+
+    private func notifyFoldStateIfChanged() {
+        let foldState = currentFoldState()
+        if let last = lastFoldState, (last as NSDictionary).isEqual(to: foldState) { return }
+
+        lastFoldState = foldState
+        notifyListeners("foldStateChange", data: foldState)
     }
 
     private func notifySizeClassIfChanged() {
@@ -67,7 +107,4 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         lastSizeClass = sizeClass
         notifyListeners("sizeClassChange", data: sizeClass)
     }
-
-    /// - TODO: No-op. `foldStateChange` is never emitted on iOS; there is no public
-    ///   API to observe a fold posture, so nothing subscribes and nothing fires.
 }
