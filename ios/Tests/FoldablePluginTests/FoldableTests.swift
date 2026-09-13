@@ -12,7 +12,12 @@ class FoldableTests: XCTestCase {
         let result = implementation.getFoldState()
 
         XCTAssertEqual(result["state"] as? String, "flat")
+        XCTAssertEqual(result["isSeparating"] as? Bool, false)
         XCTAssertNil(result["hingeOrientation"])
         XCTAssertNil(result["occludedBounds"])
+    }
+
+    func testGetHingeAngleReportsNullStub() {
+        XCTAssertTrue(Foldable().getHingeAngle()["angle"] is NSNull)
     }
 }

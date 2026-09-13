@@ -1,4 +1,4 @@
-import { Foldable } from 'capacitor-foldable';
+import { Foldable, installFoldablePolyfill } from 'capacitor-foldable';
 
 const TAG = '[foldable]';
 
@@ -6,7 +6,11 @@ const $ = (id) => document.getElementById(id);
 const els = {
   state: $('state'),
   orientation: $('orientation'),
+  hingeBounds: $('hingeBounds'),
   bounds: $('bounds'),
+  angle: $('angle'),
+  posture: $('posture'),
+  segments: $('segments'),
   window: $('window'),
   keyboard: $('keyboard'),
   rotation: $('rotation'),
@@ -23,6 +27,9 @@ function describe(fold) {
   return [
     `state=${fold.state}`,
     `hingeOrientation=${fold.hingeOrientation ?? 'none'}`,
+    fold.hingeBounds
+      ? `hingeBounds=${fold.hingeBounds.x},${fold.hingeBounds.y} ${fold.hingeBounds.width}x${fold.hingeBounds.height}`
+      : 'hingeBounds=none',
     fold.occludedBounds
       ? `occludedBounds=${fold.occludedBounds.x},${fold.occludedBounds.y} ${fold.occludedBounds.width}x${fold.occludedBounds.height}`
       : 'occludedBounds=none',
@@ -51,6 +58,9 @@ function render(fold) {
   els.orientation.textContent = fold.hingeOrientation ?? '—';
   els.window.textContent = `${window.innerWidth} × ${window.innerHeight}`;
 
+  const h = fold.hingeBounds;
+  els.hingeBounds.textContent = h ? `x ${h.x}, y ${h.y}, ${h.width} × ${h.height}` : '—';
+
   const b = fold.occludedBounds;
   els.bounds.textContent = b ? `x ${b.x}, y ${b.y}, ${b.width} × ${b.height}` : '—';
 
@@ -65,6 +75,16 @@ function render(fold) {
   }
 
   applyLayout(fold);
+  renderWebApis();
+}
+
+function renderWebApis() {
+  els.posture.textContent = navigator.devicePosture?.type ?? 'unavailable';
+
+  const segments = window.viewport?.segments;
+  els.segments.textContent = segments
+    ? segments.map((s) => `${Math.round(s.x)},${Math.round(s.y)} ${Math.round(s.width)}×${Math.round(s.height)}`).join(' | ')
+    : 'unavailable';
 }
 
 function logFold(fold) {
@@ -114,6 +134,22 @@ window.visualViewport?.addEventListener('resize', () => {
 const { foldable } = await Foldable.isDeviceFoldable();
 console.log(TAG, `isDeviceFoldable() → ${foldable}`);
 
+await installFoldablePolyfill();
+console.log(TAG, `polyfill installed: devicePosture=${navigator.devicePosture?.type} segments=${window.viewport?.segments.length}`);
+navigator.devicePosture?.addEventListener('change', () => {
+  console.log(TAG, `devicePosture change → ${navigator.devicePosture.type} segments=${window.viewport.segments.length}`);
+  renderWebApis();
+});
+
+const { angle } = await Foldable.getHingeAngle();
+console.log(TAG, `getHingeAngle() → ${angle}`);
+els.angle.textContent = angle === null ? 'no sensor' : `${Math.round(angle)}°`;
+
+await Foldable.addListener('hingeAngleChange', (event) => {
+  console.log(TAG, `hingeAngleChange: ${event.angle}`);
+  els.angle.textContent = `${Math.round(event.angle)}°`;
+});
+
 console.log(TAG, 'booting, calling getFoldState()');
 
 try {
@@ -158,6 +194,7 @@ window.addEventListener('orientationchange', () => {
 
 window.addEventListener('resize', () => {
   els.window.textContent = `${window.innerWidth} × ${window.innerHeight}`;
+  renderWebApis();
 });
 
 const boot = renderRotation();

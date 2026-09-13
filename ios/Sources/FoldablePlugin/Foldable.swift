@@ -12,6 +12,10 @@ import Foundation
     }
 
     @objc public func getFoldState() -> [String: Any] {
-        return ["state": "flat"]
+        return ["state": "flat", "isSeparating": false]
+    }
+
+    @objc public func getHingeAngle() -> [String: Any] {
+        return ["angle": NSNull()]
     }
 }

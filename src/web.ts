@@ -8,6 +8,10 @@ export class FoldableWeb extends WebPlugin implements FoldablePlugin {
   }
 
   async getFoldState(): Promise<FoldState> {
-    return { state: 'flat' };
+    return { state: 'flat', isSeparating: false };
+  }
+
+  async getHingeAngle(): Promise<{ angle: number | null }> {
+    return { angle: null };
   }
 }

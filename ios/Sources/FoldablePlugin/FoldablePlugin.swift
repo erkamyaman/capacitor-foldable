@@ -11,7 +11,8 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "Foldable"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "isDeviceFoldable", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getFoldState", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getFoldState", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getHingeAngle", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = Foldable()
 
@@ -22,6 +23,10 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     /// - TODO: Return a real posture once Apple ships public foldable APIs.
     @objc func getFoldState(_ call: CAPPluginCall) {
         call.resolve(implementation.getFoldState())
+    }
+
+    @objc func getHingeAngle(_ call: CAPPluginCall) {
+        call.resolve(implementation.getHingeAngle())
     }
 
     /// - TODO: No-op. `foldStateChange` is never emitted on iOS; there is no public
