@@ -19,9 +19,6 @@ protocol FoldProvider {
     func observe(_ view: UIView, onChange: @escaping () -> Void)
 }
 
-/// - TODO: Replace with a provider backed by Apple's foldable ("iPhone Duo") APIs once
-///   they are publicly documented in a released SDK. Until then this reports no fold
-///   rather than guessing at private or unreleased APIs.
 struct UnsupportedFoldProvider: FoldProvider {
     var isFoldable: Bool { false }
     var supportsTabletop: Bool { false }
@@ -46,7 +43,16 @@ struct UnsupportedFoldProvider: FoldProvider {
     }
 
     override public convenience init() {
-        self.init(provider: UnsupportedFoldProvider())
+        self.init(provider: Foldable.defaultProvider())
+    }
+
+    private static func defaultProvider() -> FoldProvider {
+        #if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+        if #available(iOS 27.1, *) {
+            return ReservedRegionFoldProvider(source: UIKitFoldSource())
+        }
+        #endif
+        return UnsupportedFoldProvider()
     }
 
     @objc public func isDeviceFoldable() -> Bool {
@@ -79,6 +85,23 @@ struct UnsupportedFoldProvider: FoldProvider {
 
     @objc public func getHingeAngle() -> [String: Any] {
         return ["angle": provider.hingeAngle().map { $0 as Any } ?? NSNull()]
+    }
+
+    @objc public func barPlacement(in traits: UITraitCollection) -> [String: Any] {
+        return ["verticalBarEdge": verticalBarEdge(of: traits).map { $0 as Any } ?? NSNull()]
+    }
+
+    private func verticalBarEdge(of traits: UITraitCollection) -> String? {
+        #if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+        if #available(iOS 27.1, *) {
+            switch traits.verticalBarEdge {
+            case .leading: return "leading"
+            case .trailing: return "trailing"
+            default: return nil
+            }
+        }
+        #endif
+        return nil
     }
 
     public func observeChanges(in view: UIView, onChange: @escaping () -> Void) {

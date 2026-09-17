@@ -46,6 +46,10 @@ class FoldableTests: XCTestCase {
         XCTAssertEqual(result["heightClass"], "medium")
     }
 
+    func testBarPlacementIsHorizontalWithoutVerticalBars() {
+        XCTAssertTrue(Foldable().barPlacement(in: UITraitCollection())["verticalBarEdge"] is NSNull)
+    }
+
     func testGetHingeAngleReportsNullStub() {
         XCTAssertTrue(Foldable().getHingeAngle()["angle"] is NSNull)
     }

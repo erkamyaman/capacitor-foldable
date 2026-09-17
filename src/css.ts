@@ -7,6 +7,12 @@ export const CSS_CLASSES = [
   'device-posture-folded',
 ];
 
+export const BAR_CLASSES = ['vertical-bars-leading', 'vertical-bars-trailing'];
+
+export function barClassFor(edge: 'leading' | 'trailing' | null): string | null {
+  return edge ? `vertical-bars-${edge}` : null;
+}
+
 export function cssFor(
   segments: SegmentRect[],
   posture: 'continuous' | 'folded',

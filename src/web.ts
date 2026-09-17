@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { DisplayModes, FoldablePlugin, FoldState, SizeClass } from './definitions';
+import type { BarPlacement, DisplayModes, FoldablePlugin, FoldState, SizeClass } from './definitions';
 import { sizeClassOf } from './size-class';
 
 export class FoldableWeb extends WebPlugin implements FoldablePlugin {
@@ -35,6 +35,10 @@ export class FoldableWeb extends WebPlugin implements FoldablePlugin {
 
   async getDisplayModes(): Promise<DisplayModes> {
     return { rearDisplay: 'unsupported', dualScreen: 'unsupported' };
+  }
+
+  async getBarPlacement(): Promise<BarPlacement> {
+    return { verticalBarEdge: null };
   }
 
   async startRearDisplay(): Promise<void> {

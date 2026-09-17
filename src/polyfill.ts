@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 
-import { CSS_CLASSES, cssFor } from './css';
-import type { FoldablePlugin, FoldState } from './definitions';
+import { BAR_CLASSES, barClassFor, CSS_CLASSES, cssFor } from './css';
+import type { BarPlacement, FoldablePlugin, FoldState } from './definitions';
 import { splitViewport } from './segments';
 
 type DevicePostureType = 'continuous' | 'folded';
@@ -93,7 +93,14 @@ async function run(plugin: FoldablePlugin): Promise<void> {
     applyCss();
   };
 
+  const applyBars = ({ verticalBarEdge }: BarPlacement) => {
+    const active = barClassFor(verticalBarEdge);
+    for (const name of BAR_CLASSES) root.classList.toggle(name, name === active);
+  };
+
   window.addEventListener('resize', applyCss);
   await plugin.addListener('foldStateChange', apply);
+  await plugin.addListener('barPlacementChange', applyBars);
   apply(await plugin.getFoldState());
+  applyBars(await plugin.getBarPlacement());
 }

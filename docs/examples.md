@@ -56,7 +56,7 @@ Every `env(viewport-segment-*)` value (`top`, `left`, `bottom`, `right`, `width`
 }
 ```
 
-The JavaScript APIs step aside once a web view enables them natively. On iOS the polyfill reports an unfolded device until iPhone Duo support lands.
+The JavaScript APIs step aside once a web view enables them natively. On iOS the polyfill reports the fold on iPhone Duo (iOS 27.1 or later) and an unfolded device everywhere else.
 
 ## Good to know
 

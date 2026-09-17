@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { cssFor } from '../src/css.ts';
+import { barClassFor, cssFor } from '../src/css.ts';
+
+test('a vertical bar edge maps to its class, and no edge to none', () => {
+  assert.equal(barClassFor('leading'), 'vertical-bars-leading');
+  assert.equal(barClassFor('trailing'), 'vertical-bars-trailing');
+  assert.equal(barClassFor(null), null);
+});
 
 test('one segment sets the 0-0 variables and the posture class', () => {
   const { variables, classes } = cssFor([{ x: 0, y: 0, width: 800, height: 600 }], 'continuous');

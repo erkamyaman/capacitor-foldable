@@ -20,7 +20,7 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
 | Android  | Supported | API 23, `compileSdk` 34 |
-| iOS      | Size classes only; fold data waits on Apple's iPhone Duo SDK | iOS 14 |
+| iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with iOS 27.1 and Xcode 27.1 or later | iOS 14 |
 | Web      | Stub, returns `flat` | |
 
 ## Do you need this plugin?
@@ -73,13 +73,14 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 | `@media (horizontal-viewport-segments: 2)` | `.horizontal-viewport-segments-2` |
 | `@media (vertical-viewport-segments: 2)` | `.vertical-viewport-segments-2` |
 | `env(viewport-segment-width 0 0)` | `var(--viewport-segment-width-0-0)` |
+| Native bars moved to the side (iPhone Duo) | `.vertical-bars-leading`, `.vertical-bars-trailing` |
 
 ## Guides
 
 - [Examples](docs/examples.md)
 - [Layout tips](docs/layout-tips.md)
 - [Testing on Android](docs/testing-android.md)
-- [Roadmap: iPhone Duo](docs/roadmap-iphone-duo.md)
+- [iPhone Duo](docs/roadmap-iphone-duo.md)
 
 ## API
 
@@ -90,6 +91,7 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 * [`getHingeAngle()`](#gethingeangle)
 * [`getSizeClass()`](#getsizeclass)
 * [`getDisplayModes()`](#getdisplaymodes)
+* [`getBarPlacement()`](#getbarplacement)
 * [`startRearDisplay()`](#startreardisplay)
 * [`stopRearDisplay()`](#stopreardisplay)
 * [`startDualScreen(...)`](#startdualscreen)
@@ -98,6 +100,7 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 * [`addListener('hingeAngleChange', ...)`](#addlistenerhingeanglechange-)
 * [`addListener('sizeClassChange', ...)`](#addlistenersizeclasschange-)
 * [`addListener('displayModeChange', ...)`](#addlistenerdisplaymodechange-)
+* [`addListener('barPlacementChange', ...)`](#addlistenerbarplacementchange-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -113,7 +116,8 @@ isDeviceFoldable() => Promise<{ foldable: boolean; supportsTabletop: boolean; }>
 ```
 
 Whether the device has a fold at all, and whether it can be propped half
-open like a laptop. Both `false` on iOS and web.
+open like a laptop. Both `false` on web, and on iOS except on iPhone Duo
+(iOS 27.1 or later).
 
 **Returns:** <code>Promise&lt;{ foldable: boolean; supportsTabletop: boolean; }&gt;</code>
 
@@ -147,7 +151,7 @@ getHingeAngle() => Promise<{ angle: number | null; }>
 
 Read the angle between the two halves of the device, in degrees: `0` when
 closed, `180` when flat. Resolves to `{ angle: null }` on devices without a
-hinge angle sensor, and always on iOS and web.
+hinge angle sensor, on web, and on iOS before 27.1.
 
 **Returns:** <code>Promise&lt;{ angle: number | null; }&gt;</code>
 
@@ -185,6 +189,23 @@ Read which of the foldable display modes the device offers right now. Both
 are `'unsupported'` on iOS and web.
 
 **Returns:** <code>Promise&lt;<a href="#displaymodes">DisplayModes</a>&gt;</code>
+
+**Since:** 8.0.0
+
+--------------------
+
+
+### getBarPlacement()
+
+```typescript
+getBarPlacement() => Promise<BarPlacement>
+```
+
+Read where native bars go. Native tab bars and toolbars move to the side of
+the display on iPhone Duo, but HTML ones stay put, so use this to move your
+own tab bar too.
+
+**Returns:** <code>Promise&lt;<a href="#barplacement">BarPlacement</a>&gt;</code>
 
 **Since:** 8.0.0
 
@@ -340,21 +361,42 @@ the user folded or unfolded the device. Never fires on iOS and web.
 --------------------
 
 
+### addListener('barPlacementChange', ...)
+
+```typescript
+addListener(eventName: 'barPlacementChange', listenerFunc: (placement: BarPlacement) => void) => Promise<PluginListenerHandle>
+```
+
+Listen for bar placement changes, such as opening or rotating iPhone Duo.
+Only fires on iOS 27.1 or later.
+
+| Param              | Type                                                                          |
+| ------------------ | ----------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'barPlacementChange'</code>                                             |
+| **`listenerFunc`** | <code>(placement: <a href="#barplacement">BarPlacement</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
 #### FoldState
 
-| Prop                   | Type                                                                    | Description                                                                                                                                                                                                                                                        | Since |
-| ---------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`state`**            | <code>'flat' \| 'half-opened' \| 'closed'</code>                        | Posture of the fold. `'closed'` is never reported today: a device shut on its cover display reports `'flat'`.                                                                                                                                                      | 8.0.0 |
-| **`isSeparating`**     | <code>boolean</code>                                                    | Whether the fold splits the web view into two areas: `true` when half-opened, or when the hinge has a physical gap.                                                                                                                                                | 8.0.0 |
-| **`posture`**          | <code>'flat' \| 'tabletop' \| 'book'</code>                             | How the device is held: `'tabletop'` when half-opened with a horizontal hinge, like a laptop, `'book'` when half-opened with a vertical hinge, and `'flat'` otherwise.                                                                                             | 8.0.0 |
-| **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                                 | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                                                                                                                                                 | 8.0.0 |
-| **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code>   | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold.                                                                                                                          | 8.0.0 |
-| **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code>   | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                                                                                                                                                 | 8.0.0 |
-| **`activeDisplay`**    | <code>'inner' \| 'outer'</code>                                         | Which display is showing the app, on a device with an inner and an outer display such as iPhone Duo. Omitted when the platform doesn't report it, which today is always.                                                                                           | 8.0.0 |
-| **`cameraBounds`**     | <code>{ x: number; y: number; width: number; height: number; }[]</code> | Areas of the web view covered by a front-facing camera, in CSS pixels. On Android these are the display cutouts. On iPhone Duo they will be the outer camera and the under-display inner camera while in use, once iOS support lands. Omitted when there are none. | 8.0.0 |
+| Prop                   | Type                                                                    | Description                                                                                                                                                                                                                                  | Since |
+| ---------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`state`**            | <code>'flat' \| 'half-opened' \| 'closed'</code>                        | Posture of the fold. `'closed'` is never reported today: a device shut on its cover display reports `'flat'`.                                                                                                                                | 8.0.0 |
+| **`isSeparating`**     | <code>boolean</code>                                                    | Whether the fold splits the web view into two areas: `true` when half-opened, or when the hinge has a physical gap.                                                                                                                          | 8.0.0 |
+| **`posture`**          | <code>'flat' \| 'tabletop' \| 'book'</code>                             | How the device is held: `'tabletop'` when half-opened with a horizontal hinge, like a laptop, `'book'` when half-opened with a vertical hinge, and `'flat'` otherwise.                                                                       | 8.0.0 |
+| **`hingeOrientation`** | <code>'horizontal' \| 'vertical'</code>                                 | Direction of the hinge relative to the window, so it flips when the device rotates. Omitted when there is no fold.                                                                                                                           | 8.0.0 |
+| **`hingeBounds`**      | <code>{ x: number; y: number; width: number; height: number; }</code>   | Position of the fold in CSS pixels, relative to the web view. Zero wide (or zero tall) on a seamless fold. Omitted when there is no fold.                                                                                                    | 8.0.0 |
+| **`occludedBounds`**   | <code>{ x: number; y: number; width: number; height: number; }</code>   | Area of the web view the hinge covers, in CSS pixels. Only present on devices with a physical gap.                                                                                                                                           | 8.0.0 |
+| **`activeDisplay`**    | <code>'inner' \| 'outer'</code>                                         | Which display is showing the app, on a device with an inner and an outer display such as iPhone Duo. Reported on iPhone Duo (iOS 27.1 or later) and omitted elsewhere.                                                                       | 8.0.0 |
+| **`cameraBounds`**     | <code>{ x: number; y: number; width: number; height: number; }[]</code> | Areas of the web view covered by a front-facing camera, in CSS pixels. On Android these are the display cutouts. On iPhone Duo they are the outer camera and the under-display inner camera while it is in use. Omitted when there are none. | 8.0.0 |
 
 
 #### SizeClass
@@ -373,6 +415,13 @@ the user folded or unfolded the device. Never fires on iOS and web.
 | ----------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`rearDisplay`** | <code><a href="#displaymodestatus">DisplayModeStatus</a></code> | Rear display mode moves the app to the outer display, so people can frame a photo with the rear cameras. Only on Android foldables that offer it. | 8.0.0 |
 | **`dualScreen`**  | <code><a href="#displaymodestatus">DisplayModeStatus</a></code> | Dual-screen mode shows a second page on the outer display while the app stays on the inner one. Only on Android foldables that offer it.          | 8.0.0 |
+
+
+#### BarPlacement
+
+| Prop                  | Type                                         | Description                                                                                                                                                                                                                                                                              | Since |
+| --------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`verticalBarEdge`** | <code>'leading' \| 'trailing' \| null</code> | The edge iPhone Duo moves tab bars and toolbars to when it lays them out vertically: `'leading'` or `'trailing'` in the reading direction, so `'leading'` is the left edge in left-to-right languages. `null` when bars stay horizontal, and always on Android, web and iOS before 27.1. | 8.0.0 |
 
 
 #### PluginListenerHandle

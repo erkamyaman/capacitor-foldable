@@ -156,6 +156,11 @@ class FoldablePlugin : Plugin() {
     }
 
     @PluginMethod
+    fun getBarPlacement(call: PluginCall) {
+        call.resolve(JSObject().put("verticalBarEdge", JSONObject.NULL))
+    }
+
+    @PluginMethod
     fun getDisplayModes(call: PluginCall) {
         lastDisplayModes?.let {
             call.resolve(it.toJSObject())

@@ -52,8 +52,8 @@ export interface FoldState {
 
   /**
    * Which display is showing the app, on a device with an inner and an outer
-   * display such as iPhone Duo. Omitted when the platform doesn't report it,
-   * which today is always.
+   * display such as iPhone Duo. Reported on iPhone Duo (iOS 27.1 or later) and
+   * omitted elsewhere.
    *
    * @since 8.0.0
    */
@@ -61,9 +61,9 @@ export interface FoldState {
 
   /**
    * Areas of the web view covered by a front-facing camera, in CSS pixels. On
-   * Android these are the display cutouts. On iPhone Duo they will be the outer
-   * camera and the under-display inner camera while in use, once iOS support
-   * lands. Omitted when there are none.
+   * Android these are the display cutouts. On iPhone Duo they are the outer
+   * camera and the under-display inner camera while it is in use. Omitted when
+   * there are none.
    *
    * @since 8.0.0
    */
@@ -126,10 +126,23 @@ export interface DisplayModes {
   dualScreen: DisplayModeStatus;
 }
 
+export interface BarPlacement {
+  /**
+   * The edge iPhone Duo moves tab bars and toolbars to when it lays them out
+   * vertically: `'leading'` or `'trailing'` in the reading direction, so
+   * `'leading'` is the left edge in left-to-right languages. `null` when bars
+   * stay horizontal, and always on Android, web and iOS before 27.1.
+   *
+   * @since 8.0.0
+   */
+  verticalBarEdge: 'leading' | 'trailing' | null;
+}
+
 export interface FoldablePlugin {
   /**
    * Whether the device has a fold at all, and whether it can be propped half
-   * open like a laptop. Both `false` on iOS and web.
+   * open like a laptop. Both `false` on web, and on iOS except on iPhone Duo
+   * (iOS 27.1 or later).
    *
    * @since 8.0.0
    */
@@ -147,7 +160,7 @@ export interface FoldablePlugin {
   /**
    * Read the angle between the two halves of the device, in degrees: `0` when
    * closed, `180` when flat. Resolves to `{ angle: null }` on devices without a
-   * hinge angle sensor, and always on iOS and web.
+   * hinge angle sensor, on web, and on iOS before 27.1.
    *
    * @since 8.0.0
    */
@@ -171,6 +184,15 @@ export interface FoldablePlugin {
    * @since 8.0.0
    */
   getDisplayModes(): Promise<DisplayModes>;
+
+  /**
+   * Read where native bars go. Native tab bars and toolbars move to the side of
+   * the display on iPhone Duo, but HTML ones stay put, so use this to move your
+   * own tab bar too.
+   *
+   * @since 8.0.0
+   */
+  getBarPlacement(): Promise<BarPlacement>;
 
   /**
    * Move the app to the outer display. Android asks the user to confirm first,
@@ -248,5 +270,16 @@ export interface FoldablePlugin {
   addListener(
     eventName: 'displayModeChange',
     listenerFunc: (modes: DisplayModes) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for bar placement changes, such as opening or rotating iPhone Duo.
+   * Only fires on iOS 27.1 or later.
+   *
+   * @since 8.0.0
+   */
+  addListener(
+    eventName: 'barPlacementChange',
+    listenerFunc: (placement: BarPlacement) => void,
   ): Promise<PluginListenerHandle>;
 }

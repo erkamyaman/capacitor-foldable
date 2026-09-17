@@ -16,6 +16,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getHingeAngle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getSizeClass", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDisplayModes", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getBarPlacement", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "startRearDisplay", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stopRearDisplay", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "startDualScreen", returnType: CAPPluginReturnPromise),
@@ -24,6 +25,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     private let implementation = Foldable()
     private var lastSizeClass: [String: String]?
     private var lastFoldState: [String: Any]?
+    private var lastBarPlacement: [String: Any]?
     private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
@@ -40,10 +42,13 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func isDeviceFoldable(_ call: CAPPluginCall) {
-        call.resolve([
-            "foldable": implementation.isDeviceFoldable(),
-            "supportsTabletop": implementation.supportsTabletop()
-        ])
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            call.resolve([
+                "foldable": self.implementation.isDeviceFoldable(),
+                "supportsTabletop": self.implementation.supportsTabletop()
+            ])
+        }
     }
 
     @objc func getFoldState(_ call: CAPPluginCall) {
@@ -54,7 +59,10 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func getHingeAngle(_ call: CAPPluginCall) {
-        call.resolve(implementation.getHingeAngle())
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            call.resolve(self.implementation.getHingeAngle())
+        }
     }
 
     @objc func getSizeClass(_ call: CAPPluginCall) {
@@ -66,6 +74,13 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getDisplayModes(_ call: CAPPluginCall) {
         call.resolve(["rearDisplay": "unsupported", "dualScreen": "unsupported"])
+    }
+
+    @objc func getBarPlacement(_ call: CAPPluginCall) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            call.resolve(self.currentBarPlacement())
+        }
     }
 
     @objc func startRearDisplay(_ call: CAPPluginCall) {
@@ -88,6 +103,10 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         return implementation.getFoldState(in: bridge?.webView)
     }
 
+    private func currentBarPlacement() -> [String: Any] {
+        return implementation.barPlacement(in: bridge?.viewController?.traitCollection ?? UITraitCollection.current)
+    }
+
     private func currentSizeClass() -> [String: String] {
         let traits = bridge?.viewController?.traitCollection ?? UITraitCollection.current
         let size = bridge?.viewController?.view.bounds.size ?? .zero
@@ -103,6 +122,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         guard let view = bridge?.viewController?.view else { return }
 
         lastFoldState = currentFoldState()
+        lastBarPlacement = currentBarPlacement()
         implementation.observeChanges(in: view) { [weak self] in
             self?.notifyFoldStateIfChanged()
         }
@@ -115,18 +135,33 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         ) { [weak self] _ in
             self?.notifyFoldStateIfChanged()
             self?.notifySizeClassIfChanged()
+            self?.notifyBarPlacementIfChanged()
         }
 
         guard #available(iOS 17.0, *) else { return }
 
         lastSizeClass = currentSizeClass()
-        let traits: [UITrait] = [UITraitHorizontalSizeClass.self, UITraitVerticalSizeClass.self]
         MainActor.assumeIsolated {
+            var traits: [UITrait] = [UITraitHorizontalSizeClass.self, UITraitVerticalSizeClass.self]
+            #if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+            if #available(iOS 27.1, *) {
+                traits += UITraitCollection.systemTraitsAffectingVerticalBarEdge
+            }
+            #endif
             _ = view.registerForTraitChanges(traits) { [weak self] (_: UIView, _: UITraitCollection) in
                 self?.notifySizeClassIfChanged()
                 self?.notifyFoldStateIfChanged()
+                self?.notifyBarPlacementIfChanged()
             }
         }
+    }
+
+    private func notifyBarPlacementIfChanged() {
+        let placement = currentBarPlacement()
+        if let last = lastBarPlacement, (last as NSDictionary).isEqual(to: placement) { return }
+
+        lastBarPlacement = placement
+        notifyListeners("barPlacementChange", data: placement)
     }
 
     private func notifyFoldStateIfChanged() {

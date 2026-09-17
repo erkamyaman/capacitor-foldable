@@ -10,6 +10,7 @@ const els = {
   hingeBounds: $('hingeBounds'),
   bounds: $('bounds'),
   sizeClass: $('sizeClass'),
+  barPlacement: $('barPlacement'),
   rearDisplay: $('rearDisplay'),
   dualScreen: $('dualScreen'),
   angle: $('angle'),
@@ -157,6 +158,19 @@ renderSizeClass(sizeClass);
 await Foldable.addListener('sizeClassChange', (next) => {
   console.log(TAG, `sizeClassChange: ${JSON.stringify(next)}`);
   renderSizeClass(next);
+});
+
+const renderBarPlacement = ({ verticalBarEdge }) => {
+  els.barPlacement.textContent = verticalBarEdge ? `vertical · ${verticalBarEdge}` : 'horizontal';
+};
+
+const barPlacement = await Foldable.getBarPlacement();
+console.log(TAG, `getBarPlacement() → ${JSON.stringify(barPlacement)}`);
+renderBarPlacement(barPlacement);
+
+await Foldable.addListener('barPlacementChange', (next) => {
+  console.log(TAG, `barPlacementChange: ${JSON.stringify(next)}`);
+  renderBarPlacement(next);
 });
 
 const { angle } = await Foldable.getHingeAngle();
