@@ -2,15 +2,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorFoldable",
+    name: "ErkamyamanCapacitorFoldable",
     platforms: [.iOS(.v14)],
     products: [
         .library(
-            name: "CapacitorFoldable",
+            name: "ErkamyamanCapacitorFoldable",
             targets: ["FoldablePlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", "7.0.0"..<"9.0.0")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", "7.0.0"..<"8.0.0")
     ],
     targets: [
         .target(

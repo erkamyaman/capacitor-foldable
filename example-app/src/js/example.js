@@ -1,4 +1,4 @@
-import { Foldable, installFoldablePolyfill } from 'capacitor-foldable';
+import { Foldable, installFoldablePolyfill } from '@erkamyaman/capacitor-foldable';
 
 const TAG = '[foldable]';
 

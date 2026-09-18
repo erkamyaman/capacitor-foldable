@@ -1,13 +1,13 @@
 {
-  "name": "capacitor-foldable",
-  "version": "8.0.0",
+  "name": "@erkamyaman/capacitor-foldable",
+  "version": "7.0.0",
   "description": "Fold-state and dual-display APIs for foldable devices in Capacitor apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
   "files": [
-    "CapacitorFoldable.podspec",
+    "ErkamyamanCapacitorFoldable.podspec",
     "LICENSE",
     "Package.swift",
     "android/build.gradle",
@@ -43,7 +43,7 @@
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "xcodebuild -scheme CapacitorFoldable -destination generic/platform=iOS",
+    "verify:ios": "xcodebuild -scheme ErkamyamanCapacitorFoldable -destination generic/platform=iOS",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build && npm test",
     "test": "node --test \"test/*.test.mjs\"",
@@ -75,7 +75,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=7.0.0"
+    "@capacitor/core": "^7.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
@@ -89,5 +89,8 @@
     "android": {
       "src": "android"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
