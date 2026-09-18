@@ -1,6 +1,6 @@
 import UIKit
 
-#if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+#if canImport(UIKit, _underlyingVersion: 9127.0.85) && !targetEnvironment(macCatalyst)
 @available(iOS 27.1, *)
 @MainActor
 final class UIKitFoldSource: @preconcurrency FoldSource {
@@ -27,7 +27,7 @@ final class UIKitFoldSource: @preconcurrency FoldSource {
 
     var hingeAngle: Double? {
         guard let hinge = hinge, hinge.status != .unknown else { return nil }
-        return Double(hinge.angle)
+        return Double(hinge.angle) * 180 / .pi
     }
 
     func reservedRegions(in view: UIView) -> [ReservedRegion] {

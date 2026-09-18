@@ -109,6 +109,29 @@ class ReservedRegionFoldProviderTests: XCTestCase {
         XCTAssertNil(implementation.getFoldState(in: view)["hingeBounds"])
     }
 
+    func testFullyOpenHingeIsFlatEvenIfTheDivisionIsStillActive() {
+        let source = FakeFoldSource()
+        source.hingeStatus = .fullyOpen
+        source.regions = [ReservedRegion(kind: .division, frame: CGRect(x: 456, y: 0, width: 40, height: 669), isActive: true)]
+
+        let result = foldState(source)
+
+        XCTAssertEqual(result["state"] as? String, "flat")
+        XCTAssertEqual(result["isSeparating"] as? Bool, false)
+        XCTAssertEqual(result["posture"] as? String, "flat")
+    }
+
+    func testPartiallyOpenHingeIsHalfOpenedEvenIfTheDivisionIsNotActiveYet() {
+        let source = FakeFoldSource()
+        source.hingeStatus = .partiallyOpen
+        source.regions = [ReservedRegion(kind: .division, frame: CGRect(x: 456, y: 0, width: 0, height: 669), isActive: false)]
+
+        let result = foldState(source)
+
+        XCTAssertEqual(result["state"] as? String, "half-opened")
+        XCTAssertEqual(result["posture"] as? String, "book")
+    }
+
     func testHingeAngleComesFromSource() {
         let source = FakeFoldSource()
         source.hingeAngle = 95

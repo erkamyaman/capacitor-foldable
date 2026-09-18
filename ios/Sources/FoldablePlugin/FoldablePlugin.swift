@@ -26,6 +26,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     private var lastSizeClass: [String: String]?
     private var lastFoldState: [String: Any]?
     private var lastBarPlacement: [String: Any]?
+    private var lastHingeAngle: Double?
     private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
@@ -125,6 +126,10 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         lastBarPlacement = currentBarPlacement()
         implementation.observeChanges(in: view) { [weak self] in
             self?.notifyFoldStateIfChanged()
+            self?.notifyHingeAngleIfChanged()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.notifyFoldStateIfChanged()
+            }
         }
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -143,7 +148,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         lastSizeClass = currentSizeClass()
         MainActor.assumeIsolated {
             var traits: [UITrait] = [UITraitHorizontalSizeClass.self, UITraitVerticalSizeClass.self]
-            #if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+            #if canImport(UIKit, _underlyingVersion: 9127.0.85) && !targetEnvironment(macCatalyst)
             if #available(iOS 27.1, *) {
                 traits += UITraitCollection.systemTraitsAffectingVerticalBarEdge
             }
@@ -154,6 +159,13 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
                 self?.notifyBarPlacementIfChanged()
             }
         }
+    }
+
+    private func notifyHingeAngleIfChanged() {
+        guard let angle = implementation.getHingeAngle()["angle"] as? Double, angle != lastHingeAngle else { return }
+
+        lastHingeAngle = angle
+        notifyListeners("hingeAngleChange", data: ["angle": angle])
     }
 
     private func notifyBarPlacementIfChanged() {

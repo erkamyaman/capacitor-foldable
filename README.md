@@ -56,7 +56,7 @@ More in [Examples](docs/examples.md).
 
 ## Web standard APIs
 
-Chrome ships the [Device Posture API](https://developer.mozilla.org/docs/Web/API/Device_Posture_API) and the [Viewport Segments API](https://developer.mozilla.org/docs/Web/API/Viewport_Segments_API), but Android's WebView has both turned off. `installFoldablePolyfill()` fills them in from the native fold state, and mirrors the CSS features as classes and variables on `<html>`:
+Chrome ships the [Device Posture API](https://developer.mozilla.org/docs/Web/API/Device_Posture_API) and the [Viewport Segments API](https://developer.mozilla.org/docs/Web/API/Viewport_Segments_API), but Android's WebView turns both off and Safari doesn't support them, so neither works inside a Capacitor app. `installFoldablePolyfill()` fills them in from the native fold state, and mirrors the CSS features as classes and variables on `<html>`:
 
 ```typescript
 import { installFoldablePolyfill } from 'capacitor-foldable';
@@ -80,7 +80,7 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 - [Examples](docs/examples.md)
 - [Layout tips](docs/layout-tips.md)
 - [Testing on Android](docs/testing-android.md)
-- [iPhone Duo](docs/roadmap-iphone-duo.md)
+- [iPhone Duo](docs/iphone-duo.md)
 
 ## API
 
@@ -302,8 +302,9 @@ the window.
 addListener(eventName: 'hingeAngleChange', listenerFunc: (event: { angle: number; }) => void) => Promise<PluginListenerHandle>
 ```
 
-Listen for hinge angle changes. The hinge sensor only runs while at least
-one of these listeners is registered. Never fires on iOS and web.
+Listen for hinge angle changes. On Android the hinge sensor only runs while
+at least one of these listeners is registered. On iOS it fires on iPhone
+Duo (iOS 27.1 or later). Never fires on web.
 
 | Param              | Type                                                |
 | ------------------ | --------------------------------------------------- |

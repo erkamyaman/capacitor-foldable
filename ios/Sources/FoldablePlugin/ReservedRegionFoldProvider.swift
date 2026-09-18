@@ -48,7 +48,15 @@ struct ReservedRegionFoldProvider: FoldProvider {
 func nativeFoldOf(regions: [ReservedRegion], hingeStatus: HingeStatus?) -> NativeFold {
     let divisions = hingeStatus == .closed ? [] : regions.filter { $0.kind == .division }
     let division = divisions.first { $0.isActive } ?? divisions.first
-    let isFolded = division?.isActive == true
+    let isFolded: Bool
+    switch hingeStatus {
+    case .partiallyOpen?:
+        isFolded = division != nil
+    case .fullyOpen?:
+        isFolded = false
+    default:
+        isFolded = division?.isActive == true
+    }
 
     var fold = NativeFold(state: isFolded ? "half-opened" : "flat", isSeparating: isFolded)
     if let division = division {

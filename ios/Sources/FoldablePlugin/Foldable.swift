@@ -47,7 +47,7 @@ struct UnsupportedFoldProvider: FoldProvider {
     }
 
     private static func defaultProvider() -> FoldProvider {
-        #if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+        #if canImport(UIKit, _underlyingVersion: 9127.0.85) && !targetEnvironment(macCatalyst)
         if #available(iOS 27.1, *) {
             return ReservedRegionFoldProvider(source: UIKitFoldSource())
         }
@@ -92,7 +92,7 @@ struct UnsupportedFoldProvider: FoldProvider {
     }
 
     private func verticalBarEdge(of traits: UITraitCollection) -> String? {
-        #if canImport(UIKit, _underlyingVersion: 9127.1) && !targetEnvironment(macCatalyst)
+        #if canImport(UIKit, _underlyingVersion: 9127.0.85) && !targetEnvironment(macCatalyst)
         if #available(iOS 27.1, *) {
             switch traits.verticalBarEdge {
             case .leading: return "leading"

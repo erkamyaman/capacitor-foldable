@@ -128,9 +128,8 @@ $('clear').addEventListener('click', () => {
   console.log(TAG, 'form cleared');
 });
 
-const baseline = window.visualViewport?.height ?? window.innerHeight;
 window.visualViewport?.addEventListener('resize', () => {
-  const inset = Math.round(baseline - window.visualViewport.height);
+  const inset = Math.round(window.innerHeight - window.visualViewport.height);
   const open = inset > 80;
   els.keyboard.textContent = open ? `open · ${inset}px inset` : 'closed';
   console.log(TAG, `keyboard ${open ? 'open' : 'closed'} inset=${inset} visualViewport=${Math.round(window.visualViewport.width)}x${Math.round(window.visualViewport.height)}`);
@@ -175,11 +174,11 @@ await Foldable.addListener('barPlacementChange', (next) => {
 
 const { angle } = await Foldable.getHingeAngle();
 console.log(TAG, `getHingeAngle() → ${angle}`);
-els.angle.textContent = angle === null ? 'no sensor' : `${Math.round(angle)}°`;
+els.angle.textContent = angle === null ? 'no sensor' : `${angle.toFixed(2)}°`;
 
 await Foldable.addListener('hingeAngleChange', (event) => {
   console.log(TAG, `hingeAngleChange: ${event.angle}`);
-  els.angle.textContent = `${Math.round(event.angle)}°`;
+  els.angle.textContent = `${event.angle.toFixed(2)}°`;
 });
 
 const renderDisplayModes = ({ rearDisplay, dualScreen }) => {

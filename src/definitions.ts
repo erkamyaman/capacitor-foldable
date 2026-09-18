@@ -238,8 +238,9 @@ export interface FoldablePlugin {
   addListener(eventName: 'foldStateChange', listenerFunc: (state: FoldState) => void): Promise<PluginListenerHandle>;
 
   /**
-   * Listen for hinge angle changes. The hinge sensor only runs while at least
-   * one of these listeners is registered. Never fires on iOS and web.
+   * Listen for hinge angle changes. On Android the hinge sensor only runs while
+   * at least one of these listeners is registered. On iOS it fires on iPhone
+   * Duo (iOS 27.1 or later). Never fires on web.
    *
    * @since 8.0.0
    */
