@@ -1,7 +1,7 @@
 <h1 align="center">Capacitor Foldable</h1>
 <p align="center"><strong><code>@erkamyaman/capacitor-foldable</code></strong></p>
 <p align="center">
-Fold state, hinge orientation and hinge angle for foldable devices in Capacitor apps.
+Fold state, posture, hinge angle and size classes for foldable phones such as Galaxy Z Fold and Flip and Pixel Fold, in Capacitor 7 apps.
 </p>
 
 ```typescript
@@ -21,7 +21,7 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
 | Android  | Supported | API 23, `compileSdk` 34 |
-| iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with Capacitor 8.5+, Xcode 27.1+ and iOS 27.1+ | iOS 14 |
+| iOS      | Size classes. No iPhone Duo features: use plugin v8 with Capacitor 8.5+ for those | iOS 14, built with Xcode 26 |
 | Web      | Stub, returns `flat` | |
 
 ## Do you need this plugin?
@@ -37,9 +37,13 @@ Web views already resize with the window, so a responsive layout that pads with 
 ## Installation
 
 ```bash
-npm install @erkamyaman/capacitor-foldable
+npm install @erkamyaman/capacitor-foldable@7
 npx cap sync
 ```
+
+This is the Capacitor 7 version. On Capacitor 8, install the latest `@erkamyaman/capacitor-foldable` instead, which also supports iPhone Duo.
+
+Build Capacitor 7 apps with Xcode 26. iOS 27 requires the scene lifecycle for apps built with Xcode 27, and Capacitor 7 doesn't adopt it, so a Capacitor 7 app built with Xcode 27 crashes at launch, with or without this plugin.
 
 ## Usage
 

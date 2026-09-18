@@ -1,5 +1,7 @@
 # iPhone Duo
 
+> This guide describes plugin v8. On v7 (Capacitor 7), iOS reports size classes only, since Capacitor 7 apps can't be built with Xcode 27.
+
 iPhone Duo support uses the iOS 27.1 APIs. It turns on when the app uses Capacitor 8.5 or later, is built with Xcode 27.1 or later and runs on iOS 27.1 or later. Apps built with an older Xcode keep working and report no fold. Capacitor 7 apps must stay on Xcode 26: iOS 27 requires the scene lifecycle, which only Capacitor 8.5 and later adopt, so a Capacitor 7 app built with Xcode 27 crashes at launch.
 
 - `getFoldState()` and `window.viewport.segments` come from the fold's reserved region. The fold is a 40-point band in the middle of the inner display: split around it while half-open, one segment while fully open.

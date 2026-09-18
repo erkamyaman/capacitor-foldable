@@ -1,9 +1,5 @@
 # Changelog
 
-## 8.0.0 (2026-09-19)
-
-The first release for Capacitor 8. It has the same features as 7.0.0. iPhone Duo support needs Capacitor 8.5 or later, which adopts the scene lifecycle iOS 27 requires.
-
 ## 7.0.0 (2026-09-19)
 
 The first release, for Capacitor 7.
