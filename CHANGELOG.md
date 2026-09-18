@@ -2,7 +2,7 @@
 
 ## 8.0.1 (2026-09-19)
 
-- README: screenshots of tabletop on Pixel Fold and book on iPhone Duo.
+- README: screenshots of iPhone Duo closed, in book and fully open, and of Pixel Fold in tabletop and book.
 
 ## 8.0.0 (2026-09-19)
 

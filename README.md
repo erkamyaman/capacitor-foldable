@@ -11,8 +11,13 @@ Fold state, posture, hinge angle, size classes and bar placement for foldable ph
 </p>
 
 <p align="center">
-<img width="420" alt="Pixel Fold in tabletop posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/android-tabletop.jpg">
-<img width="420" alt="iPhone Duo half-open in book posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/iphone-duo-book.jpg">
+<img height="240" alt="iPhone Duo closed, on the outer display" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/iphone-duo-closed.png">
+<img height="240" alt="iPhone Duo half-open in book posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/iphone-duo-book.png">
+<img height="240" alt="iPhone Duo fully open" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/iphone-duo-open.png">
+</p>
+<p align="center">
+<img height="300" alt="Pixel Fold in tabletop posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/android-tabletop.jpg">
+<img height="300" alt="Pixel Fold half-open in book posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/android-book.jpg">
 </p>
 
 ```typescript
