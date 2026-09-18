@@ -9,12 +9,15 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 // { state: 'half-opened', hingeOrientation: 'horizontal' }
 ```
 
+> [!NOTE]
+> **This is v7, for Capacitor 7.** On Android every function and event works. On iOS only size classes are real: `getSizeClass()` and `sizeClassChange`. The other functions run but report no fold (`getFoldState()` returns `flat`, `getHingeAngle()` returns `{ angle: null }` and `getBarPlacement()` `{ verticalBarEdge: null }`), and `hingeAngleChange` and `barPlacementChange` never fire. Capacitor 7 apps must be built with Xcode 26, which doesn't have Apple's iPhone Duo APIs. For iPhone Duo, use v8 with Capacitor 8.5 or later.
+
 ### Versions
 
-| Capacitor | Plugin |
-| --------- | ------ |
-| v7.x      | v7.x   |
-| v8.x      | v8.x   |
+| Capacitor | Plugin | iOS |
+| --------- | ------ | --- |
+| v7.x      | v7.x   | Size classes only, build with Xcode 26 |
+| v8.x      | v8.x   | Size classes, plus iPhone Duo on Capacitor 8.5+ |
 
 ### Supported Platforms
 
