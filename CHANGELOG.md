@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.1 (2026-09-19)
+
+- README: screenshots of tabletop and book on Pixel Fold.
+
 ## 7.0.0 (2026-09-19)
 
 The first release, for Capacitor 7.

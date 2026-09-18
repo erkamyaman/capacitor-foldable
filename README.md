@@ -10,6 +10,11 @@
 Fold state, posture, hinge angle and size classes for foldable phones such as Galaxy Z Fold and Flip and Pixel Fold, in Capacitor 7 apps.
 </p>
 
+<p align="center">
+<img width="420" alt="Pixel Fold in tabletop posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/android-tabletop.jpg">
+<img width="420" alt="Pixel Fold half-open in book posture" src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/android-book.jpg">
+</p>
+
 ```typescript
 const { state, hingeOrientation } = await Foldable.getFoldState();
 // { state: 'half-opened', hingeOrientation: 'horizontal' }
