@@ -1,6 +1,12 @@
 <h1 align="center">Capacitor Foldable</h1>
 <p align="center"><strong><code>@erkamyaman/capacitor-foldable</code></strong></p>
 <p align="center">
+  <img src="https://img.shields.io/maintenance/yes/2026?style=for-the-badge" />
+  <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/v/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
+  <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/dw/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/npm/l/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
+</p>
+<p align="center">
 Fold state, posture, hinge angle, size classes and bar placement for foldable phones such as Galaxy Z Fold and Flip, Pixel Fold and iPhone Duo, in Capacitor apps.
 </p>
 
