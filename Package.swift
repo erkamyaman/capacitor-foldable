@@ -10,7 +10,7 @@ let package = Package(
             targets: ["FoldablePlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", "7.0.0"..<"8.0.0")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", "8.0.0"..<"9.0.0")
     ],
     targets: [
         .target(

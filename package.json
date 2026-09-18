@@ -1,6 +1,6 @@
 {
   "name": "@erkamyaman/capacitor-foldable",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Fold-state and dual-display APIs for foldable devices in Capacitor apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -75,7 +75,7 @@
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "@capacitor/core": "^7.0.0"
+    "@capacitor/core": "^8.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
