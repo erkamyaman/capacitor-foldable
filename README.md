@@ -28,6 +28,7 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 Web views already resize with the window, so a responsive layout that pads with every safe-area inset adapts to foldables without a plugin. Use this one when your app needs to know what CSS can't tell it:
 
+- **Whether the device folds at all**, and whether it can stand half-open like a laptop.
 - **Where the fold is**, and whether it splits the screen.
 - **How the device is held**: flat, tabletop or book.
 - **The hinge angle**, for effects and interactions.
