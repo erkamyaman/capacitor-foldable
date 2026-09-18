@@ -11,10 +11,10 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 ### Versions
 
-| Capacitor | Plugin |
-| --------- | ------ |
-| v7.x      | v7.x   |
-| v8.x      | v8.x   |
+| Capacitor | Plugin | iOS |
+| --------- | ------ | --- |
+| v7.x      | v7.x   | Size classes only, build with Xcode 26 |
+| v8.x      | v8.x   | Size classes, plus iPhone Duo on Capacitor 8.5+ |
 
 ### Supported Platforms
 
