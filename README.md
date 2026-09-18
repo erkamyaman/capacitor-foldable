@@ -1,7 +1,7 @@
 <h1 align="center">Capacitor Foldable</h1>
 <p align="center"><strong><code>@erkamyaman/capacitor-foldable</code></strong></p>
 <p align="center">
-Fold state, hinge orientation and hinge angle for foldable devices in Capacitor apps.
+Fold state, posture, hinge angle, size classes and bar placement for foldable phones such as Galaxy Z Fold and Flip, Pixel Fold and iPhone Duo, in Capacitor apps.
 </p>
 
 ```typescript
@@ -20,8 +20,8 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
-| Android  | Supported | API 23, `compileSdk` 34 |
-| iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with Capacitor 8.5+, Xcode 27.1+ and iOS 27.1+ | iOS 14 |
+| Android  | Supported | API 24, `compileSdk` 34 |
+| iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with Capacitor 8.5+, Xcode 27.1+ and iOS 27.1+ | iOS 15 |
 | Web      | Stub, returns `flat` | |
 
 ## Do you need this plugin?
@@ -32,6 +32,7 @@ Web views already resize with the window, so a responsive layout that pads with 
 - **How the device is held**: flat, tabletop or book.
 - **The hinge angle**, for effects and interactions.
 - **Outer or inner display**, and Material window size classes.
+- **Where iPhone Duo puts native bars**, so your HTML tab bar can follow.
 - **The outer display on Android foldables**: rear display and dual screen.
 
 ## Installation
@@ -40,6 +41,8 @@ Web views already resize with the window, so a responsive layout that pads with 
 npm install @erkamyaman/capacitor-foldable
 npx cap sync
 ```
+
+On Capacitor 7, install `@erkamyaman/capacitor-foldable@7` instead.
 
 ## Usage
 
