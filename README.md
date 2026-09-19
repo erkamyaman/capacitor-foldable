@@ -5,6 +5,7 @@
   <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/v/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
   <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/dw/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/npm/l/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
+  <a href="https://github.com/sponsors/erkamyaman"><img src="https://img.shields.io/badge/sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" /></a>
 </p>
 <p align="center">
 Fold state, posture, hinge angle, size classes and bar placement for foldable phones such as Galaxy Z Fold and Flip, Pixel Fold and iPhone Duo, in Capacitor apps.
@@ -101,6 +102,7 @@ Using Ionic's `ion-tabs`? `import '@erkamyaman/capacitor-foldable/ionic-tabs.css
 | Ionic tabs without the plugin | With `ionic-tabs.css` |
 | --- | --- |
 | <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-book.png" width="300" alt="Ionic tab bar across the fold in book posture"> | <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-book.png" width="300" alt="Ionic tab bar as a pill on the side in book posture"> |
+| <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-closed.png" width="220" alt="Ionic tab bar at the bottom of the closed iPhone Duo"> | <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-closed.png" width="220" alt="Ionic tab bar as a pill under the clock on the closed iPhone Duo"> |
 
 ## Guides
 
