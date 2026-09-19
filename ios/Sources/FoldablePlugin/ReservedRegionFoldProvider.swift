@@ -64,6 +64,7 @@ func nativeFoldOf(regions: [ReservedRegion], hingeStatus: HingeStatus?) -> Nativ
         fold.hingeOrientation = division.frame.height >= division.frame.width ? "vertical" : "horizontal"
     }
     fold.cameraBounds = regions.filter { $0.kind == .occlusion && $0.isActive }.map { $0.frame }
-    fold.activeDisplay = hingeStatus.map { $0 == .closed ? "outer" : "inner" }
+    let onInnerDisplay = regions.contains { $0.kind == .division }
+    fold.activeDisplay = hingeStatus.map { $0 == .closed || !onInnerDisplay ? "outer" : "inner" }
     return fold
 }

@@ -9,6 +9,27 @@ export const CSS_CLASSES = [
 
 export const BAR_CLASSES = ['vertical-bars-leading', 'vertical-bars-trailing'];
 
+export const FOLD_CLASSES = ['fold-vertical', 'fold-horizontal'];
+
+export const FOLD_VARIABLES = ['--fold-left', '--fold-top', '--fold-width', '--fold-height'];
+
+export function foldCssFor(
+  hingeBounds: SegmentRect | undefined,
+  hingeOrientation: 'horizontal' | 'vertical' | undefined,
+): { variables: Record<string, string>; className: string | null } {
+  if (!hingeBounds || !hingeOrientation) return { variables: {}, className: null };
+
+  return {
+    variables: {
+      '--fold-left': `${hingeBounds.x}px`,
+      '--fold-top': `${hingeBounds.y}px`,
+      '--fold-width': `${hingeBounds.width}px`,
+      '--fold-height': `${hingeBounds.height}px`,
+    },
+    className: `fold-${hingeOrientation}`,
+  };
+}
+
 export function barClassFor(edge: 'leading' | 'trailing' | null): string | null {
   return edge ? `vertical-bars-${edge}` : null;
 }

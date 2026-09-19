@@ -97,6 +97,18 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 | `env(viewport-segment-width 0 0)` | `var(--viewport-segment-width-0-0)` |
 | Native bars moved to the side (iPhone Duo) | `.vertical-bars-leading`, `.vertical-bars-trailing` |
 
+The segment variables only exist while the device is half-open. To lay out along the fold whether it's flat or half-open, such as a game on one side and its controls on the other, the polyfill also sets the fold's position whenever there is one:
+
+| Fold | With the polyfill |
+| --- | --- |
+| Direction | `.fold-vertical`, `.fold-horizontal` |
+| Position and size | `var(--fold-left)`, `var(--fold-top)`, `var(--fold-width)`, `var(--fold-height)` |
+
+```css
+.fold-vertical .game { width: var(--fold-left); }
+.fold-vertical .controls { left: calc(var(--fold-left) + var(--fold-width)); }
+```
+
 Using Ionic's `ion-tabs`? `import '@erkamyaman/capacitor-foldable/ionic-tabs.css'` moves it to the side the way native tab bars do on iPhone Duo. See [Ionic tabs](docs/iphone-duo.md#ionic-tabs).
 
 | Ionic tabs without the plugin | With `ionic-tabs.css` |

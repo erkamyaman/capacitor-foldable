@@ -83,6 +83,27 @@ class ReservedRegionFoldProviderTests: XCTestCase {
         XCTAssertEqual(result["activeDisplay"] as? String, "outer")
     }
 
+    func testOpenHingeWithoutDivisionIsOuterDisplay() {
+        let source = FakeFoldSource()
+        source.hingeStatus = .fullyOpen
+
+        let result = foldState(source)
+
+        XCTAssertEqual(result["state"] as? String, "flat")
+        XCTAssertNil(result["hingeBounds"])
+        XCTAssertEqual(result["activeDisplay"] as? String, "outer")
+    }
+
+    func testPartiallyOpenHingeWithoutDivisionIsOuterDisplayWithoutFold() {
+        let source = FakeFoldSource()
+        source.hingeStatus = .partiallyOpen
+
+        let result = foldState(source)
+
+        XCTAssertEqual(result["state"] as? String, "flat")
+        XCTAssertEqual(result["activeDisplay"] as? String, "outer")
+    }
+
     func testActiveOcclusionsBecomeCameraBounds() {
         let source = FakeFoldSource()
         source.regions = [

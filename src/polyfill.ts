@@ -1,6 +1,15 @@
 import { Capacitor } from '@capacitor/core';
 
-import { BAR_CLASSES, barClassFor, CSS_CLASSES, cssFor, verticalTabBarBottom } from './css';
+import {
+  BAR_CLASSES,
+  barClassFor,
+  CSS_CLASSES,
+  cssFor,
+  FOLD_CLASSES,
+  FOLD_VARIABLES,
+  foldCssFor,
+  verticalTabBarBottom,
+} from './css';
 import type { BarPlacement, FoldablePlugin, FoldablePolyfillOptions, FoldState } from './definitions';
 import { takeOverKeyboard } from './keyboard';
 import { splitViewport } from './segments';
@@ -88,6 +97,12 @@ async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Pr
     variables = Object.keys(css.variables);
     for (const name of variables) root.style.setProperty(name, css.variables[name]);
     for (const name of CSS_CLASSES) root.classList.toggle(name, css.classes.includes(name));
+    const foldCss = foldCssFor(fold?.hingeBounds, fold?.hingeOrientation);
+    for (const name of FOLD_VARIABLES) {
+      if (foldCss.variables[name]) root.style.setProperty(name, foldCss.variables[name]);
+      else root.style.removeProperty(name);
+    }
+    for (const name of FOLD_CLASSES) root.classList.toggle(name, name === foldCss.className);
     root.style.setProperty(
       '--vertical-tab-bar-bottom',
       `${verticalTabBarBottom(fold?.cameraBounds ?? [], window.innerHeight)}px`,

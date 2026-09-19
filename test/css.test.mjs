@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { barClassFor, cssFor, verticalTabBarBottom } from '../src/css.ts';
+import { barClassFor, cssFor, foldCssFor, verticalTabBarBottom } from '../src/css.ts';
 
 test('a vertical bar edge maps to its class, and no edge to none', () => {
   assert.equal(barClassFor('leading'), 'vertical-bars-leading');
@@ -59,4 +59,21 @@ test('the vertical tab bar clears a camera in the lower half, ignoring the large
   ];
 
   assert.equal(verticalTabBarBottom(cameras, 466), 81);
+});
+
+test('a fold sets its position and direction, even when the device is flat', () => {
+  const { variables, className } = foldCssFor({ x: 456, y: 0, width: 40, height: 669 }, 'vertical');
+
+  assert.deepEqual(variables, {
+    '--fold-left': '456px',
+    '--fold-top': '0px',
+    '--fold-width': '40px',
+    '--fold-height': '669px',
+  });
+  assert.equal(className, 'fold-vertical');
+  assert.equal(foldCssFor({ x: 0, y: 370, width: 883, height: 0 }, 'horizontal').className, 'fold-horizontal');
+});
+
+test('no fold sets nothing', () => {
+  assert.deepEqual(foldCssFor(undefined, undefined), { variables: {}, className: null });
 });

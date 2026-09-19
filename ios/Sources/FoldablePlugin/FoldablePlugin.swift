@@ -125,11 +125,8 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         lastFoldState = currentFoldState()
         lastBarPlacement = currentBarPlacement()
         implementation.observeChanges(in: view) { [weak self] in
-            self?.notifyFoldStateIfChanged()
+            self?.notifyFoldStateNowAndAfterSettling()
             self?.notifyHingeAngleIfChanged()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.notifyFoldStateIfChanged()
-            }
         }
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -138,7 +135,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.notifyFoldStateIfChanged()
+            self?.notifyFoldStateNowAndAfterSettling()
             self?.notifySizeClassIfChanged()
             self?.notifyBarPlacementIfChanged()
         }
@@ -155,7 +152,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             #endif
             _ = view.registerForTraitChanges(traits) { [weak self] (_: UIView, _: UITraitCollection) in
                 self?.notifySizeClassIfChanged()
-                self?.notifyFoldStateIfChanged()
+                self?.notifyFoldStateNowAndAfterSettling()
                 self?.notifyBarPlacementIfChanged()
             }
         }
@@ -174,6 +171,13 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
         lastBarPlacement = placement
         notifyListeners("barPlacementChange", data: placement)
+    }
+
+    private func notifyFoldStateNowAndAfterSettling() {
+        notifyFoldStateIfChanged()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.notifyFoldStateIfChanged()
+        }
     }
 
     private func notifyFoldStateIfChanged() {

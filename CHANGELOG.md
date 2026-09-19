@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0 (2026-09-20)
+
+- **Fold position in CSS:** the polyfill sets `--fold-left`, `--fold-top`, `--fold-width` and `--fold-height`, and a `fold-vertical` or `fold-horizontal` class on `<html>`, whenever the device reports a fold, flat or half-open. Layouts can split along the fold without JavaScript ([#3](https://github.com/erkamyaman/capacitor-foldable/issues/3)).
+- **Fix, iPhone Duo:** `activeDisplay` comes from the fold region instead of the hinge, so it stays right when the app is still on the outer display with the hinge open.
+- **Fix, iPhone Duo:** the fold state is checked again after the app moves between displays, not only after hinge moves, so it no longer reports the previous display.
+
 ## 8.0.4 (2026-09-19)
 
 - Published from GitHub Actions through npm Trusted Publishing, with provenance. No code changes.

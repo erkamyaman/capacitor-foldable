@@ -38,6 +38,7 @@ function describe(fold) {
     fold.occludedBounds
       ? `occludedBounds=${fold.occludedBounds.x},${fold.occludedBounds.y} ${fold.occludedBounds.width}x${fold.occludedBounds.height}`
       : 'occludedBounds=none',
+    `activeDisplay=${fold.activeDisplay ?? 'none'}`,
     `window=${window.innerWidth}x${window.innerHeight}`,
   ].join(' ');
 }
