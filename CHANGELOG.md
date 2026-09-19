@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.0.4 (2026-09-19)
+
+- Published from GitHub Actions through npm Trusted Publishing, with provenance. No code changes.
+
 ## 8.0.3 (2026-09-19)
 
 - README: Ionic tabs before and after screenshots, and a Sponsor badge. No code changes.
