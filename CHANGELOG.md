@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.0.3 (2026-09-19)
+
+- README: Ionic tabs before and after screenshots, and a Sponsor badge. No code changes.
+
 ## 8.0.2 (2026-09-19)
 
 - **Ionic tabs on iPhone Duo:** `ionic-tabs.css` turns `ion-tabs` into a floating pill on the side, where native tab bars go, and moves it above the camera when needed. It only applies where iPhone Duo puts bars on the side. `ionic-tabs-ios26.css` optionally gives the horizontal bar iOS 26's floating style on every iPhone.
