@@ -98,6 +98,10 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 
 Using Ionic's `ion-tabs`? `import '@erkamyaman/capacitor-foldable/ionic-tabs.css'` moves it to the side the way native tab bars do on iPhone Duo. See [Ionic tabs](docs/iphone-duo.md#ionic-tabs).
 
+| Ionic tabs without the plugin | With `ionic-tabs.css` |
+| --- | --- |
+| <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-book.png" width="300" alt="Ionic tab bar across the fold in book posture"> | <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-book.png" width="300" alt="Ionic tab bar as a pill on the side in book posture"> |
+
 ## Guides
 
 - [Examples](docs/examples.md)
