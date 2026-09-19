@@ -1,0 +1,48 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - name: Pick the npm tag
+        id: tag
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Release $GITHUB_REF_NAME does not match package.json $version" >&2
+            exit 1
+          fi
+          case "$version" in
+            7.*) echo "name=latest-7" >> "$GITHUB_OUTPUT" ;;
+            *) echo "name=latest" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - run: npm install -g npm@latest
+      - run: npm install
+      - run: npm test
+      - run: npm publish --tag ${{ steps.tag.outputs.name }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+
+      - run: npm publish --ignore-scripts --tag ${{ steps.tag.outputs.name }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
