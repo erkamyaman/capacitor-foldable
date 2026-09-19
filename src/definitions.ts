@@ -138,6 +138,22 @@ export interface BarPlacement {
   verticalBarEdge: 'leading' | 'trailing' | null;
 }
 
+export interface FoldablePolyfillOptions {
+  /**
+   * Take over hiding Ionic's tab bar while the keyboard is open. iPhone Duo
+   * reports a keyboard on every fold, and Ionic waits for the window to return
+   * to the height it had when the keyboard first opened, so its tab bar can
+   * disappear until the device is folded back. With this on, the keyboard events
+   * never reach Ionic, and a `foldable-keyboard-open` class on `<html>` marks
+   * when a text field really has the keyboard. `ionic-tabs.css` hides the tab
+   * bar with it.
+   *
+   * @default false
+   * @since 8.0.2
+   */
+  ionicKeyboard?: boolean;
+}
+
 export interface FoldablePlugin {
   /**
    * Whether the device has a fold at all, and whether it can be propped half

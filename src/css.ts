@@ -13,6 +13,16 @@ export function barClassFor(edge: 'leading' | 'trailing' | null): string | null 
   return edge ? `vertical-bars-${edge}` : null;
 }
 
+const TAB_BAR_MARGIN = 24;
+const CAMERA_GAP = 15;
+
+export function verticalTabBarBottom(cameras: SegmentRect[], viewportHeight: number): number {
+  const below = cameras.filter((camera) => camera.y > viewportHeight / 2);
+  const camera = below.sort((a, b) => a.width * a.height - b.width * b.height)[0];
+  if (!camera) return TAB_BAR_MARGIN;
+  return Math.max(TAB_BAR_MARGIN, Math.round(viewportHeight - camera.y + CAMERA_GAP));
+}
+
 export function cssFor(
   segments: SegmentRect[],
   posture: 'continuous' | 'folded',

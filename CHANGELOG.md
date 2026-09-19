@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.0.2 (2026-09-19)
+
+- **Ionic tabs on iPhone Duo:** `ionic-tabs.css` turns `ion-tabs` into a floating pill on the side, where native tab bars go, and moves it above the camera when needed. It only applies where iPhone Duo puts bars on the side. `ionic-tabs-ios26.css` optionally gives the horizontal bar iOS 26's floating style on every iPhone.
+- **`installFoldablePolyfill({ ionicKeyboard: true })`** stops Ionic's tab bar from disappearing on iPhone Duo, which sends a keyboard event on every fold. Off by default.
+- The polyfill sets `--vertical-tab-bar-bottom` on `<html>`.
+- More npm keywords.
+
 ## 8.0.1 (2026-09-19)
 
 - README: screenshots of iPhone Duo closed, in book and fully open, and of Pixel Fold in tabletop and book.

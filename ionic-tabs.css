@@ -1,0 +1,86 @@
+.vertical-bars-leading ion-tab-bar,
+.vertical-bars-trailing ion-tab-bar {
+  position: absolute;
+  bottom: var(--vertical-tab-bar-bottom, 24px);
+  z-index: 10;
+  flex-direction: column;
+  width: 45px;
+  height: auto;
+  padding: 3px 2px;
+  border: none;
+  border-radius: 24.5px;
+  contain: none;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  backdrop-filter: blur(12px) saturate(180%);
+  box-shadow:
+    inset 0 0 0 0.5px rgba(0, 0, 0, 0.2),
+    inset 0 0 8px rgba(0, 0, 0, 0.04),
+    0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.vertical-bars-leading ion-tab-bar {
+  left: 24px;
+}
+
+.vertical-bars-trailing ion-tab-bar {
+  right: 24px;
+}
+
+.vertical-bars-leading ion-tab-button,
+.vertical-bars-trailing ion-tab-button {
+  --background: transparent;
+  --background-focused: transparent;
+  --color: #111;
+  --color-selected: #0088ff;
+  --padding-start: 0;
+  --padding-end: 0;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: none;
+  height: 54px;
+  border-radius: 22px;
+}
+
+.vertical-bars-leading ion-tab-button ion-label,
+.vertical-bars-trailing ion-tab-button ion-label {
+  display: none;
+}
+
+.vertical-bars-leading ion-tab-button.tab-selected,
+.vertical-bars-trailing ion-tab-button.tab-selected {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.vertical-bars-leading ion-content {
+  --padding-start: env(safe-area-inset-left);
+}
+
+.vertical-bars-trailing ion-content {
+  --padding-end: env(safe-area-inset-right);
+}
+
+.foldable-keyboard-open ion-tab-bar {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .vertical-bars-leading ion-tab-bar,
+  .vertical-bars-trailing ion-tab-bar {
+    background: rgba(40, 40, 40, 0.78);
+    box-shadow:
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
+      inset 0 0 8px rgba(255, 255, 255, 0.04),
+      0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .vertical-bars-leading ion-tab-button,
+  .vertical-bars-trailing ion-tab-button {
+    --color: #f2f2f2;
+  }
+
+  .vertical-bars-leading ion-tab-button.tab-selected,
+  .vertical-bars-trailing ion-tab-button.tab-selected {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}

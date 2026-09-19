@@ -1,7 +1,8 @@
 import { Capacitor } from '@capacitor/core';
 
-import { BAR_CLASSES, barClassFor, CSS_CLASSES, cssFor } from './css';
-import type { BarPlacement, FoldablePlugin, FoldState } from './definitions';
+import { BAR_CLASSES, barClassFor, CSS_CLASSES, cssFor, verticalTabBarBottom } from './css';
+import type { BarPlacement, FoldablePlugin, FoldablePolyfillOptions, FoldState } from './definitions';
+import { takeOverKeyboard } from './keyboard';
 import { splitViewport } from './segments';
 
 type DevicePostureType = 'continuous' | 'folded';
@@ -49,14 +50,16 @@ const postureOf = (fold: FoldState | null): DevicePostureType =>
 
 let installation: Promise<void> | null = null;
 
-export function install(plugin: FoldablePlugin): Promise<void> {
+export function install(plugin: FoldablePlugin, options: FoldablePolyfillOptions = {}): Promise<void> {
   if (!Capacitor.isNativePlatform()) return Promise.resolve();
 
-  installation ??= run(plugin);
+  installation ??= run(plugin, options);
   return installation;
 }
 
-async function run(plugin: FoldablePlugin): Promise<void> {
+async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Promise<void> {
+  if (options.ionicKeyboard) takeOverKeyboard(window, document);
+
   let fold: FoldState | null = null;
   const currentSegments = () => splitViewport(fold, window.innerWidth, window.innerHeight);
 
@@ -85,6 +88,10 @@ async function run(plugin: FoldablePlugin): Promise<void> {
     variables = Object.keys(css.variables);
     for (const name of variables) root.style.setProperty(name, css.variables[name]);
     for (const name of CSS_CLASSES) root.classList.toggle(name, css.classes.includes(name));
+    root.style.setProperty(
+      '--vertical-tab-bar-bottom',
+      `${verticalTabBarBottom(fold?.cameraBounds ?? [], window.innerHeight)}px`,
+    );
   };
 
   const apply = (next: FoldState) => {

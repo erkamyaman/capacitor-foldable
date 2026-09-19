@@ -49,7 +49,7 @@ Web views already resize with the window, so a responsive layout that pads with 
 - **How the device is held**: flat, tabletop or book.
 - **The hinge angle**, for effects and interactions.
 - **Outer or inner display**, and Material window size classes.
-- **Where iPhone Duo puts native bars**, so your HTML tab bar can follow.
+- **Where iPhone Duo puts native bars**, so your HTML tab bar can follow. For Ionic's `ion-tabs` there's a ready-made stylesheet, plus a fix for the tab bar disappearing when you fold.
 - **The outer display on Android foldables**: rear display and dual screen.
 
 ## Installation
@@ -95,6 +95,8 @@ window.viewport.segments; // two DOMRects when the fold splits the web view
 | `@media (vertical-viewport-segments: 2)` | `.vertical-viewport-segments-2` |
 | `env(viewport-segment-width 0 0)` | `var(--viewport-segment-width-0-0)` |
 | Native bars moved to the side (iPhone Duo) | `.vertical-bars-leading`, `.vertical-bars-trailing` |
+
+Using Ionic's `ion-tabs`? `import '@erkamyaman/capacitor-foldable/ionic-tabs.css'` moves it to the side the way native tab bars do on iPhone Duo. See [Ionic tabs](docs/iphone-duo.md#ionic-tabs).
 
 ## Guides
 

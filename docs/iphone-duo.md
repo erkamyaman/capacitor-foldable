@@ -51,15 +51,53 @@ When iPhone Duo moves bars to the side, the status bar turns vertical too, and t
 
 If the choice changes while the app runs, return the new value and call `setNeedsUpdateOfVerticalBarConfiguration()`.
 
-A tab bar that follows the system instead:
+To move your tab bar to the side instead, like native apps, see [Ionic tabs](#ionic-tabs).
 
-```css
-.vertical-bars-leading .tab-bar {
-  inset-block: 0;
-  inset-inline-start: 0;
-  flex-direction: column;
-}
+## Ionic tabs
+
+On iPhone Duo, native tab bars move to the side of the display as a small floating pill under the clock. Ionic's `ion-tabs` is HTML, so it stays a full-width bar at the bottom, next to a status bar that has already moved to the side:
+
+| Without the plugin | With `ionic-tabs.css` |
+| --- | --- |
+| <img src="images/ionic-before-closed.png" width="260" alt="Ionic tab bar at the bottom of the closed iPhone Duo"> | <img src="images/ionic-after-closed.png" width="260" alt="Ionic tab bar as a pill under the clock on the closed iPhone Duo"> |
+| <img src="images/ionic-before-book.png" width="360" alt="Ionic tab bar across the fold in book posture"> | <img src="images/ionic-after-book.png" width="360" alt="Ionic tab bar as a pill on the side in book posture"> |
+| <img src="images/ionic-before-open.png" width="360" alt="Ionic tab bar at the bottom of the open inner display"> | <img src="images/ionic-after-open.png" width="360" alt="Ionic tab bar as a pill on the side of the open inner display"> |
+
+The plugin ships a stylesheet that turns `ion-tabs` into that pill wherever iPhone Duo puts bars on the side:
+
+```typescript
+import '@erkamyaman/capacitor-foldable/ionic-tabs.css';
+import { installFoldablePolyfill } from '@erkamyaman/capacitor-foldable';
+
+await installFoldablePolyfill({ ionicKeyboard: true });
 ```
+
+- The pill follows the side the system uses (it switches with the camera as you rotate), and moves up to clear the camera when the camera is below it. `installFoldablePolyfill()` sets the `vertical-bars-*` classes and the `--vertical-tab-bar-bottom` variable it needs.
+- Everything in it is scoped to those classes, so it changes nothing on other iPhones, iPads, Android or the web, or on iPhone Duo held open and upright.
+- It's plain CSS, so you can override any of it, such as the colors of the selected tab.
+
+### The disappearing tab bar
+
+<img src="images/ionic-before-folded.png" width="360" alt="Ionic tab bar missing after folding">
+
+Without the plugin, Ionic apps on iPhone Duo can lose their tab bar entirely, as above. Two things cause it:
+
+- iPhone Duo sends a "keyboard will show" event on every fold, with no text field focused. Ionic hides the tab bar while the keyboard is open, so folding hides it.
+- When the keyboard closes, Ionic waits for the window to return to the height it had when the keyboard first opened. Type on the outer display (678 pt tall), then close the keyboard on the inner display (669 pt tall), and that never happens, so the tab bar stays hidden until you fold back.
+
+`ionicKeyboard: true` takes over from Ionic: keyboard events no longer reach it, and the plugin sets a `foldable-keyboard-open` class on `<html>` only while a text field really has the keyboard. `ionic-tabs.css` hides the tab bar with that class. It's off by default because it changes which listeners see the keyboard events: the Keyboard plugin's own `Keyboard.addListener` still gets them, but window listeners added after the plugin's don't.
+
+### iOS 26 tab bar
+
+<img src="images/ionic-after-upright.png" width="300" alt="Ionic tab bar as an iOS 26 floating pill on the open inner display">
+
+With the inner display upright, iPhone Duo keeps a horizontal tab bar: iOS 26's floating Liquid Glass pill. Ionic still draws the older full-width bar. To match iOS 26 there too, and on every other iPhone, add:
+
+```typescript
+import '@erkamyaman/capacitor-foldable/ionic-tabs-ios26.css';
+```
+
+This one changes every iPhone running your app, which is why it's a separate file.
 
 ## Test on the iPhone Duo simulator
 

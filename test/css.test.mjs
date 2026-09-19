@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { barClassFor, cssFor } from '../src/css.ts';
+import { barClassFor, cssFor, verticalTabBarBottom } from '../src/css.ts';
 
 test('a vertical bar edge maps to its class, and no edge to none', () => {
   assert.equal(barClassFor('leading'), 'vertical-bars-leading');
@@ -45,4 +45,18 @@ test('stacked segments are indexed along y', () => {
   assert.equal(variables['--viewport-segment-bottom-0-0'], '290px');
   assert.equal(variables['--viewport-segment-top-0-1'], '310px');
   assert.deepEqual(classes, ['device-posture-folded', 'vertical-viewport-segments-2']);
+});
+
+test('the vertical tab bar sits 24 px from the bottom when no camera is below it', () => {
+  assert.equal(verticalTabBarBottom([], 678), 24);
+  assert.equal(verticalTabBarBottom([{ x: 400, y: 29, width: 37, height: 37 }], 678), 24);
+});
+
+test('the vertical tab bar clears a camera in the lower half, ignoring the larger status area', () => {
+  const cameras = [
+    { x: 612, y: 400, width: 37, height: 37 },
+    { x: 596, y: 276, width: 82, height: 190 },
+  ];
+
+  assert.equal(verticalTabBarBottom(cameras, 466), 81);
 });

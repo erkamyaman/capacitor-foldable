@@ -1,6 +1,6 @@
 {
   "name": "@erkamyaman/capacitor-foldable",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Fold-state and dual-display APIs for foldable devices in Capacitor apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -8,6 +8,8 @@
   "unpkg": "dist/plugin.js",
   "files": [
     "ErkamyamanCapacitorFoldable.podspec",
+    "ionic-tabs-ios26.css",
+    "ionic-tabs.css",
     "LICENSE",
     "Package.swift",
     "android/build.gradle",
@@ -18,6 +20,10 @@
   ],
   "author": "Erkam Yaman <erkamyaman35@gmail.com>",
   "license": "MIT",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/erkamyaman"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erkamyaman/capacitor-foldable.git"
@@ -27,18 +33,24 @@
   },
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
+    "ionic",
     "plugin",
-    "native",
     "foldable",
-    "fold",
     "foldables",
+    "fold",
     "hinge",
-    "dual-screen",
     "posture",
+    "device-posture",
+    "viewport-segments",
+    "polyfill",
+    "dual-screen",
     "large-screen",
     "android",
     "ios",
     "pixel-fold",
+    "galaxy-fold",
+    "jetpack-windowmanager",
     "iphone-duo"
   ],
   "scripts": {
