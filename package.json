@@ -1,6 +1,6 @@
 {
   "name": "@erkamyaman/capacitor-foldable",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "description": "Fold-state and dual-display APIs for foldable devices in Capacitor apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -27,19 +27,24 @@
   },
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
+    "ionic",
     "plugin",
-    "native",
     "foldable",
-    "fold",
     "foldables",
+    "fold",
     "hinge",
-    "dual-screen",
     "posture",
+    "device-posture",
+    "viewport-segments",
+    "polyfill",
+    "dual-screen",
     "large-screen",
     "android",
     "ios",
     "pixel-fold",
-    "iphone-duo"
+    "galaxy-fold",
+    "jetpack-windowmanager"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

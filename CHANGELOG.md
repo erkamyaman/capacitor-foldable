@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.0.2 (2026-09-20)
+
+- More npm keywords, so the plugin turns up in searches for viewport segments, device posture and WindowManager.
+- Published from GitHub Actions through npm Trusted Publishing, with provenance. No code changes.
+
 ## 7.0.1 (2026-09-19)
 
 - README: screenshots of tabletop and book on Pixel Fold.
