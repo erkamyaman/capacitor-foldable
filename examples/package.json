@@ -1,0 +1,22 @@
+{
+  "name": "capacitor-foldable-examples",
+  "version": "1.0.0",
+  "description": "Foldable APIs for Capacitor apps, one runnable demo at a time",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "sync": "npm run build && npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "latest",
+    "@capacitor/ios": "^8.0.0",
+    "@erkamyaman/capacitor-foldable": "file:.."
+  },
+  "devDependencies": {
+    "@capacitor/cli": "latest",
+    "vite": "^7.0.0"
+  }
+}

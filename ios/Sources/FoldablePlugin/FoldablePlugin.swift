@@ -13,6 +13,8 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "isDeviceFoldable", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFoldState", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getReservedRegions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setVerticalBarBehavior", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getHingeAngle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getSizeClass", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDisplayModes", returnType: CAPPluginReturnPromise),
@@ -27,6 +29,8 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     private var lastFoldState: [String: Any]?
     private var lastBarPlacement: [String: Any]?
     private var lastHingeAngle: Double?
+    private var isFolding = false
+    private var foldingWorkItem: DispatchWorkItem?
     private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
@@ -56,6 +60,25 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             call.resolve(self.currentFoldState())
+        }
+    }
+
+    @objc func setVerticalBarBehavior(_ call: CAPPluginCall) {
+        let behavior = call.getString("behavior") ?? "automatic"
+        guard behavior == "automatic" || behavior == "disabled" else {
+            call.reject("behavior must be 'automatic' or 'disabled'")
+            return
+        }
+
+        DispatchQueue.main.async {
+            let applied = FoldableBridgeViewController.apply(disabled: behavior == "disabled")
+            call.resolve(["applied": applied])
+        }
+    }
+
+    @objc func getReservedRegions(_ call: CAPPluginCall) {
+        DispatchQueue.main.async {
+            call.resolve(self.implementation.getReservedRegions(in: self.bridge?.viewController?.view))
         }
     }
 
@@ -163,6 +186,24 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
         lastHingeAngle = angle
         notifyListeners("hingeAngleChange", data: ["angle": angle])
+        notifyFolding()
+    }
+
+    /// `true` while the hinge keeps moving, `false` once it has been still for a moment.
+    private func notifyFolding() {
+        if !isFolding {
+            isFolding = true
+            notifyListeners("foldingChange", data: ["folding": true])
+        }
+
+        foldingWorkItem?.cancel()
+        let settle = DispatchWorkItem { [weak self] in
+            guard let self = self, self.isFolding else { return }
+            self.isFolding = false
+            self.notifyListeners("foldingChange", data: ["folding": false])
+        }
+        foldingWorkItem = settle
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: settle)
     }
 
     private func notifyBarPlacementIfChanged() {

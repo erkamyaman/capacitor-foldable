@@ -64,16 +64,25 @@ test('the vertical tab bar clears a camera in the lower half, ignoring the large
 test('a fold sets its position and direction, even when the device is flat', () => {
   const { variables, className } = foldCssFor({ x: 456, y: 0, width: 40, height: 669 }, 'vertical');
 
-  assert.deepEqual(variables, {
-    '--fold-left': '456px',
-    '--fold-top': '0px',
-    '--fold-width': '40px',
-    '--fold-height': '669px',
-  });
+  assert.equal(variables['--fold-left'], '456px');
+  assert.equal(variables['--fold-width'], '40px');
+  assert.equal(variables['--fold-margin-left'], '0px');
   assert.equal(className, 'fold-vertical');
   assert.equal(foldCssFor({ x: 0, y: 370, width: 883, height: 0 }, 'horizontal').className, 'fold-horizontal');
 });
 
 test('no fold sets nothing', () => {
   assert.deepEqual(foldCssFor(undefined, undefined), { variables: {}, className: null });
+});
+
+test('fold margins become variables when the device reports them', () => {
+  const { variables } = foldCssFor({ x: 456, y: 0, width: 40, height: 669 }, 'vertical', {
+    top: 0,
+    right: 20,
+    bottom: 0,
+    left: 20,
+  });
+
+  assert.equal(variables['--fold-margin-left'], '20px');
+  assert.equal(variables['--fold-margin-right'], '20px');
 });

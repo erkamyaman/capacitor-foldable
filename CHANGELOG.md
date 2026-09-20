@@ -1,5 +1,22 @@
 # Changelog
 
+## 8.2.0 (2026-09-20)
+
+- **Fix, iPhone Duo:** the fold state follows the hinge angle when UIKit's hinge status disagrees with it ([#7](https://github.com/erkamyaman/capacitor-foldable/issues/7)). The status updates lazily, so the plugin could report `flat` at 60 degrees, `half-opened` at 170, or no fold at all while the phone was open.
+- **Fix:** the polyfill measures the window again after a fold, so segments and CSS variables are right even when the web view reports the previous size for a moment ([#5](https://github.com/erkamyaman/capacitor-foldable/issues/5)).
+- **`setVerticalBarBehavior()`:** keep bars horizontal on iPhone Duo, or hand them back to the system, from JavaScript. The plugin ships `FoldableBridgeViewController` for it, which replaces the hand-written view controller subclass the guide used to ask for.
+- **`getReservedRegions()`:** every region the system reserves on the current display, with its kind, whether it is active and the margins to keep clear. On iPhone Duo that is the fold, the vertical status bar strip and the under-display camera.
+- **`hingeMargins`** on `getFoldState()` and `--fold-margin-*` in the polyfill: the space to keep clear around the crease (20 points each side on iPhone Duo), so layouts can tell the crease from the keep-clear band.
+- **`getHingeAngle()`** also returns the system's hinge `status`.
+- `cameraBounds` is documented properly: on iPhone Duo it lists all active occlusions, which includes the vertical status bar strip, not only cameras.
+- **New `examples` app:** a catalogue of one-file demos, one per API, that lays itself out as two pages around the crease on iPhone Duo. The README also links [Hinge Guess](https://github.com/erkamyaman/hinge-guess), a game built on the plugin.
+- **`foldingChange`:** a new event that reports `{ folding: true }` as soon as the hinge starts moving and `{ folding: false }` half a second after it stops, so apps can pause animations or heavy work while the screen is in motion. The polyfill also puts a `folding` class on `<html>`. Android foldables with a hinge sensor, and iPhone Duo on iOS 27.1 or later.
+
+## 8.1.1 (2026-09-20)
+
+- `ionic-tabs.css` leaves a hidden tab bar hidden. It used to re-show `ion-tab-bar[hidden]`, which left an HTML tab bar showing through apps that replace it with a native one.
+- Docs: in Angular the stylesheet goes in `global.scss`, since Angular rejects a CSS import from TypeScript.
+
 ## 8.1.0 (2026-09-20)
 
 - **Fold position in CSS:** the polyfill sets `--fold-left`, `--fold-top`, `--fold-width` and `--fold-height`, and a `fold-vertical` or `fold-horizontal` class on `<html>`, whenever the device reports a fold, flat or half-open. Layouts can split along the fold without JavaScript ([#3](https://github.com/erkamyaman/capacitor-foldable/issues/3)).

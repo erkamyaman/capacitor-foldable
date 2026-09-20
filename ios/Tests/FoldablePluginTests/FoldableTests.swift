@@ -12,6 +12,10 @@ private final class FakeFoldProvider: FoldProvider {
         return reportedFold
     }
 
+    func hingeStatus() -> String? {
+        return nil
+    }
+
     func hingeAngle() -> Double? {
         return angle
     }

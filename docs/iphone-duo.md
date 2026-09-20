@@ -27,31 +27,48 @@ Apple also requires every app and game uploaded to App Store Connect from [April
 
 ## Keep bars horizontal
 
-When iPhone Duo moves bars to the side, the status bar turns vertical too, and the system adds a leading or trailing safe-area inset for it. If your app has an HTML tab bar at the bottom and you'd rather keep everything horizontal, opt your app out. A plugin can't change this for your app, so do it in your own view controller:
+When iPhone Duo moves bars to the side, the status bar turns vertical too, and the system adds a leading or trailing safe-area inset for it. If your app has an HTML tab bar at the bottom and you would rather keep everything horizontal, opt out:
 
-1. Add `ios/App/App/MainViewController.swift`:
+1. In `ios/App/App/SceneDelegate.swift`, use the view controller the plugin ships:
 
    ```swift
    import Capacitor
-   import UIKit
+   import FoldablePlugin
 
-   class MainViewController: CAPBridgeViewController {
-       #if canImport(UIKit, _underlyingVersion: 9127.0.85)
-       @available(iOS 27.1, *)
-       override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
-           .disabled
-       }
-       #endif
-   }
+   window?.rootViewController = FoldableBridgeViewController()
    ```
 
-   The `#if` keeps the file building with Xcode versions older than 27.1.
+   Older Capacitor apps create the controller in `Main.storyboard` instead. There, set the class to `FoldableBridgeViewController` with module `FoldablePlugin`.
 
-2. In `ios/App/App/Base.lproj/Main.storyboard`, change the view controller's `customClass="CAPBridgeViewController" customModule="Capacitor"` to `customClass="MainViewController" customModule="App" customModuleProvider="target"`, or set the class to `MainViewController` in Xcode's Identity inspector.
+2. Then choose the behaviour from JavaScript, at any time:
 
-If the choice changes while the app runs, return the new value and call `setNeedsUpdateOfVerticalBarConfiguration()`.
+   ```typescript
+   await Foldable.setVerticalBarBehavior({ behavior: 'disabled' });  // everything stays horizontal
+   await Foldable.setVerticalBarBehavior({ behavior: 'automatic' }); // back to the system default
+   ```
+
+It resolves to `{ applied: false }` when the app does not use `FoldableBridgeViewController`, so you can tell the setup is missing. Android, web and iOS before 27.1 always answer `false`.
 
 To move your tab bar to the side instead, like native apps, see [Ionic tabs](#ionic-tabs).
+
+## Reading the regions yourself
+
+`getReservedRegions()` returns everything the system reserves on the current display, which on iPhone Duo is the fold, the strip for the vertical status bar and the under-display camera:
+
+```typescript
+const { regions } = await Foldable.getReservedRegions();
+// [
+//   { kind: 'division', x: 456, y: 0, width: 40, height: 669,
+//     margins: { top: 0, right: 20, bottom: 0, left: 20 }, isActive: true },
+//   { kind: 'occlusion', x: 677, y: 21, width: 58, height: 37, isActive: false },
+//   { kind: 'occlusion', x: 867, y: 0, width: 84, height: 120, isActive: true },
+// ]
+```
+
+- The fold's frame is the crease **plus** the margins the system wants kept clear, 20 points each side on iPhone Duo. `getFoldState()` reports the same margins as `hingeMargins`, and the polyfill sets them as `--fold-margin-*`.
+- An inactive division means the phone is flat: the fold is still there, and its position is still useful for lining a layout up with the crease.
+- An inactive occlusion is a camera that is not in use.
+- `getHingeAngle()` also reports the system's `status` (`closed`, `partiallyOpen`, `fullyOpen`). It can lag the angle, so the plugin trusts the angle when they disagree.
 
 ## Ionic tabs
 
@@ -70,6 +87,12 @@ import '@erkamyaman/capacitor-foldable/ionic-tabs.css';
 import { installFoldablePolyfill } from '@erkamyaman/capacitor-foldable';
 
 await installFoldablePolyfill({ ionicKeyboard: true });
+```
+
+Angular rejects a CSS import in a TypeScript file, so put the stylesheet in `src/global.scss` instead:
+
+```scss
+@use '@erkamyaman/capacitor-foldable/ionic-tabs.css';
 ```
 
 - The pill follows the side the system uses (it switches with the camera as you rotate), and moves up to clear the camera when the camera is below it. `installFoldablePolyfill()` sets the `vertical-bars-*` classes and the `--vertical-tab-bar-bottom` variable it needs.

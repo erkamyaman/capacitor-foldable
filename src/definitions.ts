@@ -60,15 +60,64 @@ export interface FoldState {
   activeDisplay?: 'inner' | 'outer';
 
   /**
-   * Areas of the web view covered by a front-facing camera, in CSS pixels. On
-   * Android these are the display cutouts. On iPhone Duo they are the outer
-   * camera and the under-display inner camera while it is in use. Omitted when
-   * there are none.
+   * Areas of the web view something covers, in CSS pixels. On Android these are
+   * the display cutouts. On iPhone Duo these are the active occlusion regions:
+   * the camera in use, and the strip the system keeps for the vertical status
+   * bar. Use `getReservedRegions()` when you need to tell them apart. Omitted
+   * when there are none.
    *
    * @since 7.0.0
    */
   cameraBounds?: { x: number; y: number; width: number; height: number }[];
+
+  /**
+   * Space the system asks you to keep clear around the fold, in CSS pixels.
+   * `hingeBounds` covers the crease plus these margins, so the crease itself is
+   * `hingeBounds` shrunk by them. iPhone Duo reports 20 on each side of a
+   * vertical fold. Omitted on Android and where there is no fold.
+   *
+   * @since 8.2.0
+   */
+  hingeMargins?: { top: number; right: number; bottom: number; left: number };
 }
+
+export interface ReservedRegion {
+  /**
+   * `'division'` is the fold itself. `'occlusion'` is something covering the
+   * display, such as a camera or the vertical status bar area.
+   *
+   * @since 8.2.0
+   */
+  kind: 'division' | 'occlusion';
+
+  /**
+   * Whether the region applies right now. An inactive division is a flat fold,
+   * and an inactive occlusion is a camera that is not in use.
+   *
+   * @since 8.2.0
+   */
+  isActive: boolean;
+
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+
+  /**
+   * Space to keep clear around the region, in CSS pixels.
+   *
+   * @since 8.2.0
+   */
+  margins: { top: number; right: number; bottom: number; left: number };
+}
+
+/**
+ * How far open the hinge is, as the system sees it. Note that it can lag the
+ * angle: iOS keeps reporting `'closed'` for a moment after the phone opens.
+ *
+ * @since 8.2.0
+ */
+export type HingeStatus = 'closed' | 'partiallyOpen' | 'fullyOpen';
 
 export interface SizeClass {
   /**
@@ -180,7 +229,28 @@ export interface FoldablePlugin {
    *
    * @since 7.0.0
    */
-  getHingeAngle(): Promise<{ angle: number | null }>;
+  getHingeAngle(): Promise<{ angle: number | null; status: HingeStatus | null }>;
+
+  /**
+   * Read every region the system reserves on this display: the fold and
+   * anything covering the screen, active or not. iPhone Duo reports the fold,
+   * the vertical status bar area and the under-display camera. Resolves to an
+   * empty list on Android, on web and on iOS before 27.1.
+   *
+   * @since 8.2.0
+   */
+  getReservedRegions(): Promise<{ regions: ReservedRegion[] }>;
+
+  /**
+   * Choose whether iPhone Duo may move this app's bars to the side of the
+   * display. `'disabled'` keeps everything horizontal, including the status
+   * bar. Resolves to `{ applied: false }` when the app does not use
+   * `FoldableBridgeViewController`, on Android, on web and on iOS before 27.1.
+   * See the iPhone Duo guide for the one-line storyboard change.
+   *
+   * @since 8.2.0
+   */
+  setVerticalBarBehavior(options: { behavior: 'automatic' | 'disabled' }): Promise<{ applied: boolean }>;
 
   /**
    * Read the window's size classes: Apple's compact and regular, the signal its
@@ -287,6 +357,20 @@ export interface FoldablePlugin {
   addListener(
     eventName: 'displayModeChange',
     listenerFunc: (modes: DisplayModes) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for the device being folded or unfolded. `folding` turns `true` as
+   * soon as the hinge starts moving and `false` about half a second after it
+   * stops, so an app can pause animations or heavy work while the screen is in
+   * motion. Only fires where a hinge angle is available: Android foldables with
+   * a hinge sensor, and iPhone Duo on iOS 27.1 or later.
+   *
+   * @since 8.2.0
+   */
+  addListener(
+    eventName: 'foldingChange',
+    listenerFunc: (event: { folding: boolean }) => void,
   ): Promise<PluginListenerHandle>;
 
   /**

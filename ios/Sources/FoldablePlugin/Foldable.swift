@@ -9,6 +9,8 @@ struct NativeFold {
     var occludedBounds: CGRect?
     var activeDisplay: String?
     var cameraBounds: [CGRect] = []
+    var hingeMargins: UIEdgeInsets?
+    var regions: [ReservedRegion] = []
 }
 
 protocol FoldProvider {
@@ -16,6 +18,7 @@ protocol FoldProvider {
     var supportsTabletop: Bool { get }
     func fold(in view: UIView?) -> NativeFold?
     func hingeAngle() -> Double?
+    func hingeStatus() -> String?
     func observe(_ view: UIView, onChange: @escaping () -> Void)
 }
 
@@ -24,6 +27,10 @@ struct UnsupportedFoldProvider: FoldProvider {
     var supportsTabletop: Bool { false }
 
     func fold(in view: UIView?) -> NativeFold? {
+        return nil
+    }
+
+    func hingeStatus() -> String? {
         return nil
     }
 
@@ -77,6 +84,14 @@ struct UnsupportedFoldProvider: FoldProvider {
         result["hingeBounds"] = fold.hingeBounds.map(bounds(of:))
         result["occludedBounds"] = fold.occludedBounds.map(bounds(of:))
         result["activeDisplay"] = fold.activeDisplay
+        if let margins = fold.hingeMargins {
+            result["hingeMargins"] = [
+                "top": Int(margins.top.rounded()),
+                "right": Int(margins.right.rounded()),
+                "bottom": Int(margins.bottom.rounded()),
+                "left": Int(margins.left.rounded())
+            ]
+        }
         if !fold.cameraBounds.isEmpty {
             result["cameraBounds"] = fold.cameraBounds.map(bounds(of:))
         }
@@ -84,7 +99,32 @@ struct UnsupportedFoldProvider: FoldProvider {
     }
 
     @objc public func getHingeAngle() -> [String: Any] {
-        return ["angle": provider.hingeAngle().map { $0 as Any } ?? NSNull()]
+        return [
+            "angle": provider.hingeAngle().map { $0 as Any } ?? NSNull(),
+            "status": provider.hingeStatus().map { $0 as Any } ?? NSNull()
+        ]
+    }
+
+    public func getReservedRegions(in view: UIView? = nil) -> [String: Any] {
+        let regions = provider.fold(in: view)?.regions ?? []
+        return [
+            "regions": regions.map { region in
+                [
+                    "kind": region.kind == .division ? "division" : "occlusion",
+                    "isActive": region.isActive,
+                    "x": Int(region.frame.origin.x.rounded()),
+                    "y": Int(region.frame.origin.y.rounded()),
+                    "width": Int(region.frame.width.rounded()),
+                    "height": Int(region.frame.height.rounded()),
+                    "margins": [
+                        "top": Int(region.margins.top.rounded()),
+                        "right": Int(region.margins.right.rounded()),
+                        "bottom": Int(region.margins.bottom.rounded()),
+                        "left": Int(region.margins.left.rounded())
+                    ]
+                ]
+            }
+        ]
     }
 
     @objc public func barPlacement(in traits: UITraitCollection) -> [String: Any] {

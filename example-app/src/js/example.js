@@ -20,6 +20,11 @@ const els = {
   keyboard: $('keyboard'),
   rotation: $('rotation'),
   log: $('log'),
+  hingeStatus: $('hingeStatus'),
+  hingeMargins: $('hingeMargins'),
+  regions: $('regions'),
+  history: $('history'),
+  historyHint: $('historyHint'),
   sent: $('sent'),
   hinge: $('hinge'),
   layoutNote: $('layoutNote'),
@@ -80,8 +85,14 @@ function render(fold) {
     });
   }
 
+  const margins = fold.hingeMargins;
+  els.hingeMargins.textContent = margins
+    ? `${margins.top}, ${margins.right}, ${margins.bottom}, ${margins.left}`
+    : '—';
+
   applyLayout(fold);
   renderWebApis();
+  void renderRegions();
 }
 
 function renderWebApis() {
@@ -173,13 +184,78 @@ await Foldable.addListener('barPlacementChange', (next) => {
   renderBarPlacement(next);
 });
 
-const { angle } = await Foldable.getHingeAngle();
+const renderRegions = async () => {
+  const { regions } = await Foldable.getReservedRegions();
+  console.log(TAG, `getReservedRegions() → ${JSON.stringify(regions)}`);
+
+  els.regions.textContent = '';
+  if (regions.length === 0) {
+    els.regions.innerHTML = '<li>none</li>';
+    return;
+  }
+
+  for (const region of regions) {
+    const item = document.createElement('li');
+    const margins = Object.values(region.margins).some(Boolean)
+      ? ` · margins ${region.margins.top},${region.margins.right},${region.margins.bottom},${region.margins.left}`
+      : '';
+    item.textContent = `${region.kind} · ${region.isActive ? 'active' : 'inactive'} · ${region.x},${region.y} ${region.width}×${region.height}${margins}`;
+    els.regions.append(item);
+  }
+};
+
+await renderRegions();
+
+let barsDisabled = false;
+$('bars').addEventListener('click', async () => {
+  barsDisabled = !barsDisabled;
+  const { applied } = await Foldable.setVerticalBarBehavior({
+    behavior: barsDisabled ? 'disabled' : 'automatic',
+  });
+  $('bars').textContent = applied
+    ? `Bars: ${barsDisabled ? 'horizontal' : 'automatic'}`
+    : 'Bars: not available';
+  console.log(TAG, `setVerticalBarBehavior(${barsDisabled ? 'disabled' : 'automatic'}) → ${applied}`);
+});
+
+/** Draws the last few seconds of hinge angles. */
+const angles = [];
+const drawHistory = (value) => {
+  angles.push(value);
+  if (angles.length > 180) angles.shift();
+
+  const canvas = els.history;
+  const ctx = canvas.getContext('2d');
+  const { width, height } = canvas;
+  ctx.clearRect(0, 0, width, height);
+  ctx.strokeStyle = '#2563eb';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  angles.forEach((angle, index) => {
+    const x = (index / Math.max(angles.length - 1, 1)) * width;
+    const y = height - (angle / 180) * height;
+    if (index === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  els.historyHint.textContent = `${angles.length} samples · 0° bottom, 180° top`;
+};
+
+const { angle, status } = await Foldable.getHingeAngle();
+els.hingeStatus.textContent = status ?? '—';
 console.log(TAG, `getHingeAngle() → ${angle}`);
 els.angle.textContent = angle === null ? 'no sensor' : `${angle.toFixed(2)}°`;
 
-await Foldable.addListener('hingeAngleChange', (event) => {
-  console.log(TAG, `hingeAngleChange: ${event.angle}`);
+await Foldable.addListener('foldingChange', ({ folding }) => {
+  console.log(TAG, `foldingChange: ${folding}`);
+  document.documentElement.classList.toggle('folding', folding);
+});
+
+await Foldable.addListener('hingeAngleChange', async (event) => {
   els.angle.textContent = `${event.angle.toFixed(2)}°`;
+  drawHistory(event.angle);
+  const { status: next } = await Foldable.getHingeAngle();
+  els.hingeStatus.textContent = next ?? '—';
 });
 
 const renderDisplayModes = ({ rearDisplay, dualScreen }) => {

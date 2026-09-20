@@ -25,8 +25,16 @@ export class FoldableWeb extends WebPlugin implements FoldablePlugin {
     return { state: 'flat', isSeparating: false, posture: 'flat' };
   }
 
-  async getHingeAngle(): Promise<{ angle: number | null }> {
-    return { angle: null };
+  async setVerticalBarBehavior(): Promise<{ applied: boolean }> {
+    return { applied: false };
+  }
+
+  async getReservedRegions(): Promise<{ regions: [] }> {
+    return { regions: [] };
+  }
+
+  async getHingeAngle(): Promise<{ angle: number | null; status: null }> {
+    return { angle: null, status: null };
   }
 
   async getSizeClass(): Promise<SizeClass> {

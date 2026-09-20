@@ -153,6 +153,24 @@ class ReservedRegionFoldProviderTests: XCTestCase {
         XCTAssertEqual(result["posture"] as? String, "book")
     }
 
+    func testAngleDecidesWhenTheStatusDisagrees() {
+        let source = FakeFoldSource()
+        source.hingeStatus = .fullyOpen
+        source.hingeAngle = 60
+        source.regions = [ReservedRegion(kind: .division, frame: CGRect(x: 456, y: 0, width: 40, height: 669), isActive: false)]
+
+        XCTAssertEqual(foldState(source)["state"] as? String, "half-opened")
+    }
+
+    func testAngleNearFlatIsFlatEvenIfTheStatusSaysPartiallyOpen() {
+        let source = FakeFoldSource()
+        source.hingeStatus = .partiallyOpen
+        source.hingeAngle = 178
+        source.regions = [ReservedRegion(kind: .division, frame: CGRect(x: 456, y: 0, width: 40, height: 669), isActive: true)]
+
+        XCTAssertEqual(foldState(source)["state"] as? String, "flat")
+    }
+
     func testHingeAngleComesFromSource() {
         let source = FakeFoldSource()
         source.hingeAngle = 95

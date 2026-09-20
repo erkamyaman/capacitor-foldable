@@ -11,13 +11,25 @@ export const BAR_CLASSES = ['vertical-bars-leading', 'vertical-bars-trailing'];
 
 export const FOLD_CLASSES = ['fold-vertical', 'fold-horizontal'];
 
-export const FOLD_VARIABLES = ['--fold-left', '--fold-top', '--fold-width', '--fold-height'];
+export const FOLD_VARIABLES = [
+  '--fold-left',
+  '--fold-top',
+  '--fold-width',
+  '--fold-height',
+  '--fold-margin-top',
+  '--fold-margin-right',
+  '--fold-margin-bottom',
+  '--fold-margin-left',
+];
 
 export function foldCssFor(
   hingeBounds: SegmentRect | undefined,
   hingeOrientation: 'horizontal' | 'vertical' | undefined,
+  hingeMargins?: { top: number; right: number; bottom: number; left: number },
 ): { variables: Record<string, string>; className: string | null } {
   if (!hingeBounds || !hingeOrientation) return { variables: {}, className: null };
+
+  const margins = hingeMargins ?? { top: 0, right: 0, bottom: 0, left: 0 };
 
   return {
     variables: {
@@ -25,6 +37,10 @@ export function foldCssFor(
       '--fold-top': `${hingeBounds.y}px`,
       '--fold-width': `${hingeBounds.width}px`,
       '--fold-height': `${hingeBounds.height}px`,
+      '--fold-margin-top': `${margins.top}px`,
+      '--fold-margin-right': `${margins.right}px`,
+      '--fold-margin-bottom': `${margins.bottom}px`,
+      '--fold-margin-left': `${margins.left}px`,
     },
     className: `fold-${hingeOrientation}`,
   };

@@ -97,7 +97,7 @@ async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Pr
     variables = Object.keys(css.variables);
     for (const name of variables) root.style.setProperty(name, css.variables[name]);
     for (const name of CSS_CLASSES) root.classList.toggle(name, css.classes.includes(name));
-    const foldCss = foldCssFor(fold?.hingeBounds, fold?.hingeOrientation);
+    const foldCss = foldCssFor(fold?.hingeBounds, fold?.hingeOrientation, fold?.hingeMargins);
     for (const name of FOLD_VARIABLES) {
       if (foldCss.variables[name]) root.style.setProperty(name, foldCss.variables[name]);
       else root.style.removeProperty(name);
@@ -113,6 +113,11 @@ async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Pr
     fold = next;
     posture?.update(postureOf(next));
     applyCss();
+
+    // The web view can report the previous window size for a moment after the
+    // app moves between displays, so measure again once it has settled.
+    requestAnimationFrame(applyCss);
+    setTimeout(applyCss, 300);
   };
 
   const applyBars = ({ verticalBarEdge }: BarPlacement) => {
@@ -120,6 +125,7 @@ async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Pr
     for (const name of BAR_CLASSES) root.classList.toggle(name, name === active);
   };
 
+  await plugin.addListener('foldingChange', ({ folding }) => root.classList.toggle('folding', folding));
   window.addEventListener('resize', applyCss);
   await plugin.addListener('foldStateChange', apply);
   await plugin.addListener('barPlacementChange', applyBars);

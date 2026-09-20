@@ -39,6 +39,8 @@ class FoldablePlugin : Plugin() {
     private var displayModes: DisplayModes? = null
     private var lastKnownState: FoldState? = null
     private var hingeAngleJob: Job? = null
+    private var foldingJob: Job? = null
+    private var isFolding = false
     private var lastKnownAngle: Float? = null
     private var lastSizeClass: SizeClass? = null
     private var lastDisplayModes: DisplayModeStatuses? = null
@@ -104,6 +106,16 @@ class FoldablePlugin : Plugin() {
                 .put("foldable", implementation?.isDeviceFoldable() ?: false)
                 .put("supportsTabletop", implementation?.supportsTabletop() ?: false)
         )
+    }
+
+    @PluginMethod
+    fun setVerticalBarBehavior(call: PluginCall) {
+        call.resolve(JSObject().put("applied", false))
+    }
+
+    @PluginMethod
+    fun getReservedRegions(call: PluginCall) {
+        call.resolve(JSObject().put("regions", JSArray()))
     }
 
     @PluginMethod
@@ -234,7 +246,7 @@ class FoldablePlugin : Plugin() {
     }
 
     private fun updateHingeAngleUpdates() {
-        if (!hasListeners(HINGE_ANGLE_CHANGE)) {
+        if (!hasListeners(HINGE_ANGLE_CHANGE) && !hasListeners(FOLDING_CHANGE)) {
             hingeAngleJob?.cancel()
             hingeAngleJob = null
             lastKnownAngle = null
@@ -250,12 +262,28 @@ class FoldablePlugin : Plugin() {
                     implementation.hingeAngles().conflate().collect { angle ->
                         lastKnownAngle = angle
                         notifyListeners(HINGE_ANGLE_CHANGE, angleResult(angle))
+                        notifyFolding()
                         delay(HINGE_ANGLE_FRAME_MS)
                     }
                 } finally {
                     lastKnownAngle = null
                 }
             }
+        }
+    }
+
+    /** `true` while the hinge keeps moving, `false` once it has been still for a moment. */
+    private fun notifyFolding() {
+        if (!isFolding) {
+            isFolding = true
+            notifyListeners(FOLDING_CHANGE, JSObject().put("folding", true))
+        }
+
+        foldingJob?.cancel()
+        foldingJob = scope.launch {
+            delay(FOLDING_SETTLE_MS)
+            isFolding = false
+            notifyListeners(FOLDING_CHANGE, JSObject().put("folding", false))
         }
     }
 
@@ -326,6 +354,8 @@ class FoldablePlugin : Plugin() {
     private companion object {
         const val FIRST_EMISSION_TIMEOUT_MS = 1_000L
         const val HINGE_ANGLE_CHANGE = "hingeAngleChange"
+        const val FOLDING_CHANGE = "foldingChange"
+        const val FOLDING_SETTLE_MS = 500L
         const val HINGE_ANGLE_FRAME_MS = 16L
         const val SIZE_CLASS_CHANGE = "sizeClassChange"
         const val DISPLAY_MODE_CHANGE = "displayModeChange"

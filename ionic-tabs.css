@@ -60,7 +60,8 @@
   --padding-end: env(safe-area-inset-right);
 }
 
-.foldable-keyboard-open ion-tab-bar {
+.foldable-keyboard-open ion-tab-bar,
+ion-tab-bar[hidden] {
   display: none;
 }
 

@@ -32,10 +32,10 @@ final class UIKitFoldSource: @preconcurrency FoldSource {
 
     func reservedRegions(in view: UIView) -> [ReservedRegion] {
         let divisions = view.reservedRegions(kind: .division, options: .includeInactive).map {
-            ReservedRegion(kind: .division, frame: $0.frame, isActive: $0.isActive)
+            ReservedRegion(kind: .division, frame: $0.frame, margins: $0.margins, isActive: $0.isActive)
         }
-        let occlusions = view.reservedRegions(kind: .occlusion).map {
-            ReservedRegion(kind: .occlusion, frame: $0.frame, isActive: $0.isActive)
+        let occlusions = view.reservedRegions(kind: .occlusion, options: .includeInactive).map {
+            ReservedRegion(kind: .occlusion, frame: $0.frame, margins: $0.margins, isActive: $0.isActive)
         }
         return divisions + occlusions
     }

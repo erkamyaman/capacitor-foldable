@@ -1,0 +1,223 @@
+:root {
+  color-scheme: light dark;
+  --ink: #16181d;
+  --muted: #6b7280;
+  --ground: #f4f4f5;
+  --card: #ffffff;
+  --line: #e4e4e7;
+  --accent: #1f2937;
+  --accent-ink: #ffffff;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #f3f4f6;
+    --muted: #9ca3af;
+    --ground: #0e0f12;
+    --card: #1a1c21;
+    --line: #2d2f36;
+    --accent: #e5e7eb;
+    --accent-ink: #14161b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--ground);
+  touch-action: manipulation;
+}
+
+.display {
+  margin: 4px 0 16px;
+}
+
+.display .up {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.display h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.display p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+
+main {
+  padding: calc(env(safe-area-inset-top) + 14px) calc(env(safe-area-inset-right) + 14px) calc(env(safe-area-inset-bottom) + 14px)
+    calc(env(safe-area-inset-left) + 14px);
+}
+
+html:not(.fold-vertical) body:not(.demo-open) #demo,
+html:not(.fold-vertical) body.demo-open #list {
+  display: none;
+}
+
+/* Two pages: the list on the left screen, the demo on the right. */
+.fold-vertical body {
+  overflow: hidden;
+}
+
+.fold-vertical main {
+  position: fixed;
+  inset: 0;
+  padding: 0;
+}
+
+.fold-vertical .pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: block;
+  overflow-y: auto;
+  padding: calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 14px);
+}
+
+.fold-vertical #list {
+  left: 0;
+  width: var(--fold-left);
+  padding-left: calc(env(safe-area-inset-left) + 14px);
+}
+
+.fold-vertical #demo {
+  left: calc(var(--fold-left) + var(--fold-width));
+  right: 0;
+  padding-right: calc(env(safe-area-inset-right) + 14px);
+}
+
+.fold-vertical .up {
+  display: none;
+}
+
+/* A demo that needs the whole device gets both pages. */
+.fold-vertical body.demo-wide #list {
+  display: none;
+}
+
+.fold-vertical #demo .prompt {
+  margin-top: 46px;
+}
+
+.fold-vertical body.demo-wide #demo {
+  left: 0;
+  right: 0;
+  padding: calc(env(safe-area-inset-top) + 14px) calc(env(safe-area-inset-right) + 14px)
+    calc(env(safe-area-inset-bottom) + 14px) calc(env(safe-area-inset-left) + 14px);
+}
+
+.fold-vertical body.demo-wide .up {
+  display: inline-block;
+}
+
+.prompt {
+  margin: 0;
+  color: var(--muted);
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list a[aria-current] {
+  border-color: var(--ink);
+}
+
+.list a {
+  display: block;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+}
+
+.list h2 {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.list p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.card {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  margin-bottom: 12px;
+}
+
+.readout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.readout dt {
+  color: var(--muted);
+}
+
+.readout dd {
+  margin: 0;
+}
+
+.big {
+  margin: 0;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
