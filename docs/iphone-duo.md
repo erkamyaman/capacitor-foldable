@@ -66,9 +66,19 @@ const { regions } = await Foldable.getReservedRegions();
 ```
 
 - The fold's frame is the crease **plus** the margins the system wants kept clear, 20 points each side on iPhone Duo. `getFoldState()` reports the same margins as `hingeMargins`, and the polyfill sets them as `--fold-margin-*`.
-- An inactive division means the phone is flat: the fold is still there, and its position is still useful for lining a layout up with the crease.
+- An inactive division means the phone is flat: the fold is still there, and its position is still useful for lining a layout up with the crease. The plugin always includes inactive regions, so the fold is reported whatever the phone is doing.
 - An inactive occlusion is a camera that is not in use.
 - `getHingeAngle()` also reports the system's `status` (`closed`, `partiallyOpen`, `fullyOpen`). It can lag the angle, so the plugin trusts the angle when they disagree.
+
+### Straight from UIKit
+
+Writing native code beside the plugin, in a bridge view controller subclass or in SwiftUI, the same regions come from `UIView`:
+
+```swift
+let regions = view.reservedRegions(kind: .division, options: .includeInactive)
+```
+
+`options: .includeInactive` is the part that catches people out. A flat iPhone Duo still has a fold, but the system marks that region inactive, so a plain `reservedRegions(kind: .division)` returns an empty array until the phone is folded. The same is true of the under-display camera, which is only active while the camera is in use.
 
 ## Ionic tabs
 
