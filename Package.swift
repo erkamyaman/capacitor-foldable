@@ -19,7 +19,8 @@ let package = Package(
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/FoldablePlugin"),
+            path: "ios/Sources/FoldablePlugin",
+            resources: [.copy("Resources/PrivacyInfo.xcprivacy")]),
         .testTarget(
             name: "FoldablePluginTests",
             dependencies: ["FoldablePlugin"],

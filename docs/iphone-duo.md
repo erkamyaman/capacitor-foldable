@@ -27,7 +27,9 @@ Apple also requires every app and game uploaded to App Store Connect from [April
 
 ## Keep bars horizontal
 
-When iPhone Duo moves bars to the side, the status bar turns vertical too, and the system adds a leading or trailing safe-area inset for it. If your app has an HTML tab bar at the bottom and you would rather keep everything horizontal, opt out:
+Apple's guidance is to leave this alone: ["In general, don't override the default bar placement. The position of controls on the vertical axis is one of the core patterns of iPhone Duo."](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) The same page leaves one door open, "Consider using the full display width for interfaces where bars aren't necessary", which is where this belongs: games, a camera viewfinder, a drawing canvas, anything immersive that has no system bars to speak of. Reach for it because your layout has no bars, not to avoid adapting one.
+
+When iPhone Duo moves bars to the side, the status bar turns vertical too, and the system adds a leading or trailing safe-area inset for it. To opt out:
 
 1. In `ios/App/App/SceneDelegate.swift`, use the view controller the plugin ships:
 
@@ -48,6 +50,8 @@ When iPhone Duo moves bars to the side, the status bar turns vertical too, and t
    ```
 
 It resolves to `{ applied: false }` when the app does not use `FoldableBridgeViewController`, so you can tell the setup is missing. Android, web and iOS before 27.1 always answer `false`.
+
+The web view's safe areas follow the bars either way, so you rarely have to do the arithmetic yourself. Measured on the simulator, with the bars on the side the strip arrives as `env(safe-area-inset-right)` of 84 points on both displays; with `disabled`, that becomes `env(safe-area-inset-top)` of 82 and the right inset drops to zero, live and without a reload.
 
 To move your tab bar to the side instead, like native apps, see [Ionic tabs](#ionic-tabs).
 

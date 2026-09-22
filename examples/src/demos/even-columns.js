@@ -28,11 +28,17 @@ export const evenColumns = {
           font-weight: 650;
         }
         .fold-vertical #grid {
-          grid-template-columns: repeat(2, calc((var(--fold-left) - 20px) / 2)) var(--fold-width) repeat(2, 1fr);
+          /* The fold variables are viewport coordinates, so subtract everything
+             between the viewport edge and this grid's own content box. */
+          --grid-inset: calc(29px + env(safe-area-inset-left));
+          grid-template-columns: repeat(2, calc((var(--fold-left) - var(--grid-inset)) / 2)) var(--fold-width) repeat(2, 1fr);
           gap: 10px 0;
         }
         .fold-vertical .tile { margin: 0 5px; }
-        .fold-vertical #grid::before { content: ''; grid-row: 1 / -1; grid-column: 3; }
+        .fold-vertical .tile:nth-child(4n + 1) { grid-column: 1; }
+        .fold-vertical .tile:nth-child(4n + 2) { grid-column: 2; }
+        .fold-vertical .tile:nth-child(4n + 3) { grid-column: 4; }
+        .fold-vertical .tile:nth-child(4n) { grid-column: 5; }
       </style>
     `;
   },

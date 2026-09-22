@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.3.0 (2026-09-23)
+
+- **Privacy manifest.** The plugin ships a `PrivacyInfo.xcprivacy` declaring no tracking, no collected data and no required-reason APIs, wired into both the Swift package and the podspec. Nothing it does could hold up an App Store review, and the declaration now shows up in your app's privacy report.
+- **A skill for coding agents** in [`skills/`](skills/capacitor-foldable), also published with the package: laying out around the crease, the API, Ionic specifics, iPhone Duo, Android foldables and how to test on both. Beta, and built from the plugin's own source and measurements.
+- Docs: what the vertical bar opt-out is for, since Apple asks you not to override bar placement; how the side bar arrives as `safe-area-inset-right` (84 points) and moves to the top (82) when you disable it; that a flat foldable's fold region is reported inactive, so reading it natively needs `options: .includeInactive`; and that `ionic-tabs.css` keeps one deliberately unscoped rule.
+- Examples: the even-columns demo lines its gutter up with the crease properly, and no longer lets tiles land in the fold column from the second row down.
+
 ## 8.2.0 (2026-09-20)
 
 - **Fix, iPhone Duo:** the fold state follows the hinge angle when UIKit's hinge status disagrees with it ([#7](https://github.com/erkamyaman/capacitor-foldable/issues/7)). The status updates lazily, so the plugin could report `flat` at 60 degrees, `half-opened` at 170, or no fold at all while the phone was open.
