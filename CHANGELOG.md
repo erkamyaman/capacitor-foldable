@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.3 (2026-09-23)
+
+- **Privacy manifest.** The plugin ships a `PrivacyInfo.xcprivacy` declaring no tracking, no collected data and no required-reason APIs, wired into both the Swift package and the podspec, so it shows up in your app's privacy report. No code changes.
+
 ## 7.0.2 (2026-09-20)
 
 - More npm keywords, so the plugin turns up in searches for viewport segments, device posture and WindowManager.
