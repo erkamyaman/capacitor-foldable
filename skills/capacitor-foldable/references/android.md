@@ -33,9 +33,11 @@ await Foldable.startDualScreen({ url: 'cover.html' });
 await Foldable.stopDualScreen();
 ```
 
-The URL is loaded in a second web view on the other display, and a relative path resolves against the app's own URL, so the page has to be part of the web build. A `data:` URL is often easier for dynamic content, and is what the plugin's own example app uses.
+**Load only content you control.** The plugin refuses anything that is not a page of your own app or a `data:` URL, and keeps the second web view on your origin once it is loaded, because that view shares the app's cookies and storage. Never pass a URL that came from a server, a deep link, a push payload or a user.
 
-Treat it as a presentation surface: a plain web view with no Capacitor bridge, so no plugin API inside it. Anything it needs goes in the URL, though the page is served through the app's own local server, so same-origin storage is readable there too. Calling `startDualScreen` again rebuilds the page rather than messaging it.
+A `data:` URL is the easier route for dynamic content and is what the plugin's own example uses, but note two things. It gets an **opaque origin**, so `localStorage` and friends throw there and it cannot read the app's storage: put what the page needs into the document. And `encodeURIComponent` is URL encoding, not HTML escaping, so interpolating a name or a message into `data:text/html,...` is an injection into a page that has JavaScript on. Escape it for HTML first, or ship a static page and pass values in the fragment for its own script to insert with `textContent`.
+
+Treat it as a presentation surface: a plain web view with no Capacitor bridge, so no plugin API inside it. Calling `startDualScreen` again replaces the page rather than messaging it.
 
 Both modes share one window area behind the scenes, and both stop when the activity goes away.
 

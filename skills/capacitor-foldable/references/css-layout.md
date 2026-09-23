@@ -118,6 +118,24 @@ const handle = await Foldable.addListener('foldStateChange', apply);
 
 `animation-play-state` is not inherited and only affects elements that carry a CSS animation, so put it on the animated element itself. For a chart or anything driven by JavaScript, listen to `foldingChange` and stop redrawing instead. The class appears as the hinge starts moving and goes half a second after it stops, and only on devices that report a hinge angle: an Android foldable without a hinge sensor never gets it.
 
+## Accessibility
+
+The crease is exactly where reading order and target sizes go wrong, so four rules:
+
+- **Keep source order equal to visual order.** The `nth-child` pinning above works only while it is. Re-order the markup rather than moving things visually, or a screen reader reads the pages in the wrong sequence.
+- **Name each page and let the keyboard reach it.** Both panes scroll independently, so give them `role="region"` with an `aria-label`, and `tabindex="0"` on the scroll container.
+- **Use `rem` for your own gutters and insets**, not pixels. Android scales web view text with the system font size while iOS does not unless you opt in, so fixed pixel padding drifts in one direction and never moves in the other. Grid items pinned to a fixed track also need `min-width: 0`, or long words push them into the crease.
+- **Targets stay at least 44 pt, or 48 dp on Android**, which matters most for anything sitting beside the fold.
+
+`prefers-reduced-motion` is a separate concern from `.folding`: the class is a device signal that comes and goes with the hinge, so honour the media query independently, and use `animation: none` there rather than pausing on an arbitrary frame.
+
+Right to left needs its own arm, because the fold variables are physical viewport coordinates while `:first-child` is not:
+
+```css
+[dir='rtl'] .fold-vertical .reader .page:first-child { left: calc(var(--fold-left) + var(--fold-width)); right: 0; width: auto; }
+[dir='rtl'] .fold-vertical .reader .page:last-child { left: 0; width: var(--fold-left); }
+```
+
 ## What not to do
 
 - Splitting at `50%`. The coordinates are relative to the web view, and on iPhone Duo the band has width.

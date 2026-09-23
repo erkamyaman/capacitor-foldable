@@ -1,8 +1,16 @@
 # Changelog
 
+## 8.3.1 (2026-09-23)
+
+- **Dual screen only loads pages from your own app.** The second web view shares the app's cookies and storage, and it previously took any URL: anything with a scheme went straight to `loadUrl`, and a protocol-relative `//host/page` slipped through the relative branch onto another origin. `startDualScreen()` now rejects anything that is not a page of your app or a `data:` URL you built, and the view refuses to navigate off your origin afterwards. If you were passing a remote URL, it will now be rejected: serve that page from your own build instead.
+- The cover page's web view is destroyed when dual screen stops, so its timers and connections stop with it.
+- **Ionic tabs, accessibility:** the side pill's buttons were 41px wide, under Apple's 44pt and Material's 48dp minimum, and the labels were hidden with `display: none`, which took every tab's name out of the accessibility tree. The buttons now meet both minimums and the labels are hidden visually but kept for VoiceOver and TalkBack. Both stylesheets also drop the blur under reduced transparency, increased contrast and forced colours.
+- Docs: a `data:` page has an opaque origin and cannot read the app's storage, `encodeURIComponent` is not HTML escaping, the Capacitor 7 route closes when Apple requires the iOS 27 SDK in April 2027, and the store-review notes no longer promise more than a dependency can.
+- The skill gains an accessibility section, the right-to-left arm its layouts needed, and Apple's ordering rules for the side bar.
+
 ## 8.3.0 (2026-09-23)
 
-- **Privacy manifest.** The plugin ships a `PrivacyInfo.xcprivacy` declaring no tracking, no collected data and no required-reason APIs, wired into both the Swift package and the podspec. Nothing it does could hold up an App Store review, and the declaration now shows up in your app's privacy report.
+- **Privacy manifest.** The plugin ships a `PrivacyInfo.xcprivacy` declaring no tracking, no collected data and no required-reason APIs, wired into both the Swift package and the podspec. It gives review nothing to object to, and the declaration now shows up in your app's privacy report.
 - **A skill for coding agents** in [`skills/`](skills/capacitor-foldable), also published with the package: laying out around the crease, the API, Ionic specifics, iPhone Duo, Android foldables and how to test on both. Beta, and built from the plugin's own source and measurements.
 - Docs: what the vertical bar opt-out is for, since Apple asks you not to override bar placement; how the side bar arrives as `safe-area-inset-right` (84 points) and moves to the top (82) when you disable it; that a flat foldable's fold region is reported inactive, so reading it natively needs `options: .includeInactive`; and that `ionic-tabs.css` keeps one deliberately unscoped rule.
 - Examples: the even-columns demo lines its gutter up with the crease properly, and no longer lets tiles land in the fold column from the second row down.

@@ -37,7 +37,7 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
-| Android  | Supported | API 24, `compileSdk` 34 |
+| Android  | Supported | API 24, `compileSdk` 36 |
 | iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with Capacitor 8.5+, Xcode 27.1+ and iOS 27.1+ | iOS 15 |
 | Web      | Stub, returns `flat` | |
 
@@ -53,7 +53,7 @@ Web views already resize with the window, so a responsive layout that pads with 
 - **Where iPhone Duo puts native bars**, so your HTML tab bar can follow. For Ionic's `ion-tabs` there's a ready-made stylesheet, plus a fix for the tab bar disappearing when you fold.
 - **The outer display on Android foldables**: rear display and dual screen.
 
-Google's [adaptive app quality guidelines](https://developer.android.com/develop/adaptive-apps/quality-guidelines/adaptive-app-quality) put window size classes and posture support in Tier 1, and Apple's [iPhone Duo guidance](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) asks for layouts that adapt to the fold rather than to a device. This plugin reports what both checklists are about.
+Google's [adaptive app quality guidelines](https://developer.android.com/develop/adaptive-apps/quality-guidelines/adaptive-app-quality) make posture support a Tier 1 check and size-class-driven layouts a Tier 2 one, and Apple's [iPhone Duo guidance](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) asks for layouts that adapt to the fold rather than to a device. This plugin reports what both are about.
 
 ## Installation
 
@@ -127,11 +127,11 @@ Using Ionic's `ion-tabs`? `import '@erkamyaman/capacitor-foldable/ionic-tabs.css
 
 ## Store review
 
-The plugin is built so it cannot be the reason an app is rejected.
+The plugin is built to give store review nothing to object to.
 
-**iOS.** Public APIs only, UIKit and Capacitor, with no dynamic lookup or private symbols. It touches none of Apple's [required reason APIs](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files), collects nothing and tracks nobody, and it ships a `PrivacyInfo.xcprivacy` saying exactly that, which Xcode folds into your app's privacy report. Nothing it uses needs a purpose string in `Info.plist`. The iOS 27.1 code is behind a compile-time SDK check, so older Xcode versions build fine.
+**iOS.** Public APIs only, UIKit and Capacitor, with no dynamic lookup or private symbols. It touches none of Apple's [required reason APIs](https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api), collects nothing and tracks nobody, and it ships a `PrivacyInfo.xcprivacy` saying exactly that, which Xcode folds into your app's privacy report. Nothing it uses needs a purpose string in `Info.plist`. The iOS 27.1 code is behind a compile-time SDK check, so any Xcode that Capacitor 8 supports builds fine.
 
-**Android.** The plugin's manifest is empty: it adds no permissions to your app. The hinge angle comes from `TYPE_HINGE_ANGLE`, which needs no permission, and it is registered at `SENSOR_DELAY_NORMAL`, well under the rate that would require `HIGH_SAMPLING_RATE_SENSORS`. Rear display and dual screen go through Jetpack WindowManager's `WindowAreaController`, also permission free. `minSdk` is 24 and `targetSdk` follows your project, so it never holds you back from Play's target API rules.
+**Android.** The plugin adds no permissions and no `uses-feature` to your app, so it changes nothing about which devices can install it. Its own manifest is empty; Jetpack WindowManager merges two optional `<uses-library>` entries, which are how it binds to the OEM window extensions and filter nothing. The hinge angle comes from `TYPE_HINGE_ANGLE`, which needs no permission, and rear display and dual screen go through `WindowAreaController`, also permission free. `minSdk` is 24, the same as Capacitor's own default, and `targetSdk` follows your project.
 
 **Data safety and privacy labels.** Everything stays on the device: the plugin has no network code and stores nothing. There is no entry for it to add to Play's Data safety form or to your App Store privacy label.
 

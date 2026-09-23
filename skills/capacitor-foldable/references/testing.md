@@ -2,7 +2,7 @@
 
 ## iPhone Duo simulator
 
-Needs the iOS 27.1 runtime, which the device type refuses to go below, and Xcode 27.1 to build against the 27.1 SDK. Build against the 27.0 SDK and the app fills more of the inner display but still leaves gaps; build against anything older and it runs in compatibility mode inside a black border with no fold reported. The iOS 27.2 beta runtime does not run iPhone Duo at all, as observed on this beta. In Xcode 27 the simulator lives inside **DeviceHub.app**, not `Simulator.app`.
+Needs the iOS 27.1 runtime, which the device type refuses to go below, and Xcode 27.1 to build against the 27.1 SDK. Build against the 27.0 SDK and the app fills more of the inner display but still leaves gaps; build against anything older and it runs in compatibility mode inside a black border with no fold reported. In Xcode 27 the simulator lives inside **DeviceHub.app**, not `Simulator.app`.
 
 ```bash
 open "$(dirname "$(xcode-select -p)")/Applications/DeviceHub.app"

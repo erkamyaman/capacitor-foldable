@@ -107,6 +107,8 @@ await Foldable.stopDualScreen();
 
 `startRearDisplay()` shows a system confirmation first, and `startDualScreen()` rejects outright without a `url`. Both accept `available` or `active`.
 
-`displayModeChange` reports both modes together. Relative URLs resolve against the app's own URL, so `cover.html` has to be a page you ship in the web build, which for a bundler means adding it as an extra entry point. A `data:` URL works too, and is the easier route for dynamic content. That page runs in its own web view with no access to Capacitor plugins, and calling `startDualScreen` again replaces it.
+`displayModeChange` reports both modes together. Relative URLs resolve against the app's own URL, so `cover.html` has to be a page you ship in the web build, which for a bundler means adding it as an extra entry point. A `data:` URL works too, and is the easier route for dynamic content.
+
+The page must be content you wrote: the plugin rejects any other origin, and `encodeURIComponent` is URL encoding rather than HTML escaping, so escape anything you interpolate into a `data:text/html` document. See [android.md](android.md). That page runs in its own web view with no access to Capacitor plugins, and calling `startDualScreen` again replaces it.
 
 Android only; both read as `unsupported` on iOS and web, where the `start` methods reject. See [android.md](android.md).

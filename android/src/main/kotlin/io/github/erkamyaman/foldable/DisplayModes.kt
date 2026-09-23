@@ -3,6 +3,7 @@ package io.github.erkamyaman.foldable
 import android.app.Activity
 import android.content.Context
 import android.view.View
+import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import androidx.window.area.WindowAreaCapability
 import androidx.window.area.WindowAreaController
@@ -31,6 +32,7 @@ class DisplayModes(private val activity: Activity) {
     private var rearDisplayArea: WindowAreaInfo? = null
     private var rearDisplaySession: WindowAreaSession? = null
     private var dualScreenSession: WindowAreaSessionPresenter? = null
+    private var dualScreenContent: WebView? = null
 
     fun statuses(): Flow<DisplayModeStatuses> =
         controller.windowAreaInfos
@@ -72,7 +74,7 @@ class DisplayModes(private val activity: Activity) {
 
     fun startDualScreen(createContent: (Context) -> View, onStarted: () -> Unit, onEnded: (Throwable?) -> Unit) {
         dualScreenSession?.let { session ->
-            session.setContentView(createContent(session.context))
+            replaceContent(session, createContent)
             onStarted()
             return
         }
@@ -86,11 +88,12 @@ class DisplayModes(private val activity: Activity) {
             object : WindowAreaPresentationSessionCallback {
                 override fun onSessionStarted(session: WindowAreaSessionPresenter) {
                     dualScreenSession = session
-                    session.setContentView(createContent(session.context))
+                    replaceContent(session, createContent)
                     onStarted()
                 }
 
                 override fun onSessionEnded(t: Throwable?) {
+                    destroyContent()
                     dualScreenSession = null
                     onEnded(t)
                 }
@@ -101,8 +104,25 @@ class DisplayModes(private val activity: Activity) {
     }
 
     fun stopDualScreen() {
+        destroyContent()
         dualScreenSession?.close()
         dualScreenSession = null
+    }
+
+    /** A web view left alive keeps its timers and connections running. */
+    private fun replaceContent(session: WindowAreaSessionPresenter, createContent: (Context) -> View) {
+        destroyContent()
+        val content = createContent(session.context)
+        dualScreenContent = content as? WebView
+        session.setContentView(content)
+    }
+
+    private fun destroyContent() {
+        dualScreenContent?.apply {
+            loadUrl("about:blank")
+            destroy()
+        }
+        dualScreenContent = null
     }
 
     private fun statusOf(area: WindowAreaInfo?, operation: WindowAreaCapability.Operation): String =

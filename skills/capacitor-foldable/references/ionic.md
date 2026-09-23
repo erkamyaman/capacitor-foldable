@@ -45,6 +45,10 @@ readonly mode = signal<'game' | 'meter'>('game');
 
 If you do route, `provideIonicAngular({ animated: false })` removes the slide, but be aware it disables every Ionic animation app-wide, including modals and ripples.
 
+## Apple's rules for the side bar
+
+The vertical bar has an order: primary navigation at the top, then prominent actions. Apple also asks you to prefer a symbol over text there, since anything with a label stays in a horizontal bar. The stylesheet hides the labels visually for that reason but keeps them for VoiceOver, so leave them in your markup.
+
 ## Styling gotcha
 
 `ion-tab-bar` ships `contain: strict`, which brings size containment with it. The moment you let either dimension come from its contents, it lays out as if empty and collapses: height in the side pill, width in the iOS 26 variant. Both shipped stylesheets set `contain: none` for that reason.

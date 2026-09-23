@@ -4,7 +4,7 @@
   bottom: var(--vertical-tab-bar-bottom, 24px);
   z-index: 10;
   flex-direction: column;
-  width: 45px;
+  width: 52px;
   height: auto;
   padding: 3px 2px;
   border: none;
@@ -13,6 +13,7 @@
   background: rgba(255, 255, 255, 0.78);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
   backdrop-filter: blur(12px) saturate(180%);
+  --color-selected: #0071e3;
   box-shadow:
     inset 0 0 0 0.5px rgba(0, 0, 0, 0.2),
     inset 0 0 8px rgba(0, 0, 0, 0.04),
@@ -37,14 +38,27 @@
   --padding-end: 0;
   flex: 0 0 auto;
   width: 100%;
+  min-width: 44px;
   max-width: none;
   height: 54px;
+  min-height: 48px;
   border-radius: 22px;
 }
 
+/* Hidden to the eye, still there for VoiceOver and TalkBack: `display: none`
+   would take the tab's name out of the accessibility tree. */
 .vertical-bars-leading ion-tab-button ion-label,
 .vertical-bars-trailing ion-tab-button ion-label {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .vertical-bars-leading ion-tab-button.tab-selected,
@@ -83,5 +97,17 @@ ion-tab-bar[hidden] {
   .vertical-bars-leading ion-tab-button.tab-selected,
   .vertical-bars-trailing ion-tab-button.tab-selected {
     background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Reduced transparency, higher contrast, forced colours: drop the blur and
+   give the pill an opaque background so the icons stay legible. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+  .vertical-bars-leading ion-tab-bar,
+  .vertical-bars-trailing ion-tab-bar {
+    background: Canvas;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid CanvasText;
   }
 }

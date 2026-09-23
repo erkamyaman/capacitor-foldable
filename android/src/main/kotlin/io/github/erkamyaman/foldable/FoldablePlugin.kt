@@ -216,13 +216,15 @@ class FoldablePlugin : Plugin() {
     @PluginMethod
     fun startDualScreen(call: PluginCall) {
         val url = call.getString("url") ?: return call.reject("url is required.")
+        val target = resolveUrl(url)
+            ?: return call.reject("url must be a page in this app, or a data: URL you built yourself.")
         val displayModes = this.displayModes ?: return call.unavailable("Dual-screen mode needs an activity.")
 
         scope.launch {
             when (lastDisplayModes?.dualScreen) {
                 "available", "active" -> {
                     val settle = Settle(call, "Dual-screen mode")
-                    displayModes.startDualScreen({ context -> dualScreenWebView(context, url) }, settle::started, settle::ended)
+                    displayModes.startDualScreen({ context -> dualScreenWebView(context, target) }, settle::started, settle::ended)
                 }
                 else -> call.unavailable("Dual-screen mode is not available on this device right now.")
             }
@@ -294,12 +296,32 @@ class FoldablePlugin : Plugin() {
         webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                 bridge.localServer.shouldInterceptRequest(request)
+
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
+                !isAppUrl(request.url.toString())
         }
-        loadUrl(resolveUrl(url))
+        loadUrl(url)
     }
 
-    private fun resolveUrl(url: String): String =
-        if (Uri.parse(url).scheme != null) url else URL(URL(bridge.appUrl), url).toString()
+    /**
+     * The page on the other display shares the app's web view profile, so it is
+     * kept to the app's own origin: anything else is refused rather than loaded.
+     */
+    private fun resolveUrl(url: String): String? {
+        if (url.startsWith("//")) return null
+
+        val scheme = Uri.parse(url).scheme
+        if (scheme == null) return URL(URL(bridge.appUrl), url).toString().takeIf(::isAppUrl)
+        if (!scheme.equals("http", true) && !scheme.equals("https", true) && scheme != "data") return null
+
+        return url.takeIf { scheme == "data" || isAppUrl(it) }
+    }
+
+    private fun isAppUrl(url: String): Boolean {
+        val app = Uri.parse(bridge.appUrl)
+        val target = Uri.parse(url)
+        return target.scheme == app.scheme && target.host == app.host && target.port == app.port
+    }
 
     private inner class Settle(private val call: PluginCall, private val mode: String) {
         private var settled = false

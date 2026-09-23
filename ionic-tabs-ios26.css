@@ -52,3 +52,12 @@ html.ios:not(.vertical-bars-leading):not(.vertical-bars-trailing) ion-tab-button
     background: rgba(255, 255, 255, 0.1);
   }
 }
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+  html.ios ion-tab-bar {
+    background: Canvas;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid CanvasText;
+  }
+}
