@@ -34,7 +34,7 @@ import { Foldable, installFoldablePolyfill } from '@erkamyaman/capacitor-foldabl
 await installFoldablePolyfill();
 ```
 
-Whenever the device reports a fold, that sets `--fold-left`, `--fold-top`, `--fold-width`, `--fold-height` and `--fold-margin-*` on `<html>`, and adds `fold-vertical` or `fold-horizontal`. It also sets the `vertical-bars-*` classes the Ionic stylesheet needs, and fills in the standard Viewport Segments and Device Posture APIs, which Safari and Android's WebView do not provide.
+Whenever the device reports a fold, that sets `--fold-left`, `--fold-top`, `--fold-width`, `--fold-height` and `--fold-margin-*` on `<html>`, and adds `fold-vertical` or `fold-horizontal`. It also sets the `vertical-bars-*` classes the Ionic stylesheet needs, and fills in the standard Viewport Segments and Device Posture APIs. Android's WebView turns both off, and Safari 27.1 has them behind an off-by-default flag that only Safari can set, so a Capacitor web view gets neither. The polyfill stands aside if it ever finds them already there.
 
 Prefer the `--fold-*` variables over the polyfilled segment variables for layout: the segments only split when the fold actually separates the window, which on iPhone Duo means half open, while the fold variables are there when it is open flat too.
 

@@ -80,7 +80,7 @@ More in [Examples](docs/examples.md).
 
 ## Web standard APIs
 
-Chrome ships the [Device Posture API](https://developer.mozilla.org/docs/Web/API/Device_Posture_API) and the [Viewport Segments API](https://developer.mozilla.org/docs/Web/API/Viewport_Segments_API), but Android's WebView turns both off and Safari doesn't support them, so neither works inside a Capacitor app. `installFoldablePolyfill()` fills them in from the native fold state, and mirrors the CSS features as classes and variables on `<html>`:
+Chrome ships the [Device Posture API](https://developer.mozilla.org/docs/Web/API/Device_Posture_API) and the [Viewport Segments API](https://developer.mozilla.org/docs/Web/API/Viewport_Segments_API), but Android's WebView turns both off. Safari 27.1 has them behind a feature flag that is off by default and belongs to Safari, so a `WKWebView` inside your app cannot switch it on. Neither works in a Capacitor app today. `installFoldablePolyfill()` fills them in from the native fold state, and mirrors the CSS features as classes and variables on `<html>`:
 
 ```typescript
 import { installFoldablePolyfill } from '@erkamyaman/capacitor-foldable';
