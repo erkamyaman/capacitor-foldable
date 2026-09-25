@@ -600,3 +600,9 @@ angle: iOS keeps reporting `'closed'` for a moment after the phone opens.
 <code>'unsupported' | 'unavailable' | 'available' | 'active'</code>
 
 </docgen-api>
+
+## Trademarks and licence
+
+This plugin is MIT licensed, and that covers the work in this repository. Quoted passages from Apple's and Google's documentation belong to them and are used here to explain their guidance.
+
+iPhone and iPhone Duo are trademarks of Apple Inc., registered in the U.S. and other countries. Android and Pixel are trademarks of Google LLC. Galaxy Z Fold and Galaxy Z Flip are trademarks of Samsung Electronics Co., Ltd. This project is not affiliated with, endorsed by, or sponsored by any of them; the names appear only to say which devices the plugin works with.

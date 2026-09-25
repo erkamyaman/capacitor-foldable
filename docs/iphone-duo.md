@@ -143,4 +143,6 @@ This one changes every iPhone running your app, which is why it's a separate fil
 3. Xcode 27 replaces the Simulator app with **DeviceHub**. Its controls open, close, half-fold and rotate the phone.
 4. The phone starts closed, so the app appears on the outer display. From a terminal, `xcrun simctl io <device> screenshot --display=1` captures the outer display and `--display=3` the inner one.
 
+Agent and automation tooling has not caught up with two panels: screenshots come back from the inner panel whatever the fold state, so a folded capture is black, taps do not land, and some tools report the closed display's coordinates while the phone is open. Three projects have open bugs about it. Drive the simulator from the terminal instead, where `--display=1` and `--display=3` pick the panel and the `hinge` CLI sets the angle.
+
 Without the simulator, a browser's responsive mode at the outer display's 466 × 678 and the inner display's 951 × 669 gets you most of the way. Apple's published inner display size, 626 × 890, is smaller than what the simulator reports, so check both.

@@ -28,7 +28,7 @@ hinge -d <udid> get
 
 Sweep rather than jumping: an instant change can confuse the simulator's display switching.
 
-Known limitation: taps and key input do not land on the Duo simulator through automation ([XcodeBuildMCP #537](https://github.com/getsentry/XcodeBuildMCP/issues/537)), so scripted UI tests cannot drive it yet. Screenshots work from the terminal with an explicit `--display`; through tooling that cannot pass one, a folded screenshot comes back black because it always targets the inner panel.
+Known limitation: agent and automation tooling does not handle the Duo's two panels yet, and several projects have open bugs about it ([XcodeBuildMCP #537](https://github.com/getsentry/XcodeBuildMCP/issues/537), [claude-code #96941](https://github.com/anthropics/claude-code/issues/96941)). Taps and key input do not land, and some tools keep reporting the closed panel's coordinate space while the phone is open, so scripted UI tests cannot drive it. Work from the terminal instead. Screenshots work from the terminal with an explicit `--display`; through tooling that cannot pass one, a folded screenshot comes back black because it always targets the inner panel.
 
 ## Android foldable emulator
 
