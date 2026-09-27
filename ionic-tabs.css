@@ -21,11 +21,11 @@
 }
 
 .vertical-bars-leading ion-tab-bar {
-  left: 24px;
+  inset-inline-start: 24px;
 }
 
 .vertical-bars-trailing ion-tab-bar {
-  right: 24px;
+  inset-inline-end: 24px;
 }
 
 .vertical-bars-leading ion-tab-button,

@@ -127,8 +127,9 @@ struct UnsupportedFoldProvider: FoldProvider {
         ]
     }
 
-    @objc public func barPlacement(in traits: UITraitCollection) -> [String: Any] {
-        return ["verticalBarEdge": verticalBarEdge(of: traits).map { $0 as Any } ?? NSNull()]
+    @objc public func barPlacement(in traits: UITraitCollection, view: UIView? = nil) -> [String: Any] {
+        let edge = verticalBarEdge(of: traits) ?? view.flatMap(verticalBarEdge(inferredFrom:))
+        return ["verticalBarEdge": edge.map { $0 as Any } ?? NSNull()]
     }
 
     private func verticalBarEdge(of traits: UITraitCollection) -> String? {
@@ -143,6 +144,24 @@ struct UnsupportedFoldProvider: FoldProvider {
         #endif
         return nil
     }
+
+    private func verticalBarEdge(inferredFrom view: UIView) -> String? {
+        #if canImport(UIKit, _underlyingVersion: 9127.0.85) && !targetEnvironment(macCatalyst)
+        return nil
+        #else
+        guard #available(iOS 27.1, *) else { return nil }
+
+        view.layoutIfNeeded()
+        let insets = view.safeAreaInsets
+        let rightToLeft = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+
+        if insets.right >= barInsetThreshold { return rightToLeft ? "leading" : "trailing" }
+        if insets.left >= barInsetThreshold { return rightToLeft ? "trailing" : "leading" }
+        return nil
+        #endif
+    }
+
+    private let barInsetThreshold: CGFloat = 70
 
     public func observeChanges(in view: UIView, onChange: @escaping () -> Void) {
         provider.observe(view, onChange: onChange)

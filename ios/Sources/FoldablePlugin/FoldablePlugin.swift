@@ -128,7 +128,10 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     private func currentBarPlacement() -> [String: Any] {
-        return implementation.barPlacement(in: bridge?.viewController?.traitCollection ?? UITraitCollection.current)
+        return implementation.barPlacement(
+            in: bridge?.viewController?.traitCollection ?? UITraitCollection.current,
+            view: bridge?.webView
+        )
     }
 
     private func currentSizeClass() -> [String: String] {

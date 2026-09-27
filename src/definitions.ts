@@ -180,7 +180,9 @@ export interface BarPlacement {
    * The edge iPhone Duo moves tab bars and toolbars to when it lays them out
    * vertically: `'leading'` or `'trailing'` in the reading direction, so
    * `'leading'` is the left edge in left-to-right languages. `null` when bars
-   * stay horizontal, and always on Android, web and iOS before 27.1.
+   * stay horizontal, and always on Android, web and iOS before 27.1. An app
+   * built with an older Xcode still gets the edge: it is inferred from the
+   * safe-area inset the bar leaves, since the trait that names it is missing.
    *
    * @since 7.0.0
    */

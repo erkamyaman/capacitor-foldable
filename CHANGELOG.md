@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.3.2 (2026-09-27)
+
+- **Bar placement on an older Xcode.** `getBarPlacement()` reported no edge whenever the app was built against an SDK without the `verticalBarEdge` trait, even though iPhone Duo still moved the bars. The edge is now inferred from the deep safe-area inset the bar leaves (over 70 points, where an ordinary iPhone stays under it), in the reading direction. Apps built with Xcode 27.1 or later keep reading the trait and are unaffected.
+- **Ionic tabs, right-to-left:** the side pill was placed with `left` and `right`, so in Arabic or Hebrew it sat on the opposite side from the native bar. It now uses `inset-inline-start` and `inset-inline-end`, which follow the reading direction the same way the reported edge does.
+
 ## 8.3.1 (2026-09-23)
 
 - **Dual screen only loads pages from your own app.** The second web view shares the app's cookies and storage, and it previously took any URL: anything with a scheme went straight to `loadUrl`, and a protocol-relative `//host/page` slipped through the relative branch onto another origin. `startDualScreen()` now rejects anything that is not a page of your app or a `data:` URL you built, and the view refuses to navigate off your origin afterwards. If you were passing a remote URL, it will now be rejected: serve that page from your own build instead.
