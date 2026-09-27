@@ -129,7 +129,20 @@ struct UnsupportedFoldProvider: FoldProvider {
 
     @objc public func barPlacement(in traits: UITraitCollection, view: UIView? = nil) -> [String: Any] {
         let edge = verticalBarEdge(of: traits) ?? view.flatMap(verticalBarEdge(inferredFrom:))
-        return ["verticalBarEdge": edge.map { $0 as Any } ?? NSNull()]
+        let inset = view.map { barInset(of: edge, in: $0) } ?? 0
+        return [
+            "verticalBarEdge": edge.map { $0 as Any } ?? NSNull(),
+            "inset": inset
+        ]
+    }
+
+    private func barInset(of edge: String?, in view: UIView) -> Double {
+        guard let edge else { return 0 }
+
+        view.layoutIfNeeded()
+        let rightToLeft = view.effectiveUserInterfaceLayoutDirection == .rightToLeft
+        let onRight = (edge == "trailing") != rightToLeft
+        return Double((onRight ? view.safeAreaInsets.right : view.safeAreaInsets.left).rounded())
     }
 
     private func verticalBarEdge(of traits: UITraitCollection) -> String? {

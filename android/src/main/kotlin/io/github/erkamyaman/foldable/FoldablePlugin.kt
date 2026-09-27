@@ -169,7 +169,7 @@ class FoldablePlugin : Plugin() {
 
     @PluginMethod
     fun getBarPlacement(call: PluginCall) {
-        call.resolve(JSObject().put("verticalBarEdge", JSONObject.NULL))
+        call.resolve(JSObject().put("verticalBarEdge", JSONObject.NULL).put("inset", 0))
     }
 
     @PluginMethod

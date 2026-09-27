@@ -187,6 +187,19 @@ export interface BarPlacement {
    * @since 7.0.0
    */
   verticalBarEdge: 'leading' | 'trailing' | null;
+
+  /**
+   * How much room the vertical bar takes on its edge, in points, rounded to
+   * whole points. It is the same value the web view reports as a safe-area
+   * inset, so `env(safe-area-inset-*)` already covers simple layouts. Read it
+   * when you place your own chrome and need the number itself, and do not
+   * assume it stays at 84: it differs when the bar is disabled, and Apple can
+   * change it. `0` when no vertical bar is reported, and always on Android and
+   * web.
+   *
+   * @since 8.3.3
+   */
+  inset: number;
 }
 
 export interface FoldablePolyfillOptions {

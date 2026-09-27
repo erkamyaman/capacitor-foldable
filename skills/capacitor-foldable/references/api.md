@@ -72,10 +72,11 @@ Apple's compact and regular plus Material's window classes. On iOS the first pai
 ## Where the system put its bars
 
 ```typescript
-const { verticalBarEdge } = await Foldable.getBarPlacement(); // 'leading' | 'trailing' | null
+const { verticalBarEdge, inset } = await Foldable.getBarPlacement();
+// verticalBarEdge: 'leading' | 'trailing' | null, inset: points the bar takes
 ```
 
-`null` means no vertical bar edge is reported: bars are horizontal, or the platform cannot say, which is always the case on Android, web and iOS before 27.1. An app built with an Xcode older than 27.1 cannot read the trait that names the edge, so the plugin infers it from the safe-area inset the bar leaves. On iPhone Duo the bar also arrives as a safe-area inset, so simple layouts need nothing beyond `env(safe-area-inset-*)`. Use this when positioning your own chrome to match. `barPlacementChange` fires when it moves.
+`null` means no vertical bar edge is reported: bars are horizontal, or the platform cannot say, which is always the case on Android, web and iOS before 27.1. An app built with an Xcode older than 27.1 cannot read the trait that names the edge, so the plugin infers it from the safe-area inset the bar leaves. On iPhone Duo the bar also arrives as a safe-area inset, so simple layouts need nothing beyond `env(safe-area-inset-*)`. Use this when positioning your own chrome to match. `inset` is how many points the bar takes on its edge, measured rather than assumed, and `0` when no bar is reported: read it instead of hard-coding a width, since it differs when the bar is disabled and Apple can change it. `barPlacementChange` fires when either one moves.
 
 ```typescript
 await Foldable.setVerticalBarBehavior({ behavior: 'disabled' });  // everything horizontal

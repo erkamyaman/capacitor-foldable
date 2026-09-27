@@ -46,7 +46,7 @@ export class FoldableWeb extends WebPlugin implements FoldablePlugin {
   }
 
   async getBarPlacement(): Promise<BarPlacement> {
-    return { verticalBarEdge: null };
+    return { verticalBarEdge: null, inset: 0 };
   }
 
   async startRearDisplay(): Promise<void> {

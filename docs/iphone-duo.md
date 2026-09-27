@@ -6,7 +6,7 @@ iPhone Duo support uses the iOS 27.1 APIs. It turns on when the app uses Capacit
 - Half-open and fully open follow the hinge status, so `foldStateChange` fires as soon as the hinge moves.
 - `getHingeAngle()` and `hingeAngleChange` come from the hinge. UIKit reports the angle in radians, and the plugin converts it to degrees to match Android: 0 closed, 180 fully open.
 - `activeDisplay` (inner or outer) comes from the hinge status, and `cameraBounds` from the camera reserved regions.
-- **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` reports `{ verticalBarEdge: 'leading' | 'trailing' | null }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android.
+- **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` reports `{ verticalBarEdge: 'leading' | 'trailing' | null, inset: number }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android.
 
 ## What the plugin reports
 
@@ -51,7 +51,7 @@ When iPhone Duo moves bars to the side, the status bar turns vertical too, and t
 
 It resolves to `{ applied: false }` when the app does not use `FoldableBridgeViewController`, so you can tell the setup is missing. Android, web and iOS before 27.1 always answer `false`.
 
-The web view's safe areas follow the bars either way, so you rarely have to do the arithmetic yourself. Measured on the simulator, with the bars on the side the strip arrives as `env(safe-area-inset-right)` of 84 points on both displays; with `disabled`, that becomes `env(safe-area-inset-top)` of 82 and the right inset drops to zero, live and without a reload.
+The web view's safe areas follow the bars either way, so you rarely have to do the arithmetic yourself. Measured on the simulator, with the bars on the side the strip arrives as `env(safe-area-inset-right)` of 84 points on both displays; with `disabled`, that becomes `env(safe-area-inset-top)` of 82 and the right inset drops to zero, live and without a reload. `getBarPlacement()` returns the same width as `inset`, which is the number to read if you need it in JavaScript rather than CSS.
 
 To move your tab bar to the side instead, like native apps, see [Ionic tabs](#ionic-tabs).
 

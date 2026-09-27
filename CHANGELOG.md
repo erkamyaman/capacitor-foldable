@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.3.3 (2026-09-27)
+
+- **`getBarPlacement()` reports the bar's width.** The new `inset` is how many points the vertical bar takes on its edge, measured rather than assumed, and `barPlacementChange` fires when it moves. Asked for by [ionic-theme-ios27](https://github.com/rdlabo-dev/ionic-theme-ios27), which needs the real width to reserve space: today it is 84 points on iPhone Duo, but that is not a number to hard-code. `0` where no bar is reported.
+
 ## 8.3.2 (2026-09-27)
 
 - **Bar placement on an older Xcode.** `getBarPlacement()` reported no edge whenever the app was built against an SDK without the `verticalBarEdge` trait, even though iPhone Duo still moved the bars. The edge is now inferred from the deep safe-area inset the bar leaves (over 70 points, where an ordinary iPhone stays under it), in the reading direction. Apps built with Xcode 27.1 or later keep reading the trait and are unaffected.

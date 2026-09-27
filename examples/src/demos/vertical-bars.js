@@ -1,7 +1,8 @@
 /**
  * Where the system puts bars, and how to opt out.
  *
- * `getBarPlacement()` reports the edge iPhone Duo moves native bars to, and
+ * `getBarPlacement()` reports the edge iPhone Duo moves native bars to and how
+ * much room it takes, and
  * `setVerticalBarBehavior()` keeps everything horizontal instead.
  */
 export const verticalBars = {
@@ -55,8 +56,8 @@ export const verticalBars = {
     const toggle = stage.querySelector('#toggle');
     let disabled = false;
 
-    const show = ({ verticalBarEdge }) => {
-      edge.textContent = verticalBarEdge ?? 'horizontal';
+    const show = ({ verticalBarEdge, inset }) => {
+      edge.textContent = verticalBarEdge ? `${verticalBarEdge} · ${inset}pt` : 'horizontal';
     };
 
     toggle.addEventListener('click', async () => {
