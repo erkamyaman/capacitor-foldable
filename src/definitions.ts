@@ -202,6 +202,17 @@ export interface BarPlacement {
   inset: number;
 }
 
+type ThemeConsumedFoldState = {
+  state: 'flat' | 'half-opened' | 'closed';
+  hingeBounds?: { x: number; y: number; width: number; height: number };
+};
+
+type StaysAssignableTo<Shape, T extends Shape> = T;
+
+type FoldStateStaysThemeCompatible = StaysAssignableTo<ThemeConsumedFoldState, FoldState>;
+
+export type { FoldStateStaysThemeCompatible };
+
 export interface FoldablePolyfillOptions {
   /**
    * Take over hiding Ionic's tab bar while the keyboard is open. iPhone Duo
