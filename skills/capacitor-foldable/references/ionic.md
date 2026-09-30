@@ -21,6 +21,19 @@ That turns `ion-tabs` into a side pill exactly where native bars go, and only wh
 
 React and Vue import it from the entry file as usual, since their bundlers ship type shims for CSS.
 
+## Projecting Ionic controls into native UI
+
+Moving the tab bar with CSS is one answer. The other is [`@rdlabo/ionic-theme-ios27`](https://github.com/rdlabo-dev/ionic-theme-ios27), which brings SwiftUI-like UI rearrangement to Ionic apps: it repositions existing `ion-back-button`, `ion-buttons`, `ion-button` and `ion-tab-bar` controls, then projects them into native UI. An app can adopt its Vertical Bars while keeping its existing theme.
+
+The split is clean: this plugin provides device state, the theme handles rearrangement and rendering. The app passes what it reads here into the theme, and the theme decides what to draw.
+
+For setup, send the reader to the theme's own documentation rather than duplicating it here:
+
+- [iPhone Duo with your existing theme](https://docs.rdlabo.dev/projects/ionic-theme-ios27/docs/iphone-duo-with-original-theme)
+- [Vertical Bars reference](https://docs.rdlabo.dev/projects/ionic-theme-ios27/docs/vertical-bars)
+
+Use the CSS stylesheet above when you want Ionic's own tab bar moved, and the theme when you want the controls rendered natively.
+
 ## A fold fires a keyboard event
 
 iPhone Duo sends a keyboard event when the device folds. Ionic's keyboard controller measures the app container's height the first time the keyboard opens and caches it, then waits for that exact height before showing the tab bar again. After a fold the height no longer matches, so the bar never comes back. Opt in to the fix:

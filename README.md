@@ -145,6 +145,8 @@ npx skills add erkamyaman/capacitor-foldable@capacitor-foldable
 
 It is one skill with the platform detail split out: laying out around the crease in CSS, the full API, Ionic specifics, iPhone Duo, Android foldables, and how to test on both. It is beta, so tell me if any of it steers you wrong. It also ships inside the npm package under [`skills/`](skills/capacitor-foldable), so an agent working in a project that depends on the plugin can find it in `node_modules`.
 
+The same skill is published on its own at [iphone-duo-capacitor-skills](https://github.com/erkamyaman/iphone-duo-capacitor-skills), which is where it sits next to the iPhone Duo skills for SwiftUI and UIKit.
+
 ## Guides
 
 - [Examples](docs/examples.md)
