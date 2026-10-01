@@ -1,6 +1,6 @@
 # iPhone Duo
 
-Needs iOS 27.1 and Xcode 27.1 or later. Older versions compile and simply report no fold.
+Needs iOS 27.1 on the device. Any Xcode builds: against the 27.1 SDK the plugin uses the typed APIs, and against an older one it reaches the same APIs through the Objective-C runtime, so the fold is reported either way.
 
 ## Measured geometry
 

@@ -38,7 +38,7 @@ const { state, hingeOrientation } = await Foldable.getFoldState();
 | Platform | Status | Minimum |
 | -------- | ------ | ------- |
 | Android  | Supported | API 24, `compileSdk` 36 |
-| iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with Capacitor 8.5+, Xcode 27.1+ and iOS 27.1+ | iOS 15 |
+| iOS      | Size classes everywhere; fold, hinge and bar placement on iPhone Duo with Capacitor 8.5+ and iOS 27.1+, built with any Xcode | iOS 15 |
 | Web      | Stub, returns `flat` | |
 
 ## Do you need this plugin?
@@ -129,7 +129,7 @@ Using Ionic's `ion-tabs`? `import '@erkamyaman/capacitor-foldable/ionic-tabs.css
 
 The plugin is built to give store review nothing to object to.
 
-**iOS.** Public APIs only, UIKit and Capacitor, with no dynamic lookup or private symbols. It touches none of Apple's [required reason APIs](https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api), collects nothing and tracks nobody, and it ships a `PrivacyInfo.xcprivacy` saying exactly that, which Xcode folds into your app's privacy report. Nothing it uses needs a purpose string in `Info.plist`. The iOS 27.1 code is behind a compile-time SDK check, so any Xcode that Capacitor 8 supports builds fine.
+**iOS.** Public APIs only, UIKit and Capacitor, with no private symbols. An app built against an SDK older than 27.1 reaches the iOS 27.1 APIs through the Objective-C runtime, since the compiler cannot see them, and they are the same public APIs either way. It touches none of Apple's [required reason APIs](https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api), collects nothing and tracks nobody, and it ships a `PrivacyInfo.xcprivacy` saying exactly that, which Xcode folds into your app's privacy report. Nothing it uses needs a purpose string in `Info.plist`. Any Xcode that Capacitor 8 supports builds fine, and reports the fold on a 27.1 device either way.
 
 **Android.** The plugin adds no permissions and no `uses-feature` to your app, so it changes nothing about which devices can install it. Its own manifest is empty; Jetpack WindowManager merges two optional `<uses-library>` entries, which are how it binds to the OEM window extensions and filter nothing. The hinge angle comes from `TYPE_HINGE_ANGLE`, which needs no permission, and rear display and dual screen go through `WindowAreaController`, also permission free. `minSdk` is 24, the same as Capacitor's own default, and `targetSdk` follows your project.
 
