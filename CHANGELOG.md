@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.4.0 (2026-10-01)
+
+- **The fold now works on an app built with Xcode 27.0.** The hinge and reserved-region APIs arrived in the 27.1 SDK, so a build made with an older Xcode had the code compiled out entirely and reported no fold at all, even running on iPhone Duo. Those builds now reach the same APIs through the Objective-C runtime, so `isDeviceFoldable()`, the fold state and the hinge angle work without waiting for Xcode 27.1. Verified on the Duo simulator: an Xcode 27.0 build tracked the hinge live from 0 to 180 degrees. A build made with 27.1 or later keeps the typed path and is untouched.
+- The package declares an `exports` map, so `@erkamyaman/capacitor-foldable` and its two stylesheets resolve the same way under Node, bundlers and TypeScript.
+
 ## 8.3.3 (2026-09-27)
 
 - **`getBarPlacement()` reports the bar's width.** The new `inset` is how many points the vertical bar takes on its edge, measured rather than assumed, and `barPlacementChange` fires when it moves. Asked for by [ionic-theme-ios27](https://github.com/rdlabo-dev/ionic-theme-ios27), which needs the real width to reserve space: today it is 84 points on iPhone Duo, but that is not a number to hard-code. `0` where no bar is reported.

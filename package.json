@@ -1,10 +1,20 @@
 {
   "name": "@erkamyaman/capacitor-foldable",
-  "version": "8.3.3",
+  "version": "8.4.0",
   "description": "Fold-state and dual-display APIs for foldable devices in Capacitor apps",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/plugin.cjs.js"
+    },
+    "./ionic-tabs.css": "./ionic-tabs.css",
+    "./ionic-tabs-ios26.css": "./ionic-tabs-ios26.css",
+    "./package.json": "./package.json"
+  },
   "unpkg": "dist/plugin.js",
   "files": [
     "android/build.gradle",

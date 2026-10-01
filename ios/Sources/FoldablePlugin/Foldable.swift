@@ -58,6 +58,10 @@ struct UnsupportedFoldProvider: FoldProvider {
         if #available(iOS 27.1, *) {
             return ReservedRegionFoldProvider(source: UIKitFoldSource())
         }
+        #elseif !targetEnvironment(macCatalyst)
+        if #available(iOS 27.1, *) {
+            return MainActor.assumeIsolated { ReservedRegionFoldProvider(source: RuntimeFoldSource()) }
+        }
         #endif
         return UnsupportedFoldProvider()
     }
