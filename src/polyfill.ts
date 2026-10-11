@@ -110,8 +110,8 @@ async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Pr
   };
 
   const apply = (next: FoldState) => {
-    fold = next;
-    posture?.update(postureOf(next));
+    fold = next.activeDisplay === 'outer' ? null : next;
+    posture?.update(postureOf(fold));
     applyCss();
 
     // The web view can report the previous window size for a moment after the
@@ -125,8 +125,18 @@ async function run(plugin: FoldablePlugin, options: FoldablePolyfillOptions): Pr
     for (const name of BAR_CLASSES) root.classList.toggle(name, name === active);
   };
 
+  let measured = '';
+  const applyCssIfResized = () => {
+    const size = `${window.innerWidth}x${window.innerHeight}`;
+    if (size === measured) return;
+    measured = size;
+    applyCss();
+  };
+
   await plugin.addListener('foldingChange', ({ folding }) => root.classList.toggle('folding', folding));
   window.addEventListener('resize', applyCss);
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(applyCssIfResized).observe(root);
+  document.addEventListener('visibilitychange', applyCssIfResized);
   await plugin.addListener('foldStateChange', apply);
   await plugin.addListener('barPlacementChange', applyBars);
   apply(await plugin.getFoldState());
