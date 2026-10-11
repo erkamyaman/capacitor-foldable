@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.4.1 (2026-10-11)
+
+- **Fix: the viewport segments could go stale after the app moved between displays.** The web view can report the previous window size for a while after a Duo opens or closes, with no resize event to follow, so the fold was measured against the wrong viewport: the crease at x 456 sits outside a 466 point cover display, which read as no fold at all. The fold is now ignored while the app is on the outer display, since that geometry belongs to the inner one, and a `ResizeObserver` on `<html>` plus a `visibilitychange` listener re-measure when the window really changes.
+
 ## 8.4.0 (2026-10-01)
 
 - **The fold now works on an app built with Xcode 27.0.** The hinge and reserved-region APIs arrived in the 27.1 SDK, so a build made with an older Xcode had the code compiled out entirely and reported no fold at all, even running on iPhone Duo. Those builds now reach the same APIs through the Objective-C runtime, so `isDeviceFoldable()`, the fold state and the hinge angle work without waiting for Xcode 27.1. Verified on the Duo simulator: an Xcode 27.0 build tracked the hinge live from 0 to 180 degrees. A build made with 27.1 or later keeps the typed path and is untouched.
