@@ -127,7 +127,7 @@ section { scroll-margin-top: 64px; }
   .devices img { height: 150px; }
 }
 
-.doc { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; padding: 40px 0 24px; }
+.doc { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 40px; padding-top: 40px; padding-bottom: 24px; }
 .sidenav { position: sticky; top: 80px; align-self: start; font-size: 15px; }
 .sidenav a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--muted); }
 .sidenav a:hover { color: var(--text); background: var(--surface); text-decoration: none; }
@@ -140,9 +140,11 @@ section { scroll-margin-top: 64px; }
 .content blockquote { margin: 0 0 16px; padding: 4px 16px; border-left: 3px solid var(--line); color: var(--muted); }
 .content hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0; }
 .content pre code { background: none; padding: 0; }
+.content { min-width: 0; overflow-wrap: anywhere; }
+.content pre { overflow-wrap: normal; }
 .content :not(pre) > code { background: var(--code-bg); padding: 1px 5px; border-radius: 5px; }
 @media (max-width: 760px) {
-  .doc { grid-template-columns: 1fr; gap: 16px; padding-top: 20px; }
+  .doc { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-top: 20px; }
   .sidenav { position: static; display: flex; flex-wrap: wrap; gap: 4px; }
   .sidenav a { padding: 6px 10px; border: 1px solid var(--line); }
 }
