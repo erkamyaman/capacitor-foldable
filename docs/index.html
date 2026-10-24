@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capacitor Foldable</title>
+<meta name="description" content="Fold state, posture, hinge angle, size classes and bar placement for iPhone Duo, Galaxy Z Fold and Flip, and Pixel Fold, in Capacitor apps.">
+<meta property="og:title" content="Capacitor Foldable">
+<meta property="og:description" content="Make your Capacitor app fold-aware on iPhone Duo and Android foldables.">
+<meta property="og:image" content="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/iphone-duo-book.png">
+<style>
+:root {
+  --bg: #fbfaf8;
+  --surface: #ffffff;
+  --text: #1c1b1a;
+  --muted: #6b6762;
+  --line: #e7e3dd;
+  --accent: #3b5bdb;
+  --code-bg: #f3f1ed;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121212;
+    --surface: #1b1b1b;
+    --text: #ecebe8;
+    --muted: #a19c95;
+    --line: #2c2b29;
+    --accent: #8ea6ff;
+    --code-bg: #1f1f1e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121212;
+  --surface: #1b1b1b;
+  --text: #ecebe8;
+  --muted: #a19c95;
+  --line: #2c2b29;
+  --accent: #8ea6ff;
+  --code-bg: #1f1f1e;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+header { padding: 64px 0 32px; }
+.eyebrow { font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); letter-spacing: .02em; }
+h1 { font-size: clamp(36px, 7vw, 56px); line-height: 1.05; letter-spacing: -.02em; margin: 14px 0 16px; }
+.lede { font-size: 20px; color: var(--muted); max-width: 640px; margin: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600; font-size: 15px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #121212; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #121212; } }
+.btn:hover { text-decoration: none; filter: brightness(1.05); }
+.devices { display: flex; gap: 14px; align-items: flex-end; justify-content: center; margin: 24px 0 8px; flex-wrap: wrap; }
+.devices img { height: 220px; width: auto; max-width: 100%; }
+section { padding: 36px 0; border-top: 1px solid var(--line); }
+h2 { font-size: 26px; letter-spacing: -.01em; margin: 0 0 16px; }
+h3 { font-size: 17px; margin: 0 0 6px; }
+p { margin: 0 0 14px; }
+.muted { color: var(--muted); }
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+  margin: 0 0 16px;
+}
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
+p code, li code, td code { background: var(--code-bg); padding: 1px 5px; border-radius: 5px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.compare figure { margin: 0; text-align: center; }
+.compare img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
+.compare figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+ul { padding-left: 20px; margin: 0 0 14px; }
+li { margin-bottom: 6px; }
+footer { padding: 32px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+.topbar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; gap: 18px; height: 56px; }
+.brand { font-weight: 700; color: var(--text); margin-right: auto; white-space: nowrap; }
+.brand:hover { text-decoration: none; }
+.nav { display: flex; gap: 16px; font-size: 15px; }
+.nav a { color: var(--muted); }
+.nav a:hover { color: var(--text); text-decoration: none; }
+.theme-toggle { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .moon { display: none; }
+}
+.hero-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
+.hero-compare figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+.hero-compare img { width: 100%; height: auto; display: block; border-radius: 10px; background: #fff; }
+.hero-compare figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tag { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+.tag.bad { background: color-mix(in srgb, #e03131 15%, transparent); color: #e03131; }
+.tag.good { background: color-mix(in srgb, #2f9e44 15%, transparent); color: #2f9e44; }
+#hinge-guess { border-top: 0; padding-top: 12px; }
+@media (max-width: 560px) {
+  .hero-compare { grid-template-columns: 1fr; }
+}
+.devices { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px 16px; margin-top: 36px; }
+.devices img { border-radius: 10px; }
+.compare img { background: #fff; }
+pre { position: relative; }
+.copy { position: absolute; top: 10px; right: 10px; font: 600 12px/1 -apple-system, BlinkMacSystemFont, sans-serif; padding: 6px 9px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; }
+.copy:hover { color: var(--text); }
+td code, th code { white-space: nowrap; }
+.skills .card code { font-size: 13px; }
+section { scroll-margin-top: 64px; }
+@media (max-width: 560px) {
+  .nav { display: none; }
+  .compare { grid-template-columns: 1fr; }
+  header { padding-top: 40px; }
+  .lede { font-size: 18px; }
+  .devices img { height: 150px; }
+}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap">
+  <a class="brand" href="#">Capacitor Foldable</a>
+  <nav class="nav">
+    <a href="#install">Install</a>
+    <a href="#polyfill">Polyfill</a>
+    <a href="#ionic">Ionic</a>
+    <a href="#skills">Agent skill</a>
+    <a href="https://github.com/erkamyaman/capacitor-foldable">GitHub</a>
+  </nav>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div></div>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">@erkamyaman/capacitor-foldable</div>
+  <h1>Capacitor Foldable</h1>
+  <p class="lede">Make your Capacitor app fold-aware on iPhone Duo, Galaxy Z Fold and Flip, and Pixel Fold. Fold state, posture, hinge angle, size classes and where the native bars go, from one plugin.</p>
+  <div class="actions">
+    <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable">GitHub</a>
+    <a class="btn" href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable">npm</a>
+    <a class="btn" href="https://github.com/erkamyaman/capacitor-foldable#api">API reference</a>
+  </div>
+  <div class="hero-compare">
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-book.png" alt="Ionic tab bar across the fold on a half-open iPhone Duo"><figcaption><span class="tag bad">Without the plugin</span> Tab bar across the fold</figcaption></figure>
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-book.png" alt="Ionic tab bar moved to the side on a half-open iPhone Duo"><figcaption><span class="tag good">With the plugin</span> Tab bar on the side, like native apps</figcaption></figure>
+  </div>
+</header>
+
+<section id="hinge-guess">
+  <h2>Built with it: Hinge Guess</h2>
+  <p><a href="https://github.com/erkamyaman/hinge-guess">Hinge Guess</a> is a small game where the phone is the controller: fold it to the target angle, tap Measure, and score how close you got. Ionic Angular, Capacitor, and this plugin's hinge angle behind the dial, with the protractor's pivot sitting right on the crease.</p>
+  <div class="compare">
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/meter.gif" alt="The needle following the hinge as the phone folds from flat to about 120 degrees and back" loading="lazy"><figcaption>Meter: the live hinge angle</figcaption></figure>
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/game.gif" alt="A round of the game: a 60 degree target, the phone folded to it, then the measurement taken" loading="lazy"><figcaption>Game: fold to the target</figcaption></figure>
+  </div>
+  <div class="compare" style="margin-top:14px">
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/game-score.png" alt="A scored round: 88 percent, with a dashed arm showing the angle the phone was folded to" loading="lazy"><figcaption>A scored round</figcaption></figure>
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/meter-flat.png" alt="The meter reading 180 degrees on a flat iPhone Duo" loading="lazy"><figcaption>Flat at 180 degrees</figcaption></figure>
+  </div>
+</section>
+
+<section id="install">
+  <h2>Install</h2>
+<pre><code>npm install @erkamyaman/capacitor-foldable
+npx cap sync</code></pre>
+  <p class="muted">Capacitor 8. On Capacitor 7, install <code>@erkamyaman/capacitor-foldable@7</code>. iPhone Duo support needs Capacitor 8.5+ and iOS 27.1, and works with any Xcode.</p>
+<pre><code>import { Foldable } from '@erkamyaman/capacitor-foldable';
+
+const { posture } = await Foldable.getFoldState(); // 'flat' | 'tabletop' | 'book'
+
+Foldable.addListener('foldStateChange', ({ posture }) =&gt; {
+  document.documentElement.dataset.posture = posture;
+});</code></pre>
+</section>
+
+<section>
+  <h2>What it tells your app</h2>
+  <div class="grid">
+    <div class="card"><h3>Fold state and posture</h3><p>Flat, half-opened or closed, and whether the phone is held as a book or a tabletop.</p></div>
+    <div class="card"><h3>Where the fold is</h3><p>The hinge bounds and orientation, and whether the fold splits the web view in two.</p></div>
+    <div class="card"><h3>Hinge angle</h3><p>Live degrees from 0 to 180, plus a <code>folding</code> event while the hinge moves.</p></div>
+    <div class="card"><h3>Inner or outer display</h3><p>Which screen the app is on, and Material window size classes.</p></div>
+    <div class="card"><h3>Bar placement</h3><p>Which edge iPhone Duo moves native bars to, and how many points they take, so HTML tab bars can follow.</p></div>
+    <div class="card"><h3>Android outer display</h3><p>Rear display and dual screen on Android foldables.</p></div>
+  </div>
+</section>
+
+<section id="polyfill">
+  <h2>Web standards, in a web view that turned them off</h2>
+  <p>Chrome ships the Device Posture and Viewport Segments APIs, but Android's WebView disables both, and Safari 27.1 keeps them behind a flag an app can't set. <code>installFoldablePolyfill()</code> fills them in from the native fold state and mirrors the CSS features on <code>&lt;html&gt;</code>.</p>
+<pre><code>import { installFoldablePolyfill } from '@erkamyaman/capacitor-foldable';
+
+await installFoldablePolyfill();
+
+navigator.devicePosture.type; // 'continuous' | 'folded'
+window.viewport.segments;     // two DOMRects when the fold splits the view</code></pre>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Standard CSS</th><th>With the polyfill</th></tr>
+      <tr><td><code>@media (device-posture: folded)</code></td><td><code>.device-posture-folded</code></td></tr>
+      <tr><td><code>@media (horizontal-viewport-segments: 2)</code></td><td><code>.horizontal-viewport-segments-2</code></td></tr>
+      <tr><td><code>env(viewport-segment-width 0 0)</code></td><td><code>var(--viewport-segment-width-0-0)</code></td></tr>
+      <tr><td>Fold position, flat or half-open</td><td><code>var(--fold-left)</code>, <code>var(--fold-width)</code>, <code>.fold-vertical</code></td></tr>
+      <tr><td>Native bars moved to the side</td><td><code>.vertical-bars-leading</code>, <code>.vertical-bars-trailing</code></td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="ionic">
+  <h2>Ionic tabs on iPhone Duo</h2>
+  <p>Native tab bars move to the side on iPhone Duo, but <code>ion-tabs</code> stays across the bottom, right over the fold. One import moves it the way the system does, and an opt-in fix stops the tab bar disappearing when the phone folds.</p>
+<pre><code>import '@erkamyaman/capacitor-foldable/ionic-tabs.css';</code></pre>
+  <div class="compare">
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-closed.png" alt="Ionic tab bar at the bottom of the closed iPhone Duo" loading="lazy"><figcaption>Closed, without the plugin</figcaption></figure>
+    <figure><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-closed.png" alt="Ionic tab bar as a pill under the clock on the closed iPhone Duo" loading="lazy"><figcaption>Closed, with <code>ionic-tabs.css</code></figcaption></figure>
+  </div>
+  <p class="muted" style="margin-top:16px">Want the controls rendered natively instead? See Capacitor Native UI below.</p>
+</section>
+
+<section>
+  <h2>Used by</h2>
+  <div class="grid">
+    <div class="card">
+      <h3><a href="https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui">Capacitor Native UI</a></h3>
+      <p>By <a href="https://github.com/rdlabo">Masahiko Sakakibara (rdlabo)</a>. Renders existing Ionic buttons, tabs and segments with UIKit and SwiftUI, including the side rail on iPhone Duo, while state and handlers stay in the web view. It uses this plugin as its standard device integration.</p>
+    </div>
+    <div class="card">
+      <h3><a href="https://github.com/rdlabo-dev/ionic-theme-ios27">Ionic Theme iOS 27</a></h3>
+      <p>Also by rdlabo. iOS 27 styling for Ionic apps, with layout helpers that take this plugin's bar edge and measured inset to make room for the rail.</p>
+    </div>
+  </div>
+<pre><code>npm install @rdlabo/capacitor-native-ui @erkamyaman/capacitor-foldable</code></pre>
+</section>
+
+
+<section id="skills" class="skills">
+  <h2>Agent skill</h2>
+  <p>Using Claude Code, Codex or another coding agent? Give it the skill, so it uses the plugin correctly instead of guessing at the API: laying out around the crease, the full API, Ionic specifics, iPhone Duo, Android foldables, and how to test on both.</p>
+<pre><code>npx skills add erkamyaman/capacitor-foldable@capacitor-foldable</code></pre>
+  <div class="grid">
+    <div class="card"><h3>In your project already</h3><p>The skill ships inside the npm package under <code>skills/</code>, so an agent can find it in <code>node_modules</code>.</p></div>
+    <div class="card"><h3><a href="https://github.com/erkamyaman/iphone-duo-capacitor-skills">iphone-duo-capacitor-skills</a></h3><p>The same skill on its own, next to the iPhone Duo skills for SwiftUI and UIKit.</p></div>
+    <div class="card"><h3><a href="https://github.com/erkamyaman/ionic-capacitor-skills">ionic-capacitor-skills</a></h3><p>A full set of Ionic and Capacitor skills, this one included.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Platforms</h2>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Platform</th><th>Support</th></tr>
+      <tr><td>Android</td><td>Galaxy Z Fold and Flip, Pixel Fold and other foldables, through Jetpack WindowManager. API 24+.</td></tr>
+      <tr><td>iOS</td><td>Size classes everywhere. Fold, hinge and bar placement on iPhone Duo with iOS 27.1. iOS 15+.</td></tr>
+      <tr><td>Web</td><td>Stub that reports <code>flat</code>, so the same code runs in the browser.</td></tr>
+    </table>
+  </div>
+  <p class="muted">No permissions, no tracking, public APIs only, and a privacy manifest included.</p>
+</section>
+
+<section>
+  <h2>Learn more</h2>
+  <ul>
+    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/iphone-duo.md">iPhone Duo guide</a></li>
+    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/layout-tips.md">Layout tips</a></li>
+    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/examples.md">Examples</a></li>
+    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/testing-android.md">Testing on Android</a></li>
+  </ul>
+</section>
+
+<footer>
+  MIT licensed. Made by <a href="https://github.com/erkamyaman">Erkam Yaman</a>. iPhone Duo is a trademark of Apple Inc.
+</footer>
+
+</div>
+<script>
+(function () {
+  var root = document.documentElement;
+  var media = window.matchMedia('(prefers-color-scheme: dark)');
+  var saved = null;
+  try { saved = localStorage.getItem('theme'); } catch (e) {}
+  if (saved === 'dark' || saved === 'light') root.dataset.theme = saved;
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var current = root.dataset.theme || (media.matches ? 'dark' : 'light');
+    var next = current === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+  document.querySelectorAll('pre').forEach(function (pre) {
+    var button = document.createElement('button');
+    button.className = 'copy';
+    button.type = 'button';
+    button.textContent = 'Copy';
+    button.addEventListener('click', function () {
+      navigator.clipboard.writeText(pre.querySelector('code').innerText).then(function () {
+        button.textContent = 'Copied';
+        setTimeout(function () { button.textContent = 'Copy'; }, 1500);
+      });
+    });
+    pre.appendChild(button);
+  });
+})();
+</script>
+</body>
+</html>
