@@ -1,0 +1,12 @@
+title: Capacitor Foldable
+description: Fold state, posture, hinge angle, size classes and bar placement for foldable phones in Capacitor apps.
+baseurl: /capacitor-foldable
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

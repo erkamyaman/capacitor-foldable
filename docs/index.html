@@ -8,136 +8,7 @@
 <meta property="og:title" content="Capacitor Foldable">
 <meta property="og:description" content="Make your Capacitor app fold-aware on iPhone Duo and Android foldables.">
 <meta property="og:image" content="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/iphone-duo-book.png">
-<style>
-:root {
-  --bg: #fbfaf8;
-  --surface: #ffffff;
-  --text: #1c1b1a;
-  --muted: #6b6762;
-  --line: #e7e3dd;
-  --accent: #3b5bdb;
-  --code-bg: #f3f1ed;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #121212;
-    --surface: #1b1b1b;
-    --text: #ecebe8;
-    --muted: #a19c95;
-    --line: #2c2b29;
-    --accent: #8ea6ff;
-    --code-bg: #1f1f1e;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #121212;
-  --surface: #1b1b1b;
-  --text: #ecebe8;
-  --muted: #a19c95;
-  --line: #2c2b29;
-  --accent: #8ea6ff;
-  --code-bg: #1f1f1e;
-  color-scheme: dark;
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
-header { padding: 64px 0 32px; }
-.eyebrow { font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); letter-spacing: .02em; }
-h1 { font-size: clamp(36px, 7vw, 56px); line-height: 1.05; letter-spacing: -.02em; margin: 14px 0 16px; }
-.lede { font-size: 20px; color: var(--muted); max-width: 640px; margin: 0; }
-.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-.btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600; font-size: 15px; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-:root[data-theme="dark"] .btn.primary { color: #121212; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #121212; } }
-.btn:hover { text-decoration: none; filter: brightness(1.05); }
-.devices { display: flex; gap: 14px; align-items: flex-end; justify-content: center; margin: 24px 0 8px; flex-wrap: wrap; }
-.devices img { height: 220px; width: auto; max-width: 100%; }
-section { padding: 36px 0; border-top: 1px solid var(--line); }
-h2 { font-size: 26px; letter-spacing: -.01em; margin: 0 0 16px; }
-h3 { font-size: 17px; margin: 0 0 6px; }
-p { margin: 0 0 14px; }
-.muted { color: var(--muted); }
-pre {
-  background: var(--code-bg);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 16px;
-  overflow-x: auto;
-  font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
-  margin: 0 0 16px;
-}
-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; }
-p code, li code, td code { background: var(--code-bg); padding: 1px 5px; border-radius: 5px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
-.card p { margin: 0; color: var(--muted); font-size: 15px; }
-.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.compare figure { margin: 0; text-align: center; }
-.compare img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
-.compare figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
-.table-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-size: 15px; }
-th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-th { color: var(--muted); font-weight: 600; }
-ul { padding-left: 20px; margin: 0 0 14px; }
-li { margin-bottom: 6px; }
-footer { padding: 32px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
-.topbar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar .wrap { display: flex; align-items: center; gap: 18px; height: 56px; }
-.brand { font-weight: 700; color: var(--text); margin-right: auto; white-space: nowrap; }
-.brand:hover { text-decoration: none; }
-.nav { display: flex; gap: 16px; font-size: 15px; }
-.nav a { color: var(--muted); }
-.nav a:hover { color: var(--text); text-decoration: none; }
-.theme-toggle { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; }
-.theme-toggle svg { width: 18px; height: 18px; }
-.theme-toggle .sun { display: none; }
-:root[data-theme="dark"] .theme-toggle .sun { display: block; }
-:root[data-theme="dark"] .theme-toggle .moon { display: none; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .sun { display: block; }
-  :root:not([data-theme="light"]) .theme-toggle .moon { display: none; }
-}
-.hero-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
-.hero-compare figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
-.hero-compare img { width: 100%; height: auto; display: block; border-radius: 10px; background: #fff; }
-.hero-compare figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.tag { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
-.tag.bad { background: color-mix(in srgb, #e03131 15%, transparent); color: #e03131; }
-.tag.good { background: color-mix(in srgb, #2f9e44 15%, transparent); color: #2f9e44; }
-#hinge-guess { border-top: 0; padding-top: 12px; }
-@media (max-width: 560px) {
-  .hero-compare { grid-template-columns: 1fr; }
-}
-.devices { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px 16px; margin-top: 36px; }
-.devices img { border-radius: 10px; }
-.compare img { background: #fff; }
-pre { position: relative; }
-.copy { position: absolute; top: 10px; right: 10px; font: 600 12px/1 -apple-system, BlinkMacSystemFont, sans-serif; padding: 6px 9px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; }
-.copy:hover { color: var(--text); }
-td code, th code { white-space: nowrap; }
-.skills .card code { font-size: 13px; }
-section { scroll-margin-top: 64px; }
-@media (max-width: 560px) {
-  .nav { display: none; }
-  .compare { grid-template-columns: 1fr; }
-  header { padding-top: 40px; }
-  .lede { font-size: 18px; }
-  .devices img { height: 150px; }
-}
-</style>
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
 <div class="topbar"><div class="wrap">
@@ -147,6 +18,7 @@ section { scroll-margin-top: 64px; }
     <a href="#polyfill">Polyfill</a>
     <a href="#ionic">Ionic</a>
     <a href="#skills">Agent skill</a>
+    <a href="api.html">API</a>
     <a href="https://github.com/erkamyaman/capacitor-foldable">GitHub</a>
   </nav>
   <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
@@ -163,7 +35,7 @@ section { scroll-margin-top: 64px; }
   <div class="actions">
     <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable">GitHub</a>
     <a class="btn" href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable">npm</a>
-    <a class="btn" href="https://github.com/erkamyaman/capacitor-foldable#api">API reference</a>
+    <a class="btn" href="api.html">API reference</a>
   </div>
   <div class="hero-compare">
     <figure><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-book.png" alt="Ionic tab bar across the fold on a half-open iPhone Duo"><figcaption><span class="tag bad">Without the plugin</span> Tab bar across the fold</figcaption></figure>
@@ -285,10 +157,12 @@ window.viewport.segments;     // two DOMRects when the fold splits the view</cod
 <section>
   <h2>Learn more</h2>
   <ul>
-    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/iphone-duo.md">iPhone Duo guide</a></li>
-    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/layout-tips.md">Layout tips</a></li>
-    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/examples.md">Examples</a></li>
-    <li><a href="https://github.com/erkamyaman/capacitor-foldable/blob/main/docs/testing-android.md">Testing on Android</a></li>
+    <li><a href="iphone-duo.html">iPhone Duo guide</a></li>
+    <li><a href="layout-tips.html">Layout tips</a></li>
+    <li><a href="examples.html">Examples</a></li>
+    <li><a href="testing-android.html">Testing on Android</a></li>
+    <li><a href="store-review.html">Store review</a></li>
+    <li><a href="api.html">API reference</a></li>
   </ul>
 </section>
 
@@ -297,33 +171,6 @@ window.viewport.segments;     // two DOMRects when the fold splits the view</cod
 </footer>
 
 </div>
-<script>
-(function () {
-  var root = document.documentElement;
-  var media = window.matchMedia('(prefers-color-scheme: dark)');
-  var saved = null;
-  try { saved = localStorage.getItem('theme'); } catch (e) {}
-  if (saved === 'dark' || saved === 'light') root.dataset.theme = saved;
-  document.getElementById('theme-toggle').addEventListener('click', function () {
-    var current = root.dataset.theme || (media.matches ? 'dark' : 'light');
-    var next = current === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = next;
-    try { localStorage.setItem('theme', next); } catch (e) {}
-  });
-  document.querySelectorAll('pre').forEach(function (pre) {
-    var button = document.createElement('button');
-    button.className = 'copy';
-    button.type = 'button';
-    button.textContent = 'Copy';
-    button.addEventListener('click', function () {
-      navigator.clipboard.writeText(pre.querySelector('code').innerText).then(function () {
-        button.textContent = 'Copied';
-        setTimeout(function () { button.textContent = 'Copy'; }, 1500);
-      });
-    });
-    pre.appendChild(button);
-  });
-})();
-</script>
+<script src="assets/site.js"></script>
 </body>
 </html>
