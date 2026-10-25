@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Capacitor Foldable">
+  <title>Capacitor Foldable</title>
+  <!-- two upright bodies with a hinge gap, like a dual-screen iPhone -->
+  <rect x="12" y="12" width="49" height="104" rx="11" fill="#3b5bdb"/>
+  <rect x="67" y="12" width="49" height="104" rx="11" fill="#3b5bdb"/>
+  <!-- screens -->
+  <rect x="17" y="17" width="39" height="94" rx="7" fill="#fff" fill-opacity=".92"/>
+  <rect x="72" y="17" width="39" height="94" rx="7" fill="#fff" fill-opacity=".92"/>
+  <!-- hinge -->
+  <rect x="58" y="34" width="12" height="14" rx="3" fill="#253a99"/>
+  <rect x="58" y="80" width="12" height="14" rx="3" fill="#253a99"/>
+  <!-- camera pill -->
+  <rect x="29" y="23" width="15" height="5" rx="2.5" fill="#3b5bdb"/>
+</svg>

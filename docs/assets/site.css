@@ -85,7 +85,7 @@ li { margin-bottom: 6px; }
 footer { padding: 32px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
 .topbar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
 .topbar .wrap { display: flex; align-items: center; gap: 18px; height: 56px; }
-.brand { font-weight: 700; color: var(--text); margin-right: auto; white-space: nowrap; }
+.brand { font-weight: 700; color: var(--text); margin-right: auto; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
 .brand:hover { text-decoration: none; }
 .nav { display: flex; gap: 16px; font-size: 15px; }
 .nav a { color: var(--muted); }
