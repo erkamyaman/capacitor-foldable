@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/logo/logo.svg" width="112" height="112" alt="Capacitor Foldable logo"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/logo/logo.svg" width="168" height="126" alt="Capacitor Foldable logo"></p>
 <h1 align="center">Capacitor Foldable</h1>
 <p align="center"><strong><code>@erkamyaman/capacitor-foldable</code></strong></p>
 <p align="center">
