@@ -1,28 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 96" width="128" height="96" role="img" aria-label="Capacitor Foldable">
   <title>Capacitor Foldable</title>
   <defs>
-    <linearGradient id="cf-screen" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#d6dfff"/>
+    <linearGradient id="cf-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34332f"/>
+      <stop offset="1" stop-color="#171614"/>
+    </linearGradient>
+    <linearGradient id="cf-screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7d95ff"/>
+      <stop offset="1" stop-color="#3b5bdb"/>
     </linearGradient>
     <linearGradient id="cf-crease" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#3b5bdb" stop-opacity="0"/>
-      <stop offset=".5" stop-color="#3b5bdb" stop-opacity=".45"/>
-      <stop offset="1" stop-color="#3b5bdb" stop-opacity="0"/>
+      <stop offset="0" stop-color="#1b2a7a" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#1b2a7a" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#1b2a7a" stop-opacity="0"/>
     </linearGradient>
+    <mask id="cf-cut">
+      <rect width="128" height="96" fill="#fff"/>
+      <circle cx="62" cy="5" r="4" fill="#000"/>
+      <circle cx="62" cy="91" r="4" fill="#000"/>
+    </mask>
   </defs>
   <!-- side button -->
-  <rect x="121" y="30" width="4" height="22" rx="2" fill="#3b5bdb"/>
-  <!-- body -->
-  <rect x="3" y="6" width="119" height="84" rx="22" fill="#1c1b1a" stroke="#3b5bdb" stroke-width="3"/>
-  <!-- single continuous screen -->
-  <rect x="10" y="13" width="105" height="70" rx="15" fill="url(#cf-screen)"/>
-  <!-- fold -->
-  <rect x="55" y="13" width="14" height="70" fill="url(#cf-crease)"/>
-  <rect x="61.2" y="13" width="1.6" height="70" fill="#3b5bdb" fill-opacity=".55"/>
-  <path d="M58 6 h8 l-4 5 z" fill="#3b5bdb"/>
-  <path d="M58 90 h8 l-4 -5 z" fill="#3b5bdb"/>
-  <!-- status strip on the right edge -->
-  <rect x="96" y="22" width="12" height="4" rx="2" fill="#3b5bdb" fill-opacity=".8"/>
-  <path d="M97 38 a9 9 0 0 1 10 0" fill="none" stroke="#3b5bdb" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>
+  <rect x="122" y="32" width="3.5" height="20" rx="1.75" fill="#3b5bdb"/>
+  <g mask="url(#cf-cut)">
+    <!-- body, with a blue rim so it holds on dark backgrounds -->
+    <rect x="2.5" y="5" width="120" height="86" rx="23" fill="url(#cf-body)" stroke="#5c7cfa" stroke-width="2"/>
+    <!-- one continuous screen -->
+    <rect x="9.5" y="12" width="105" height="72" rx="16.5" fill="url(#cf-screen)"/>
+    <!-- fold -->
+    <rect x="52" y="12" width="20" height="72" fill="url(#cf-crease)"/>
+    <rect x="61.4" y="12" width="1.2" height="72" fill="#fff" fill-opacity=".35"/>
+    <!-- status strip on the right edge -->
+    <rect x="95" y="24" width="12" height="4.5" rx="2.25" fill="#fff"/>
+    <path d="M95.5 41 a8.5 8.5 0 0 1 11 0" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="101" cy="47" r="2" fill="#fff"/>
+  </g>
 </svg>
