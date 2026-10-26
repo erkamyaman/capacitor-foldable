@@ -42,6 +42,7 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
 header { padding: 64px 0 32px; }
+.hero-logo { display: block; width: clamp(96px, 18vw, 148px); height: auto; margin-bottom: 22px; }
 .eyebrow { font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); letter-spacing: .02em; }
 h1 { font-size: clamp(36px, 7vw, 56px); line-height: 1.05; letter-spacing: -.02em; margin: 14px 0 16px; }
 .lede { font-size: 20px; color: var(--muted); max-width: 640px; margin: 0; }
