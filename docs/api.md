@@ -2,7 +2,7 @@
 
 Generated from the JSDoc in `src/definitions.ts`. Back to the [docs](https://erkamyaman.github.io/capacitor-foldable/).
 
-<docgen-index>
+<!-- docgen-index -->
 
 * [`isDeviceFoldable()`](#isdevicefoldable)
 * [`getFoldState()`](#getfoldstate)
@@ -25,9 +25,9 @@ Generated from the JSDoc in `src/definitions.ts`. Back to the [docs](https://erk
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
-</docgen-index>
+<!-- /docgen-index -->
 
-<docgen-api>
+<!-- docgen-api -->
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 ### isDeviceFoldable()
@@ -448,4 +448,4 @@ angle: iOS keeps reporting `'closed'` for a moment after the phone opens.
 
 <code>'unsupported' | 'unavailable' | 'available' | 'active'</code>
 
-</docgen-api>
+<!-- /docgen-api -->
