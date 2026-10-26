@@ -4,7 +4,7 @@
   --text: #1c1b1a;
   --muted: #6b6762;
   --line: #e7e3dd;
-  --accent: #3b5bdb;
+  --accent: #6a3df0;
   --code-bg: #f3f1ed;
   color-scheme: light;
 }
@@ -15,7 +15,7 @@
     --text: #ecebe8;
     --muted: #a19c95;
     --line: #2c2b29;
-    --accent: #8ea6ff;
+    --accent: #a98bff;
     --code-bg: #1f1f1e;
     color-scheme: dark;
   }
@@ -26,7 +26,7 @@
   --text: #ecebe8;
   --muted: #a19c95;
   --line: #2c2b29;
-  --accent: #8ea6ff;
+  --accent: #a98bff;
   --code-bg: #1f1f1e;
   color-scheme: dark;
 }
