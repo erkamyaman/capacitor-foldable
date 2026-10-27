@@ -31,6 +31,8 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     private var lastHingeAngle: Double?
     private var isFolding = false
     private var foldingWorkItem: DispatchWorkItem?
+    private var barPlacementWorkItems: [DispatchWorkItem] = []
+    private var barPlacementNeedsResend = false
     private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
@@ -103,7 +105,12 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func getBarPlacement(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            call.resolve(self.currentBarPlacement())
+            let placement = self.currentBarPlacement()
+            if let last = self.lastBarPlacement, !(last as NSDictionary).isEqual(to: placement) {
+                self.barPlacementNeedsResend = true
+                self.notifyBarPlacementAfterSettling()
+            }
+            call.resolve(placement)
         }
     }
 
@@ -153,6 +160,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         implementation.observeChanges(in: view) { [weak self] in
             self?.notifyFoldStateNowAndAfterSettling()
             self?.notifyHingeAngleIfChanged()
+            self?.notifyBarPlacementAfterSettling()
         }
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -163,7 +171,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         ) { [weak self] _ in
             self?.notifyFoldStateNowAndAfterSettling()
             self?.notifySizeClassIfChanged()
-            self?.notifyBarPlacementIfChanged()
+            self?.notifyBarPlacementAfterSettling()
         }
 
         guard #available(iOS 17.0, *) else { return }
@@ -179,7 +187,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             _ = view.registerForTraitChanges(traits) { [weak self] (_: UIView, _: UITraitCollection) in
                 self?.notifySizeClassIfChanged()
                 self?.notifyFoldStateNowAndAfterSettling()
-                self?.notifyBarPlacementIfChanged()
+                self?.notifyBarPlacementAfterSettling()
             }
         }
     }
@@ -211,10 +219,20 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func notifyBarPlacementIfChanged() {
         let placement = currentBarPlacement()
-        if let last = lastBarPlacement, (last as NSDictionary).isEqual(to: placement) { return }
+        if !barPlacementNeedsResend, let last = lastBarPlacement, (last as NSDictionary).isEqual(to: placement) { return }
 
+        barPlacementNeedsResend = false
         lastBarPlacement = placement
         notifyListeners("barPlacementChange", data: placement)
+    }
+
+    private func notifyBarPlacementAfterSettling() {
+        barPlacementWorkItems.forEach { $0.cancel() }
+        barPlacementWorkItems = [0.25, 0.8].map { delay in
+            let check = DispatchWorkItem { [weak self] in self?.notifyBarPlacementIfChanged() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: check)
+            return check
+        }
     }
 
     private func notifyFoldStateNowAndAfterSettling() {
