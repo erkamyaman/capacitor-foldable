@@ -32,6 +32,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     private var isFolding = false
     private var foldingWorkItem: DispatchWorkItem?
     private var barPlacementWorkItems: [DispatchWorkItem] = []
+    private var barPlacementNeedsResend = false
     private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
@@ -104,7 +105,12 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func getBarPlacement(_ call: CAPPluginCall) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            call.resolve(self.currentBarPlacement())
+            let placement = self.currentBarPlacement()
+            if let last = self.lastBarPlacement, !(last as NSDictionary).isEqual(to: placement) {
+                self.barPlacementNeedsResend = true
+                self.notifyBarPlacementAfterSettling()
+            }
+            call.resolve(placement)
         }
     }
 
@@ -213,8 +219,9 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func notifyBarPlacementIfChanged() {
         let placement = currentBarPlacement()
-        if let last = lastBarPlacement, (last as NSDictionary).isEqual(to: placement) { return }
+        if !barPlacementNeedsResend, let last = lastBarPlacement, (last as NSDictionary).isEqual(to: placement) { return }
 
+        barPlacementNeedsResend = false
         lastBarPlacement = placement
         notifyListeners("barPlacementChange", data: placement)
     }
