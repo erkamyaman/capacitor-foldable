@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.4.2 (2026-10-27)
+
+- **`barPlacementChange` no longer reports a missing bar mid-fold.** Every move between displays first fired `{ verticalBarEdge: null, inset: 0 }`, read before the layout had settled, and the real edge only followed if UIKit sent a second trait callback. A side rail built from it could flicker, or lose its spacing, as [RecipeSage](https://github.com/julianpoy/RecipeSage) found. The placement is now read once the switch has settled (0.25 s, then a check at 0.8 s), so real changes arrive about a quarter second after the system reports them.
+- When `getBarPlacement()` returns something other than the last event, the settled value is sent again, so a read taken mid-switch is always corrected.
+
 ## 8.4.1 (2026-10-11)
 
 - **Fix: the viewport segments could go stale after the app moved between displays.** The web view can report the previous window size for a while after a Duo opens or closes, with no resize event to follow, so the fold was measured against the wrong viewport: the crease at x 456 sits outside a 466 point cover display, which read as no fold at all. The fold is now ignored while the app is on the outer display, since that geometry belongs to the inner one, and a `ResizeObserver` on `<html>` plus a `visibilitychange` listener re-measure when the window really changes.
