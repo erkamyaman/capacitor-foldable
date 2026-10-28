@@ -119,7 +119,6 @@ pre { position: relative; }
 .copy:hover { color: var(--text); }
 td code, th code { white-space: nowrap; }
 .skills .card code { font-size: 13px; }
-section { scroll-margin-top: 64px; }
 @media (max-width: 560px) {
   .nav { display: none; }
   .compare { grid-template-columns: 1fr; }
@@ -202,3 +201,4 @@ body.modal-open { overflow: hidden; }
 .star-count[hidden] { display: none; }
 .btn .star-count .star { width: 13px; height: 13px; vertical-align: 0; }
 .btn { white-space: nowrap; }
+html { scroll-padding-top: 64px; }
