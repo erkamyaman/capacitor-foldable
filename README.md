@@ -68,6 +68,7 @@ Also ships in the npm package under [`skills/`](skills/capacitor-foldable), and 
 ## Used by
 
 - [Capacitor Native UI](https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui) and [Ionic Theme iOS 27](https://github.com/rdlabo-dev/ionic-theme-ios27) by rdlabo
+- [RecipeSage](https://github.com/julianpoy/RecipeSage), a collaborative recipe keeper and meal planner, moves its native tab bar to the side on iPhone Duo with it
 - [Hinge Guess](https://github.com/erkamyaman/hinge-guess), a game where the phone's hinge is the controller
 
 ## Trademarks and licence
