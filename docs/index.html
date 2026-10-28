@@ -35,9 +35,10 @@
   <h1>Capacitor Foldable</h1>
   <p class="lede">Make your Capacitor app fold-aware on iPhone Duo, Galaxy Z Fold and Flip, and Pixel Fold. Fold state, posture, hinge angle, size classes and where the native bars go, from one plugin.</p>
   <div class="actions">
-    <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable">GitHub</a>
-    <a class="btn" href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable">npm</a>
-    <a class="btn" href="api.html">API reference</a>
+    <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+    <a class="btn" href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><svg class="npm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 2v20h20V2H2zm16.5 16.5H15V9h-3v9.5H5.5v-13h13v13z"/></svg> npm</a>
+    <a class="btn" href="api.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg> API reference</a>
+    <a class="btn ai" href="#agent-prompt"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 2.5l1.9 5.6 5.6 1.9-5.6 1.9L10 17.5l-1.9-5.6L2.5 10l5.6-1.9z"/><path d="M18.5 13l.95 2.55L22 16.5l-2.55.95L18.5 20l-.95-2.55L15 16.5l2.55-.95z"/></svg> Agent prompt</a>
   </div>
   <div class="hero-compare">
     <figure><img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-book.png" alt="Ionic tab bar across the fold on a half-open iPhone Duo"><figcaption><span class="tag bad">Without the plugin</span> Tab bar across the fold</figcaption></figure>
@@ -142,8 +143,48 @@ window.viewport.segments;     // two DOMRects when the fold splits the view</cod
   <div class="grid">
     <div class="card"><h3>In your project already</h3><p>The skill ships inside the npm package under <code>skills/</code>, so an agent can find it in <code>node_modules</code>.</p></div>
     <div class="card"><h3><a href="https://github.com/erkamyaman/iphone-duo-capacitor-skills">iphone-duo-capacitor-skills</a></h3><p>The same skill on its own, next to the iPhone Duo skills for SwiftUI and UIKit.</p></div>
-    <div class="card"><h3><a href="https://github.com/erkamyaman/ionic-capacitor-skills">ionic-capacitor-skills</a></h3><p>A full set of Ionic and Capacitor skills, this one included.</p></div>
-  </div>
+    <div class="card"><h3><a href="https://github.com/erkamyaman/ionic-capacitor-skills">ionic-capacitor-skills</a></h3><p>A full set of Ionic and Capacitor skills, this one included.</p></div>  </div>
+  <h3 id="agent-prompt" class="agent-prompt-title">Agent prompt</h3>
+  <p>Paste this into Claude Code, Cursor, Codex or any other coding agent working on your Capacitor app:</p>
+<pre class="agent-prompt"><code>Task: Make this Capacitor app fold-aware on iPhone Duo and Android foldables
+using @erkamyaman/capacitor-foldable.
+
+Context:
+- Docs: https://erkamyaman.github.io/capacitor-foldable/
+- API: https://erkamyaman.github.io/capacitor-foldable/api.html
+- If the capacitor-foldable skill is installed (node_modules/@erkamyaman/
+  capacitor-foldable/skills/), read it first.
+- Needs Capacitor 8.5 or later for iPhone Duo (iOS 27 scene lifecycle).
+  On Capacitor 7, stop and report instead of upgrading on your own.
+
+Steps:
+1. npm install @erkamyaman/capacitor-foldable, then npx cap sync.
+2. At startup, call installFoldablePolyfill() once. It fills in
+   navigator.devicePosture and window.viewport.segments, and sets classes
+   and variables on &lt;html&gt;: .device-posture-folded,
+   .horizontal-viewport-segments-2, --fold-left, --fold-width,
+   .vertical-bars-leading / .vertical-bars-trailing.
+3. Keep interactive content out of the fold: when the view is split in two,
+   lay out each half from --fold-left and --fold-width (or the viewport
+   segments) instead of centering across the crease.
+4. HTML tab bars and toolbars: iPhone Duo moves native bars to the side, but
+   HTML bars stay put. Follow getBarPlacement() / barPlacementChange
+   ({ verticalBarEdge: 'leading' | 'trailing' | null, inset }) or the
+   .vertical-bars-* classes.
+5. Ionic with ion-tabs: import '@erkamyaman/capacitor-foldable/ionic-tabs.css'.
+   If the tab bar disappears after folding, pass { ionicKeyboard: true } to
+   installFoldablePolyfill().
+6. Use getHingeAngle() / hingeAngleChange only for features that really
+   depend on the angle; layout should come from fold state and segments.
+
+Deliverables:
+1. Files changed, and which fold signals each screen uses.
+2. Manual test poses: iPhone Duo closed, open portrait, open landscape, half
+   folded (book and tabletop); an Android foldable folded and flat.
+
+Constraints:
+- Only use APIs from the plugin's definitions.ts and the docs above.
+- Don't add fold logic to screens that look fine in every pose.</code></pre>
 </section>
 
 <section>

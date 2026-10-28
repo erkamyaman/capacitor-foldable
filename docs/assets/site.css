@@ -202,3 +202,9 @@ body.modal-open { overflow: hidden; }
 .btn .star-count .star { width: 13px; height: 13px; vertical-align: 0; }
 .btn { white-space: nowrap; }
 html { scroll-padding-top: 64px; }
+
+.agent-prompt-title { margin-top: 32px; }
+.btn svg.npm { color: #cb3837; }
+.btn.ai { border-color: #e3b341; box-shadow: 0 0 0 1px rgba(227, 179, 65, .25), 0 0 14px rgba(227, 179, 65, .18); }
+.btn.ai svg { color: #e3b341; }
+.btn.ai:hover { border-color: #f0c75e; }
