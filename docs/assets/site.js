@@ -75,7 +75,9 @@
     };
     document.addEventListener('keydown', onKey);
     overlay.addEventListener('click', function (event) { if (event.target === overlay) close(); });
-    popup.querySelector('.close').addEventListener('click', close);
+    var closeButton = popup.querySelector('.close');
+    closeButton.addEventListener('click', close);
+    setTimeout(function () { closeButton.classList.add('ready'); }, 5000);
     popup.querySelectorAll('.support-actions a').forEach(function (a) { a.addEventListener('click', close); });
   }, 5000);
 })();

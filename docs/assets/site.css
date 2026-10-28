@@ -193,6 +193,8 @@ pre { padding-right: 76px; }
 .support-popup .support-actions .btn { padding: 11px 14px; font-size: 15px; }
 .support-popup .close { position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font-size: 22px; line-height: 1; cursor: pointer; }
 .support-popup .close:hover { background: var(--bg); color: var(--text); }
+.support-popup .close:not(.ready) { opacity: 0; visibility: hidden; }
+.support-popup .close.ready { opacity: 1; visibility: visible; transition: opacity .3s ease; }
 body.modal-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) { .support-overlay, .support-popup { transition: none; } }
 
