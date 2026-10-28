@@ -20,8 +20,8 @@
     <a href="#ionic">Ionic</a>
     <a href="#skills">Agent skill</a>
     <a href="api.html">API</a>
-    <a href="https://github.com/erkamyaman/capacitor-foldable">GitHub</a>
   </nav>
+  <a class="gh-stars" href="https://github.com/erkamyaman/capacitor-foldable" aria-label="Capacitor Foldable on GitHub"><svg class="gh" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="gh-stars-count" hidden><svg class="star" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.67.42l1.88 3.81 4.2.61a.75.75 0 01.42 1.28l-3.04 2.96.72 4.19a.75.75 0 01-1.09.79L8 12.34l-3.76 1.97a.75.75 0 01-1.09-.79l.72-4.19L.83 6.37a.75.75 0 01.42-1.28l4.2-.61L7.33.67A.75.75 0 018 .25z"/></svg><span data-stars></span></span></a>
   <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
     <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -51,8 +51,6 @@
   <div class="compare">
     <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/meter.gif" alt="The needle following the hinge as the phone folds from flat to about 120 degrees and back" loading="lazy"><figcaption>Meter: the live hinge angle</figcaption></figure>
     <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/game.gif" alt="A round of the game: a 60 degree target, the phone folded to it, then the measurement taken" loading="lazy"><figcaption>Game: fold to the target</figcaption></figure>
-  </div>
-  <div class="compare" style="margin-top:14px">
     <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/game-score.png" alt="A scored round: 88 percent, with a dashed arm showing the angle the phone was folded to" loading="lazy"><figcaption>A scored round</figcaption></figure>
     <figure><img src="https://raw.githubusercontent.com/erkamyaman/hinge-guess/main/docs/images/meter-flat.png" alt="The meter reading 180 degrees on a flat iPhone Duo" loading="lazy"><figcaption>Flat at 180 degrees</figcaption></figure>
   </div>
@@ -132,6 +130,7 @@ window.viewport.segments;     // two DOMRects when the fold splits the view</cod
       <p>A collaborative recipe keeper, meal planner and shopping list by <a href="https://github.com/julianpoy">Julian Poyourow</a>. Its iOS app follows this plugin's fold state and bar placement to move the native tab bar to the side on iPhone Duo.</p>
     </div>
   </div>
+  <p class="muted used-install">Using Capacitor Native UI? Install it alongside the plugin:</p>
 <pre><code>npm install @rdlabo/capacitor-native-ui @erkamyaman/capacitor-foldable</code></pre>
 </section>
 
@@ -157,19 +156,32 @@ window.viewport.segments;     // two DOMRects when the fold splits the view</cod
       <tr><td>Web</td><td>Stub that reports <code>flat</code>, so the same code runs in the browser.</td></tr>
     </table>
   </div>
-  <p class="muted">No permissions, no tracking, public APIs only, and a privacy manifest included.</p>
+  <p class="muted table-note">No permissions, no tracking, public APIs only, and a privacy manifest included.</p>
 </section>
 
 <section>
   <h2>Learn more</h2>
-  <ul>
-    <li><a href="iphone-duo.html">iPhone Duo guide</a></li>
-    <li><a href="layout-tips.html">Layout tips</a></li>
-    <li><a href="examples.html">Examples</a></li>
-    <li><a href="testing-android.html">Testing on Android</a></li>
-    <li><a href="store-review.html">Store review</a></li>
-    <li><a href="api.html">API reference</a></li>
-  </ul>
+  <div class="links">
+    <a href="iphone-duo.html">iPhone Duo guide</a>
+    <a href="layout-tips.html">Layout tips</a>
+    <a href="examples.html">Examples</a>
+    <a href="testing-android.html">Testing on Android</a>
+    <a href="store-review.html">Store review</a>
+    <a href="api.html">API reference</a>
+  </div>
+</section>
+
+<section class="support">
+  <div class="support-card">
+    <div>
+      <h2>Like it? Help it grow</h2>
+      <p>Capacitor Foldable is free and MIT licensed, built and tested in spare time. A star helps other developers find it, and sponsoring keeps it maintained as new foldables and OS releases land.</p>
+    </div>
+    <div class="support-actions">
+      <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> Star on GitHub<span class="star-count" hidden><svg class="star" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.67.42l1.88 3.81 4.2.61a.75.75 0 01.42 1.28l-3.04 2.96.72 4.19a.75.75 0 01-1.09.79L8 12.34l-3.76 1.97a.75.75 0 01-1.09-.79l.72-4.19L.83 6.37a.75.75 0 01.42-1.28l4.2-.61L7.33.67A.75.75 0 018 .25z"/></svg><span data-stars></span></span></a>
+      <a class="btn sponsor" href="https://github.com/sponsors/erkamyaman"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3.1 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3 1.6-1.8 3.1-3 5.2-3 3.7 0 5.9 3.8 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg> Sponsor</a>
+    </div>
+  </div>
 </section>
 
 <footer>
