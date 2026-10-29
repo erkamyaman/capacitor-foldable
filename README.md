@@ -74,6 +74,7 @@ Also ships in the npm package under [`skills/`](skills/capacitor-foldable), and 
 
 - [Capacitor Native UI](https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui) and [Ionic Theme iOS 27](https://github.com/rdlabo-dev/ionic-theme-ios27) by rdlabo
 - [RecipeSage](https://github.com/julianpoy/RecipeSage), a collaborative recipe keeper and meal planner, moves its native tab bar to the side on iPhone Duo with it
+- [AI Gist](https://github.com/yarin-zhang/AI-Gist), a privacy-first AI prompt manager, moves its tab bar to the side rail on iPhone Duo with it, alongside rdlabo's theme
 - [Hinge Guess](https://github.com/erkamyaman/hinge-guess), a game where the phone's hinge is the controller
 
 ## Trademarks and licence
