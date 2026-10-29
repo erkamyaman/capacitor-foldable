@@ -12,7 +12,11 @@
 Fold state, posture, hinge angle, size classes and bar placement for foldable phones such as Galaxy Z Fold and Flip, Pixel Fold and iPhone Duo, in Capacitor apps.
 </p>
 
-<p align="center"><a href="https://erkamyaman.github.io/capacitor-foldable/"><strong>Documentation</strong></a> · <a href="https://erkamyaman.github.io/capacitor-foldable/api.html">API</a> · <a href="https://erkamyaman.github.io/capacitor-foldable/iphone-duo.html">iPhone Duo guide</a> · <a href="https://github.com/erkamyaman/hinge-guess">Hinge Guess demo</a></p>
+<table align="center">
+  <tr>
+    <td align="center">📚 <a href="https://erkamyaman.github.io/capacitor-foldable/"><strong>Documentation</strong></a></td>
+  </tr>
+</table>
 
 | Ionic tabs on iPhone Duo without the plugin | With the plugin |
 | --- | --- |
