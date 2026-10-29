@@ -25,10 +25,11 @@ npm install @erkamyaman/capacitor-foldable
 npx cap sync
 ```
 
-| Capacitor | Plugin | iOS |
-| --------- | ------ | --- |
-| v8.x      | v8.x   | Size classes, plus iPhone Duo on Capacitor 8.5+ and iOS 27.1, built with any Xcode |
-| v7.x      | v7.x   | Size classes only |
+| Capacitor | Plugin | Install | iOS |
+| --------- | ------ | ------- | --- |
+| v9 beta   | v9.x beta | `npm install @erkamyaman/capacitor-foldable@next` | Size classes and iPhone Duo, iOS 16+. Setup in the [release notes](https://github.com/erkamyaman/capacitor-foldable/releases/tag/v9.0.0-beta.0) |
+| v8.x      | v8.x   | `npm install @erkamyaman/capacitor-foldable` | Size classes, plus iPhone Duo on Capacitor 8.5+ and iOS 27.1, built with any Xcode |
+| v7.x      | v7.x   | `npm install @erkamyaman/capacitor-foldable@latest-7` | Size classes only |
 
 Android works on API 24+ with any foldable Jetpack WindowManager supports. The web build is a stub that reports `flat`.
 
