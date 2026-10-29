@@ -78,6 +78,7 @@ p code, li code, td code { background: var(--code-bg); padding: 1px 5px; border-
 .compare img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
 .compare figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
 .table-wrap { overflow-x: auto; }
+#install .table-wrap { margin-bottom: 18px; }
 table { border-collapse: collapse; width: 100%; font-size: 15px; }
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--muted); font-weight: 600; }

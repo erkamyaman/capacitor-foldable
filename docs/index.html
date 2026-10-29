@@ -35,8 +35,8 @@
   <h1>Capacitor Foldable</h1>
   <p class="lede">Make your Capacitor app fold-aware on iPhone Duo, Galaxy Z Fold and Flip, and Pixel Fold. Fold state, posture, hinge angle, size classes and where the native bars go, from one plugin.</p>
   <div class="actions">
-    <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
-    <a class="btn" href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><svg class="npm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 2v20h20V2H2zm16.5 16.5H15V9h-3v9.5H5.5v-13h13v13z"/></svg> npm</a>
+    <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
+    <a class="btn" href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable" target="_blank" rel="noopener"><svg class="npm" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 2v20h20V2H2zm16.5 16.5H15V9h-3v9.5H5.5v-13h13v13z"/></svg> npm</a>
     <a class="btn" href="api.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg> API reference</a>
     <a class="btn ai" href="#agent-prompt"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 2.5l1.9 5.6 5.6 1.9-5.6 1.9L10 17.5l-1.9-5.6L2.5 10l5.6-1.9z"/><path d="M18.5 13l.95 2.55L22 16.5l-2.55.95L18.5 20l-.95-2.55L15 16.5l2.55-.95z"/></svg> Agent prompt</a>
   </div>
@@ -61,7 +61,14 @@
   <h2>Install</h2>
 <pre><code>npm install @erkamyaman/capacitor-foldable
 npx cap sync</code></pre>
-  <p class="muted">Capacitor 8. On Capacitor 7, install <code>@erkamyaman/capacitor-foldable@latest-7</code>. Trying the Capacitor 9 beta? Install <code>@erkamyaman/capacitor-foldable@next</code> and follow the <a href="https://github.com/erkamyaman/capacitor-foldable/releases/tag/v9.0.0-beta.0">release notes</a>. iPhone Duo support needs Capacitor 8.5+ and iOS 27.1, and works with any Xcode.</p>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Capacitor</th><th>Plugin</th><th>npm tag</th><th>iOS</th></tr>
+      <tr><td>9 beta</td><td>9.x beta</td><td><code>@next</code></td><td>Size classes and iPhone Duo. Setup in the <a href="https://github.com/erkamyaman/capacitor-foldable/releases/tag/v9.0.0-beta.0">release notes</a></td></tr>
+      <tr><td>8</td><td>8.x</td><td><code>latest</code></td><td>Size classes, plus iPhone Duo on 8.5+ and iOS 27.1</td></tr>
+      <tr><td>7</td><td>7.x</td><td><code>@latest-7</code></td><td>Size classes only</td></tr>
+    </table>
+  </div>
 <pre><code>import { Foldable } from '@erkamyaman/capacitor-foldable';
 
 const { posture } = await Foldable.getFoldState(); // 'flat' | 'tabletop' | 'book'
@@ -219,8 +226,8 @@ Constraints:
       <p>Capacitor Foldable is free and MIT licensed, built and tested in spare time. A star helps other developers find it, and sponsoring keeps it maintained as new foldables and OS releases land.</p>
     </div>
     <div class="support-actions">
-      <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> Star on GitHub<span class="star-count" hidden><svg class="star" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.67.42l1.88 3.81 4.2.61a.75.75 0 01.42 1.28l-3.04 2.96.72 4.19a.75.75 0 01-1.09.79L8 12.34l-3.76 1.97a.75.75 0 01-1.09-.79l.72-4.19L.83 6.37a.75.75 0 01.42-1.28l4.2-.61L7.33.67A.75.75 0 018 .25z"/></svg><span data-stars></span></span></a>
-      <a class="btn sponsor" href="https://github.com/sponsors/erkamyaman"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3.1 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3 1.6-1.8 3.1-3 5.2-3 3.7 0 5.9 3.8 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg> Sponsor</a>
+      <a class="btn primary" href="https://github.com/erkamyaman/capacitor-foldable" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> Star on GitHub<span class="star-count" hidden><svg class="star" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.67.42l1.88 3.81 4.2.61a.75.75 0 01.42 1.28l-3.04 2.96.72 4.19a.75.75 0 01-1.09.79L8 12.34l-3.76 1.97a.75.75 0 01-1.09-.79l.72-4.19L.83 6.37a.75.75 0 01.42-1.28l4.2-.61L7.33.67A.75.75 0 018 .25z"/></svg><span data-stars></span></span></a>
+      <a class="btn sponsor" href="https://github.com/sponsors/erkamyaman" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3.1 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3 1.6-1.8 3.1-3 5.2-3 3.7 0 5.9 3.8 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg> Sponsor</a>
     </div>
   </div>
 </section>
