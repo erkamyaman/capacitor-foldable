@@ -12,7 +12,11 @@
 Fold state, posture, hinge angle, size classes and bar placement for foldable phones such as Galaxy Z Fold and Flip, Pixel Fold and iPhone Duo, in Capacitor apps.
 </p>
 
-<p align="center"><a href="https://erkamyaman.github.io/capacitor-foldable/"><strong>Documentation</strong></a> · <a href="https://erkamyaman.github.io/capacitor-foldable/api.html">API</a> · <a href="https://erkamyaman.github.io/capacitor-foldable/iphone-duo.html">iPhone Duo guide</a> · <a href="https://github.com/erkamyaman/hinge-guess">Hinge Guess demo</a></p>
+<table align="center">
+  <tr>
+    <td align="center">📚 <a href="https://erkamyaman.github.io/capacitor-foldable/"><strong>Documentation</strong></a></td>
+  </tr>
+</table>
 
 | Ionic tabs on iPhone Duo without the plugin | With the plugin |
 | --- | --- |
@@ -25,10 +29,11 @@ npm install @erkamyaman/capacitor-foldable
 npx cap sync
 ```
 
-| Capacitor | Plugin | iOS |
-| --------- | ------ | --- |
-| v8.x      | v8.x   | Size classes, plus iPhone Duo on Capacitor 8.5+ and iOS 27.1, built with any Xcode |
-| v7.x      | v7.x   | Size classes only |
+| Capacitor | Plugin | Install | iOS |
+| --------- | ------ | ------- | --- |
+| v9 beta   | v9.x beta | `npm install @erkamyaman/capacitor-foldable@next` | Size classes and iPhone Duo, iOS 16+. Setup in the [release notes](https://github.com/erkamyaman/capacitor-foldable/releases/tag/v9.0.0-beta.0) |
+| v8.x      | v8.x   | `npm install @erkamyaman/capacitor-foldable` | Size classes, plus iPhone Duo on Capacitor 8.5+ and iOS 27.1, built with any Xcode |
+| v7.x      | v7.x   | `npm install @erkamyaman/capacitor-foldable@latest-7` | Size classes only |
 
 Android works on API 24+ with any foldable Jetpack WindowManager supports. The web build is a stub that reports `flat`.
 
@@ -69,6 +74,7 @@ Also ships in the npm package under [`skills/`](skills/capacitor-foldable), and 
 
 - [Capacitor Native UI](https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui) and [Ionic Theme iOS 27](https://github.com/rdlabo-dev/ionic-theme-ios27) by rdlabo
 - [RecipeSage](https://github.com/julianpoy/RecipeSage), a collaborative recipe keeper and meal planner, moves its native tab bar to the side on iPhone Duo with it
+- [AI Gist](https://github.com/yarin-zhang/AI-Gist), a privacy-first AI prompt manager, moves its tab bar to the side rail on iPhone Duo with it, alongside rdlabo's theme
 - [Hinge Guess](https://github.com/erkamyaman/hinge-guess), a game where the phone's hinge is the controller
 
 ## Trademarks and licence

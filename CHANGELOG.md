@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.4.3 (2026-10-29)
+
+- Docs only, no code changes. The npm page now shows the versions table with each Capacitor version's npm tag (`latest` for 8, `latest-7` for 7, `next` for the Capacitor 9 beta).
+
 ## 8.4.2 (2026-10-27)
 
 - **`barPlacementChange` no longer reports a missing bar mid-fold.** Every move between displays first fired `{ verticalBarEdge: null, inset: 0 }`, read before the layout had settled, and the real edge only followed if UIKit sent a second trait callback. A side rail built from it could flicker, or lose its spacing, as [RecipeSage](https://github.com/julianpoy/RecipeSage) found. The placement is now read once the switch has settled (0.25 s, then a check at 0.8 s), so real changes arrive about a quarter second after the system reports them.
