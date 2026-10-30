@@ -35,6 +35,7 @@
     "type": "github",
     "url": "https://github.com/sponsors/erkamyaman"
   },
+  "homepage": "https://erkamyaman.github.io/capacitor-foldable/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erkamyaman/capacitor-foldable.git"
