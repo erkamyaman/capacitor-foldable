@@ -2,6 +2,8 @@
 
 iPhone Duo support uses the iOS 27.1 APIs. It turns on when the app uses Capacitor 8.5 or later, is built with Xcode 27.1 or later and runs on iOS 27.1 or later. Apps built with an older Xcode keep working and report no fold. Capacitor 7 apps must stay on Xcode 26: iOS 27 requires the scene lifecycle, which only Capacitor 8.5 and later adopt, so a Capacitor 7 app built with Xcode 27 crashes at launch.
 
+Apple says apps submitted from April 2027 must include iPhone Duo screenshots, so fold support shows up on your product page. See [Store review](store-review.md).
+
 - `getFoldState()` and `window.viewport.segments` come from the fold's reserved region. The fold is a 40-point band in the middle of the inner display: split around it while half-open, one segment while fully open.
 - Half-open and fully open follow the hinge status, so `foldStateChange` fires as soon as the hinge moves.
 - `getHingeAngle()` and `hingeAngleChange` come from the hinge. UIKit reports the angle in radians, and the plugin converts it to degrees to match Android: 0 closed, 180 fully open.

@@ -15,6 +15,9 @@ Fold state, posture, hinge angle, size classes and bar placement for foldable ph
 <table align="center">
   <tr>
     <td align="center">📚 <a href="https://erkamyaman.github.io/capacitor-foldable/"><strong>Documentation</strong></a></td>
+    <td align="center"><a href="https://erkamyaman.github.io/capacitor-foldable/api.html">API</a></td>
+    <td align="center"><a href="https://erkamyaman.github.io/capacitor-foldable/iphone-duo.html">iPhone Duo guide</a></td>
+    <td align="center"><a href="https://github.com/erkamyaman/hinge-guess">Hinge Guess demo</a></td>
   </tr>
 </table>
 

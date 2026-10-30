@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.4.4 (2026-10-30)
+
+- Docs only, no code changes. The npm page's Homepage link now goes to the [documentation site](https://erkamyaman.github.io/capacitor-foldable/), and the README links to the API, the iPhone Duo guide and the Hinge Guess demo again.
+
 ## 8.4.3 (2026-10-29)
 
 - Docs only, no code changes. The npm page now shows the versions table with each Capacitor version's npm tag (`latest` for 8, `latest-7` for 7, `next` for the Capacitor 9 beta).
