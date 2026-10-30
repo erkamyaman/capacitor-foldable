@@ -33,16 +33,23 @@ Apple's guidance is to leave this alone: ["In general, don't override the defaul
 
 When iPhone Duo moves bars to the side, the status bar turns vertical too, and the system adds a leading or trailing safe-area inset for it. To opt out:
 
-1. In `ios/App/App/SceneDelegate.swift`, use the view controller the plugin ships:
+1. Use the view controller the plugin ships. On Capacitor 9, which starts the app from SwiftUI, return it from `ios/App/App/CapacitorView.swift`:
 
    ```swift
+   import SwiftUI
    import Capacitor
    import FoldablePlugin
 
-   window?.rootViewController = FoldableBridgeViewController()
+   public struct CapacitorView: UIViewControllerRepresentable {
+       public func makeUIViewController(context: Context) -> CAPBridgeViewController {
+           FoldableBridgeViewController()
+       }
+
+       public func updateUIViewController(_ vc: CAPBridgeViewController, context: Context) {}
+   }
    ```
 
-   Older Capacitor apps create the controller in `Main.storyboard` instead. There, set the class to `FoldableBridgeViewController` with module `FoldablePlugin`.
+   On Capacitor 8, set it in `ios/App/App/SceneDelegate.swift` with `window?.rootViewController = FoldableBridgeViewController()`. Older apps create the controller in `Main.storyboard` instead. There, set the class to `FoldableBridgeViewController` with module `FoldablePlugin`. After `npx cap migrate` to Capacitor 9, remove that window setup from `SceneDelegate.swift`, because the SwiftUI app now owns the window.
 
 2. Then choose the behaviour from JavaScript, at any time:
 
