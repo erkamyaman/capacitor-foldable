@@ -6,4 +6,6 @@ The plugin is built to give store review nothing to object to.
 
 **Android.** The plugin adds no permissions and no `uses-feature` to your app, so it changes nothing about which devices can install it. Its own manifest is empty; Jetpack WindowManager merges two optional `<uses-library>` entries, which are how it binds to the OEM window extensions and filter nothing. The hinge angle comes from `TYPE_HINGE_ANGLE`, which needs no permission, and rear display and dual screen go through `WindowAreaController`, also permission free. `minSdk` is 24, the same as Capacitor's own default, and `targetSdk` follows your project.
 
+**iPhone Duo screenshots.** Apple says apps submitted from April 2027 must include iPhone Duo screenshots, for both the outer display (1398 × 2034) and the inner display (2007 × 2853). Shots taken without the plugin show Ionic's tab bar running across the fold, so take them in the [iPhone Duo simulator](iphone-duo.md) once the app follows the fold. Check [App Store Connect's screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/screenshot-specifications/) for the exact rules.
+
 **Data safety and privacy labels.** Everything stays on the device: the plugin has no network code and stores nothing. There is no entry for it to add to Play's Data safety form or to your App Store privacy label.
