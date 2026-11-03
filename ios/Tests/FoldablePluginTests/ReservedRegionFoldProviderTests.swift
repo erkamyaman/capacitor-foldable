@@ -179,4 +179,20 @@ class ReservedRegionFoldProviderTests: XCTestCase {
 
         XCTAssertEqual(implementation.getHingeAngle()["angle"] as? Double, 95)
     }
+
+    func testWatcherReportsOnlyWhenRegionsChange() {
+        var regions: [ReservedRegion] = []
+        let changed = expectation(description: "onChange")
+        changed.expectedFulfillmentCount = 2
+        changed.assertForOverFulfill = true
+        let watcher = ReservedRegionWatcher(read: { _ in regions }, onChange: { changed.fulfill() })
+
+        watcher.updateConstraints()
+        watcher.updateConstraints()
+        regions = [ReservedRegion(kind: .division, frame: CGRect(x: 456, y: 0, width: 40, height: 669), isActive: false)]
+        watcher.updateConstraints()
+        watcher.updateConstraints()
+
+        wait(for: [changed], timeout: 1)
+    }
 }
