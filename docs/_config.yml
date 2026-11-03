@@ -1,6 +1,9 @@
 title: Capacitor Foldable
 description: Fold state, posture, hinge angle, size classes and bar placement for foldable phones in Capacitor apps.
+url: https://erkamyaman.github.io
 baseurl: /capacitor-foldable
+plugins:
+  - jekyll-sitemap
 markdown: kramdown
 kramdown:
   input: GFM

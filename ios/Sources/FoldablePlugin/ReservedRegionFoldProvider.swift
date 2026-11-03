@@ -1,6 +1,6 @@
 import UIKit
 
-struct ReservedRegion {
+struct ReservedRegion: Equatable {
     enum Kind {
         case division
         case occlusion
@@ -56,6 +56,46 @@ struct ReservedRegionFoldProvider: FoldProvider {
 
     func observe(_ view: UIView, onChange: @escaping () -> Void) {
         source.observe(view, onChange: onChange)
+
+        let source = self.source
+        let watcher = ReservedRegionWatcher(
+            read: { source.reservedRegions(in: $0) },
+            onChange: onChange
+        )
+        watcher.frame = view.bounds
+        watcher.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(watcher)
+    }
+}
+
+typealias FoldRegion = ReservedRegion
+
+final class ReservedRegionWatcher: UIView {
+    private let read: (UIView) -> [FoldRegion]
+    private let onChange: () -> Void
+    private var lastRegions: [FoldRegion]?
+
+    override class var requiresConstraintBasedLayout: Bool { true }
+
+    init(read: @escaping (UIView) -> [FoldRegion], onChange: @escaping () -> Void) {
+        self.read = read
+        self.onChange = onChange
+        super.init(frame: .zero)
+        alpha = 0
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+        let regions = read(self)
+        guard regions != lastRegions else { return }
+        lastRegions = regions
+        DispatchQueue.main.async { [onChange] in onChange() }
     }
 }
 

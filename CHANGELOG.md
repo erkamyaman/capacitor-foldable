@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.5 (2026-11-03)
+
+- **iOS: fold state now updates when reserved regions arrive late.** UIKit can report no reserved regions for a moment after launch, and nothing told the plugin when they appeared. It now watches them, so `foldStateChange` fires when they change.
+- Fixed links to Capacitor Native UI and rdlabo's theme, which moved to the `webview-native-ui` organization. The old Native UI links returned 404.
+- Docs site: sitemap, canonical URLs and a description for each page.
+
 ## 8.4.4 (2026-10-30)
 
 - Docs only, no code changes. The npm page's Homepage link now goes to the [documentation site](https://erkamyaman.github.io/capacitor-foldable/), and the README links to the API, the iPhone Duo guide and the Hinge Guess demo again.

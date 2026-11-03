@@ -1,3 +1,7 @@
+---
+description: "Code examples for fold-aware Capacitor apps: tabletop and book layouts, CSS viewport segments and reacting to fold state changes."
+---
+
 # Examples
 
 Tabletop (video on top, controls below) or book (list on the left, detail on the right):
