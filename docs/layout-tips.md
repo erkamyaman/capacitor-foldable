@@ -1,3 +1,7 @@
+---
+description: "Layout tips for foldable Capacitor apps: keeping content and controls off the crease and adapting to each pose on iPhone Duo and Android foldables."
+---
+
 # Layout tips
 
 These follow Apple's [Designing for iPhone Duo](https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo) guidelines and apply to Android foldables too.

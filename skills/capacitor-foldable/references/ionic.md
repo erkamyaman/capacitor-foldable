@@ -23,7 +23,7 @@ React and Vue import it from the entry file as usual, since their bundlers ship 
 
 ## Projecting Ionic controls into native UI
 
-Moving the tab bar with CSS is one answer. The other is [`@rdlabo/capacitor-native-ui`](https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui), which renders existing `ion-back-button`, `ion-buttons`, `ion-button`, `ion-tab-bar` and segment controls with UIKit and SwiftUI while the original elements, state and handlers stay in the WebView. It can put them in the system's vertical rail on iPhone Duo, and it works with an app's existing theme. The optional [`@rdlabo/ionic-theme-ios27`](https://github.com/rdlabo-dev/ionic-theme-ios27) adds iOS 27 styling on top.
+Moving the tab bar with CSS is one answer. The other is [`@rdlabo/capacitor-native-ui`](https://github.com/webview-native-ui/capacitor-plugin), which renders existing `ion-back-button`, `ion-buttons`, `ion-button`, `ion-tab-bar` and segment controls with UIKit and SwiftUI while the original elements, state and handlers stay in the WebView. It can put them in the system's vertical rail on iPhone Duo, and it works with an app's existing theme. The optional [`@rdlabo/ionic-theme-ios27`](https://github.com/webview-native-ui/ionic-theme-ios27) adds iOS 27 styling on top.
 
 The split is clean: this plugin provides device state, Native UI projects the controls, and the theme handles Web styling. Both rdlabo packages list this plugin in their standard setup, installed by the app as a direct dependency:
 
@@ -33,9 +33,9 @@ npm install @rdlabo/capacitor-native-ui @erkamyaman/capacitor-foldable
 
 For setup, send the reader to rdlabo's own documentation rather than duplicating it here:
 
-- [Native UI guide](https://github.com/rdlabo-dev/ionic-theme-ios27/tree/main/packages/capacitor-native-ui)
-- [Vertical Bars with an existing Ionic theme](https://github.com/rdlabo-dev/ionic-theme-ios27/blob/main/packages/capacitor-native-ui/docs/ionic-vertical-bars.md)
-- [Migrating from theme 1.2.x](https://github.com/rdlabo-dev/ionic-theme-ios27/blob/main/packages/capacitor-native-ui/docs/migration.md), where the native APIs were still bundled in the theme
+- [Native UI guide](https://github.com/webview-native-ui/capacitor-plugin)
+- [Vertical Bars with an existing Ionic theme](https://github.com/webview-native-ui/capacitor-plugin/blob/main/docs/ionic-vertical-bars.md)
+- [Migrating from theme 1.2.x](https://github.com/webview-native-ui/capacitor-plugin/blob/main/docs/migration.md), where the native APIs were still bundled in the theme
 
 Use the CSS stylesheet above when you want Ionic's own tab bar moved, and Native UI when you want the controls rendered natively.
 

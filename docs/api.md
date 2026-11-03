@@ -1,3 +1,7 @@
+---
+description: "Full API for the Capacitor Foldable plugin: fold state, posture, hinge angle, size classes, bar placement, display modes, events and types."
+---
+
 # API reference
 
 Generated from the JSDoc in `src/definitions.ts`. Back to the [docs](https://erkamyaman.github.io/capacitor-foldable/).

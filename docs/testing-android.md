@@ -1,3 +1,7 @@
+---
+description: "How to test a fold-aware Capacitor app on Android: foldable and Resizable emulators, Samsung Remote Test Lab, and rear display modes."
+---
+
 # Testing on Android
 
 - **Emulator.** Create a foldable virtual device in Android Studio, such as Pixel 9 Pro Fold, and use its fold and unfold controls. From a terminal, `adb emu fold` and `adb emu unfold` do the same, and `adb emu sensor set hinge-angle0 90` sets the hinge angle.

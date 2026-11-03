@@ -1,3 +1,7 @@
+---
+description: "App Store and Google Play review notes for Capacitor Foldable: public APIs, privacy manifest, permissions, data safety and iPhone Duo screenshots."
+---
+
 # Store review
 
 The plugin is built to give store review nothing to object to.
