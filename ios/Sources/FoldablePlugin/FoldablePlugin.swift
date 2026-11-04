@@ -28,11 +28,13 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
     private var lastSizeClass: [String: String]?
     private var lastFoldState: [String: Any]?
     private var lastBarPlacement: [String: Any]?
+    private var lastLayout: [String: Any]?
     private var lastHingeAngle: Double?
     private var isFolding = false
     private var foldingWorkItem: DispatchWorkItem?
     private var barPlacementWorkItems: [DispatchWorkItem] = []
     private var barPlacementNeedsResend = false
+    private var layoutWorkItems: [DispatchWorkItem] = []
     private var orientationObserver: NSObjectProtocol?
 
     @objc override public func load() {
@@ -141,6 +143,12 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         )
     }
 
+    private func currentLayout() -> [String: Any] {
+        var layout = implementation.getReservedRegions(in: bridge?.viewController?.view)
+        layout["placement"] = currentBarPlacement()
+        return layout
+    }
+
     private func currentSizeClass() -> [String: String] {
         let traits = bridge?.viewController?.traitCollection ?? UITraitCollection.current
         let size = bridge?.viewController?.view.bounds.size ?? .zero
@@ -157,10 +165,12 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
 
         lastFoldState = currentFoldState()
         lastBarPlacement = currentBarPlacement()
+        lastLayout = currentLayout()
         implementation.observeChanges(in: view) { [weak self] in
             self?.notifyFoldStateNowAndAfterSettling()
             self?.notifyHingeAngleIfChanged()
             self?.notifyBarPlacementAfterSettling()
+            self?.notifyLayoutAfterSettling()
         }
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -172,6 +182,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             self?.notifyFoldStateNowAndAfterSettling()
             self?.notifySizeClassIfChanged()
             self?.notifyBarPlacementAfterSettling()
+            self?.notifyLayoutAfterSettling()
         }
 
         guard #available(iOS 17.0, *) else { return }
@@ -188,6 +199,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
                 self?.notifySizeClassIfChanged()
                 self?.notifyFoldStateNowAndAfterSettling()
                 self?.notifyBarPlacementAfterSettling()
+                self?.notifyLayoutAfterSettling()
             }
         }
     }
@@ -230,6 +242,23 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
         barPlacementWorkItems.forEach { $0.cancel() }
         barPlacementWorkItems = [0.25, 0.8].map { delay in
             let check = DispatchWorkItem { [weak self] in self?.notifyBarPlacementIfChanged() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: check)
+            return check
+        }
+    }
+
+    private func notifyLayoutIfChanged() {
+        let layout = currentLayout()
+        if let last = lastLayout, (last as NSDictionary).isEqual(to: layout) { return }
+
+        lastLayout = layout
+        notifyListeners("layoutChange", data: layout)
+    }
+
+    private func notifyLayoutAfterSettling() {
+        layoutWorkItems.forEach { $0.cancel() }
+        layoutWorkItems = [0.3, 0.8].map { delay in
+            let check = DispatchWorkItem { [weak self] in self?.notifyLayoutIfChanged() }
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: check)
             return check
         }

@@ -12,7 +12,7 @@ Apple says apps submitted from April 2027 must include iPhone Duo screenshots, s
 - Half-open and fully open follow the hinge status, so `foldStateChange` fires as soon as the hinge moves.
 - `getHingeAngle()` and `hingeAngleChange` come from the hinge. UIKit reports the angle in radians, and the plugin converts it to degrees to match Android: 0 closed, 180 fully open.
 - `activeDisplay` (inner or outer) comes from the hinge status, and `cameraBounds` from the camera reserved regions.
-- **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` reports `{ verticalBarEdge: 'leading' | 'trailing' | null, inset: number }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android.
+- **Bar placement.** On iPhone Duo, native tab bars and toolbars move to the side of the display, but HTML tab bars stay where they are. `getBarPlacement()` reports `{ verticalBarEdge: 'leading' | 'trailing' | null, inset: number }`, with a `barPlacementChange` event and a `vertical-bars-leading` / `vertical-bars-trailing` class on `<html>`, so your tab bar can move to the side too. It reports `null` on Android. For layout that depends on both placement and reserved regions, `layoutChange` fires once after a fold or rotation settles.
 
 ## What the plugin reports
 

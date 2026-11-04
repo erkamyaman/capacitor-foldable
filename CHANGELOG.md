@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.5.0 (2026-11-04)
+
+- **New `layoutChange` event.** It fires once after a fold or rotation settles, when bar placement or reserved regions changed, with `{ placement, regions }`. Use it for layout that depends on both: `barPlacementChange` misses folds that keep the same placement, and `foldStateChange` can fire before placement settles. Only fires on iOS 27.1 or later. Existing events are unchanged.
+
 ## 8.4.5 (2026-11-03)
 
 - **iOS: fold state now updates when reserved regions arrive late.** UIKit can report no reserved regions for a moment after launch, and nothing told the plugin when they appeared. It now watches them, so `foldStateChange` fires when they change.

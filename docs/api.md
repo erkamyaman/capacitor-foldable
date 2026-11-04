@@ -26,6 +26,7 @@ Generated from the JSDoc in `src/definitions.ts`. Back to the [docs](https://erk
 * [`addListener('displayModeChange', ...)`](#addlistenerdisplaymodechange-)
 * [`addListener('foldingChange', ...)`](#addlistenerfoldingchange-)
 * [`addListener('barPlacementChange', ...)`](#addlistenerbarplacementchange-)
+* [`addListener('layoutChange', ...)`](#addlistenerlayoutchange-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -373,6 +374,30 @@ Only fires on iOS 27.1 or later.
 --------------------
 
 
+### addListener('layoutChange', ...)
+
+```typescript
+addListener(eventName: 'layoutChange', listenerFunc: (layout: LayoutChange) => void) => Promise<PluginListenerHandle>
+```
+
+Listen for one update after a fold or rotation settles, when bar placement
+or reserved regions changed. Use it for layout that depends on both, since
+`barPlacementChange` misses folds that keep the same placement and
+`foldStateChange` can fire before placement settles. Only fires on iOS 27.1
+or later.
+
+| Param              | Type                                                                       |
+| ------------------ | -------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'layoutChange'</code>                                                |
+| **`listenerFunc`** | <code>(layout: <a href="#layoutchange">LayoutChange</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.5.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -435,6 +460,14 @@ Only fires on iOS 27.1 or later.
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### LayoutChange
+
+| Prop            | Type                                                  | Description                                                             | Since |
+| --------------- | ----------------------------------------------------- | ----------------------------------------------------------------------- | ----- |
+| **`placement`** | <code><a href="#barplacement">BarPlacement</a></code> | Where bars sit now, the same value `getBarPlacement()` returns.         | 8.5.0 |
+| **`regions`**   | <code>ReservedRegion[]</code>                         | The regions reserved now, the same list `getReservedRegions()` returns. | 8.5.0 |
 
 
 ### Type Aliases
