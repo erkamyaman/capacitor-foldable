@@ -170,6 +170,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             self?.notifyFoldStateNowAndAfterSettling()
             self?.notifyHingeAngleIfChanged()
             self?.notifyBarPlacementAfterSettling()
+            self?.notifyLayoutAfterSettling()
         }
 
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
@@ -181,6 +182,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             self?.notifyFoldStateNowAndAfterSettling()
             self?.notifySizeClassIfChanged()
             self?.notifyBarPlacementAfterSettling()
+            self?.notifyLayoutAfterSettling()
         }
 
         guard #available(iOS 17.0, *) else { return }
@@ -197,6 +199,7 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
                 self?.notifySizeClassIfChanged()
                 self?.notifyFoldStateNowAndAfterSettling()
                 self?.notifyBarPlacementAfterSettling()
+                self?.notifyLayoutAfterSettling()
             }
         }
     }
@@ -242,7 +245,6 @@ public class FoldablePlugin: CAPPlugin, CAPBridgedPlugin {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: check)
             return check
         }
-        notifyLayoutAfterSettling()
     }
 
     private func notifyLayoutIfChanged() {
