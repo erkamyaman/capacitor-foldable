@@ -202,6 +202,22 @@ export interface BarPlacement {
   inset: number;
 }
 
+export interface LayoutChange {
+  /**
+   * Where bars sit now, the same value `getBarPlacement()` returns.
+   *
+   * @since 8.5.0
+   */
+  placement: BarPlacement;
+
+  /**
+   * The regions reserved now, the same list `getReservedRegions()` returns.
+   *
+   * @since 8.5.0
+   */
+  regions: ReservedRegion[];
+}
+
 type ThemeConsumedFoldState = {
   state: 'flat' | 'half-opened' | 'closed';
   hingeBounds?: { x: number; y: number; width: number; height: number };
@@ -409,4 +425,15 @@ export interface FoldablePlugin {
     eventName: 'barPlacementChange',
     listenerFunc: (placement: BarPlacement) => void,
   ): Promise<PluginListenerHandle>;
+
+  /**
+   * Listen for one update after a fold or rotation settles, when bar placement
+   * or reserved regions changed. Use it for layout that depends on both, since
+   * `barPlacementChange` misses folds that keep the same placement and
+   * `foldStateChange` can fire before placement settles. Only fires on iOS 27.1
+   * or later.
+   *
+   * @since 8.5.0
+   */
+  addListener(eventName: 'layoutChange', listenerFunc: (layout: LayoutChange) => void): Promise<PluginListenerHandle>;
 }

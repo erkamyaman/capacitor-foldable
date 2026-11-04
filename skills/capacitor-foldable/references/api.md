@@ -93,6 +93,14 @@ await Foldable.addListener('foldingChange', ({ folding }) => { /* pause heavy wo
 
 Only fires where a hinge angle is available: an Android foldable with a hinge sensor, or iPhone Duo on iOS 27.1.
 
+## Layout changes
+
+```typescript
+await Foldable.addListener('layoutChange', ({ placement, regions }) => { /* place chrome */ });
+```
+
+Fires once after a fold or rotation settles, when bar placement or reserved regions changed. Use it when layout depends on both: `barPlacementChange` misses folds that keep the same placement, and `foldStateChange` can fire before placement settles. Only fires on iOS 27.1 or later.
+
 ## Android display modes
 
 ```typescript
