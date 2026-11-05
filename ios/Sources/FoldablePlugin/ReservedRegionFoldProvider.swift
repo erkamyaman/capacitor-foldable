@@ -26,11 +26,21 @@ protocol FoldSource {
     func observe(_ view: UIView, onChange: @escaping () -> Void)
 }
 
+private let foldableModels: Set<String> = ["iPhone19,4"]
+
+private func deviceModel() -> String {
+    if let simulated = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] { return simulated }
+    var info = utsname()
+    uname(&info)
+    return withUnsafeBytes(of: &info.machine) { String(cString: $0.bindMemory(to: CChar.self).baseAddress!) }
+}
+
 struct ReservedRegionFoldProvider: FoldProvider {
     let source: FoldSource
+    var model = deviceModel()
 
-    var isFoldable: Bool { source.hasFold }
-    var supportsTabletop: Bool { source.hasFold }
+    var isFoldable: Bool { foldableModels.contains(model) || source.hasFold }
+    var supportsTabletop: Bool { isFoldable }
 
     func fold(in view: UIView?) -> NativeFold? {
         guard source.hasFold, let view = view else { return nil }

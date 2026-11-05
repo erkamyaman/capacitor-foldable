@@ -43,7 +43,8 @@ isDeviceFoldable() => Promise<{ foldable: boolean; supportsTabletop: boolean; }>
 
 Whether the device has a fold at all, and whether it can be propped half
 open like a laptop. Both `false` on web, and on iOS except on iPhone Duo
-(iOS 27.1 or later).
+(iOS 27.1 or later). On a foldable iPhone newer than this plugin version,
+both can read `false` until the first hinge update, shortly after launch.
 
 **Returns:** <code>Promise&lt;{ foldable: boolean; supportsTabletop: boolean; }&gt;</code>
 
