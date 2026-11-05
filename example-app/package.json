@@ -13,13 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
-    "@erkamyaman/capacitor-foldable": "file:..",
-    "@capacitor/ios": "^8.0.0",
-    "@capacitor/android": "^8.0.0"
+    "@capacitor/android": "next",
+    "@capacitor/core": "next",
+    "@capacitor/ios": "next",
+    "@erkamyaman/capacitor-foldable": "file:.."
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
+    "@capacitor/cli": "next",
     "vite": "^7.3.1"
   },
   "author": "",
