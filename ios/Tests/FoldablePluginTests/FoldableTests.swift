@@ -25,7 +25,7 @@ private final class FakeFoldProvider: FoldProvider {
 
 class FoldableTests: XCTestCase {
     func testIsDeviceFoldableReportsFalseStub() {
-        let implementation = Foldable()
+        let implementation = Foldable(provider: UnsupportedFoldProvider())
 
         XCTAssertFalse(implementation.isDeviceFoldable())
         XCTAssertFalse(implementation.supportsTabletop())

@@ -122,7 +122,7 @@ class ReservedRegionFoldProviderTests: XCTestCase {
         source.hasFold = false
         source.regions = [ReservedRegion(kind: .division, frame: CGRect(x: 313, y: 0, width: 0, height: 890), isActive: true)]
 
-        let implementation = Foldable(provider: ReservedRegionFoldProvider(source: source))
+        let implementation = Foldable(provider: ReservedRegionFoldProvider(source: source, model: "iPhone18,1"))
 
         XCTAssertFalse(implementation.isDeviceFoldable())
         XCTAssertFalse(implementation.supportsTabletop())
@@ -178,6 +178,31 @@ class ReservedRegionFoldProviderTests: XCTestCase {
         let implementation = Foldable(provider: ReservedRegionFoldProvider(source: source))
 
         XCTAssertEqual(implementation.getHingeAngle()["angle"] as? Double, 95)
+    }
+
+    func testKnownFoldableModelIsFoldableBeforeTheFirstHingeUpdate() {
+        let source = FakeFoldSource()
+        source.hasFold = false
+        let provider = ReservedRegionFoldProvider(source: source, model: "iPhone19,4")
+        let implementation = Foldable(provider: provider)
+
+        XCTAssertTrue(implementation.isDeviceFoldable())
+        XCTAssertTrue(implementation.supportsTabletop())
+    }
+
+    func testOtherModelsAreFoldableOnlyOnceTheSourceReportsAFold() {
+        let source = FakeFoldSource()
+        source.hasFold = false
+        let provider = ReservedRegionFoldProvider(source: source, model: "iPhone18,1")
+        let implementation = Foldable(provider: provider)
+
+        XCTAssertFalse(implementation.isDeviceFoldable())
+        XCTAssertFalse(implementation.supportsTabletop())
+
+        source.hasFold = true
+
+        XCTAssertTrue(implementation.isDeviceFoldable())
+        XCTAssertTrue(implementation.supportsTabletop())
     }
 
     func testWatcherReportsOnlyWhenRegionsChange() {
