@@ -2,7 +2,7 @@
 
 ## 8.5.1 (2026-11-05)
 
-- **iOS: `isDeviceFoldable()` no longer reads `false` on iPhone Duo during startup.** The check relied on the first hinge update, which arrives a few hundred milliseconds after the plugin loads. iPhone Duo is now recognized by its model straight away. A foldable iPhone newer than this plugin version can still read `false` until that first update.
+- **iOS: `isDeviceFoldable()` no longer reads `false` on iPhone Duo during startup.** The check relied on the first hinge update, which arrives a few hundred milliseconds after the plugin loads. iPhone Duo is now recognized by its model straight away. A foldable iPhone model this plugin doesn't recognize can still read `false` until that first update.
 
 ## 8.5.0 (2026-11-04)
 

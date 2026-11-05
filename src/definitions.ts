@@ -249,8 +249,9 @@ export interface FoldablePlugin {
   /**
    * Whether the device has a fold at all, and whether it can be propped half
    * open like a laptop. Both `false` on web, and on iOS except on iPhone Duo
-   * (iOS 27.1 or later). On a foldable iPhone newer than this plugin version,
-   * both can read `false` until the first hinge update, shortly after launch.
+   * (iOS 27.1 or later). On a foldable iPhone model this plugin doesn't
+   * recognize, both can read `false` until the first hinge update, shortly
+   * after launch.
    *
    * @since 7.0.0
    */
