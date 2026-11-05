@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.5.1 (2026-11-05)
+
+- **iOS: `isDeviceFoldable()` no longer reads `false` on iPhone Duo during startup.** The check relied on the first hinge update, which arrives a few hundred milliseconds after the plugin loads. iPhone Duo is now recognized by its model straight away. A foldable iPhone model this plugin doesn't recognize can still read `false` until that first update.
+
 ## 8.5.0 (2026-11-04)
 
 - **New `layoutChange` event.** It fires once after a fold or rotation settles, when bar placement or reserved regions changed, with `{ placement, regions }`. Use it for layout that depends on both: `barPlacementChange` misses folds that keep the same placement, and `foldStateChange` can fire before placement settles. Only fires on iOS 27.1 or later. Existing events are unchanged.
