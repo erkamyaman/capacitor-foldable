@@ -30,16 +30,25 @@ The system moves bars to the side, and the web view's safe areas follow. Measure
 
 So for most layouts, padding with the safe-area insets is enough, and `getBarPlacement()` is for when you are positioning your own chrome to match the system's.
 
-The opt-out needs the plugin's view controller in `ios/App/App/SceneDelegate.swift`:
+The opt-out needs the plugin's view controller. Capacitor 9 starts the app from SwiftUI, so return it from `ios/App/App/CapacitorView.swift`:
 
 ```swift
+import SwiftUI
 import Capacitor
 import FoldablePlugin
 
-window?.rootViewController = FoldableBridgeViewController()
+public struct CapacitorView: UIViewControllerRepresentable {
+    public func makeUIViewController(context: Context) -> CAPBridgeViewController {
+        FoldableBridgeViewController()
+    }
+
+    public func updateUIViewController(_ vc: CAPBridgeViewController, context: Context) {}
+}
 ```
 
-`FoldablePlugin` is the module name for a Swift Package install, which is what `npx cap add ios` sets up for a new Capacitor 8 app. On a CocoaPods install the module is `ErkamyamanCapacitorFoldable`. Older apps that build the controller in `Main.storyboard` set the class there instead.
+On Capacitor 8, set it in `ios/App/App/SceneDelegate.swift` instead: `window?.rootViewController = FoldableBridgeViewController()`. After `npx cap migrate` to Capacitor 9, delete that window setup, because the SwiftUI app owns the window and a second one would cover it.
+
+`FoldablePlugin` is the module name for a Swift Package install, which is what `npx cap add ios` sets up for a new app. On a CocoaPods install the module is `ErkamyamanCapacitorFoldable`. Older apps that build the controller in `Main.storyboard` set the class there instead.
 
 ## The web view pauses between displays
 
