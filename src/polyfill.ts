@@ -9,10 +9,10 @@ import {
   FOLD_VARIABLES,
   foldCssFor,
   verticalTabBarBottom,
-} from './css';
-import type { BarPlacement, FoldablePlugin, FoldablePolyfillOptions, FoldState } from './definitions';
-import { takeOverKeyboard } from './keyboard';
-import { splitViewport } from './segments';
+} from './css.js';
+import type { BarPlacement, FoldablePlugin, FoldablePolyfillOptions, FoldState } from './definitions.js';
+import { takeOverKeyboard } from './keyboard.js';
+import { splitViewport } from './segments.js';
 
 type DevicePostureType = 'continuous' | 'folded';
 

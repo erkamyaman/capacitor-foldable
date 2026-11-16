@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { BarPlacement, DisplayModes, FoldablePlugin, FoldState, SizeClass } from './definitions';
-import { sizeClassOf } from './size-class';
+import type { BarPlacement, DisplayModes, FoldablePlugin, FoldState, SizeClass } from './definitions.js';
+import { sizeClassOf } from './size-class.js';
 
 export class FoldableWeb extends WebPlugin implements FoldablePlugin {
   private sizeClass = sizeClassOf(window.innerWidth, window.innerHeight);
