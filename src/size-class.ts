@@ -1,4 +1,4 @@
-import type { SizeClass } from './definitions';
+import type { SizeClass } from './definitions.js';
 
 const MEDIUM_WIDTH = 600;
 const EXPANDED_WIDTH = 840;

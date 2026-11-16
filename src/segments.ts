@@ -1,4 +1,4 @@
-import type { FoldState } from './definitions';
+import type { FoldState } from './definitions.js';
 
 export interface SegmentRect {
   x: number;

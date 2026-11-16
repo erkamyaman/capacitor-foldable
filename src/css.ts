@@ -1,4 +1,4 @@
-import type { SegmentRect } from './segments';
+import type { SegmentRect } from './segments.js';
 
 export const CSS_CLASSES = [
   'horizontal-viewport-segments-2',
