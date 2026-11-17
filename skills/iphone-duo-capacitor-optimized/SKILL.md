@@ -17,6 +17,10 @@ A Capacitor app gets the first half from the SDK and owes the second half itself
 
 Run the four checks in order. Every check ends on **evidence**: a command's output, a search result, or a simulator screenshot. A check without evidence has not passed.
 
+## Before you start
+
+Run `npm ls @erkamyaman/capacitor-foldable`. If it is missing, install the plugin and its polyfill first, following the `capacitor-foldable` skill's "Install" and "Start here" sections. Checks 2 to 4 read the fold state through it, and check 3 cannot pass without it.
+
 ## 1. The SDK
 
 The SDK decides the window before any code runs. Per Apple's page:
@@ -29,7 +33,7 @@ The SDK decides the window before any code runs. Per Apple's page:
 
 ```bash
 xcodebuild -version                 # 27.1 or later
-npm ls @capacitor/ios @erkamyaman/capacitor-foldable
+npm ls @capacitor/ios
 ```
 
 Capacitor must be 8.5 or later, because iOS 27 needs the scene lifecycle that 8.5 adopted, and a Capacitor 7 app built with Xcode 27 crashes at launch. If the app is on Capacitor 7, the upgrade to Capacitor 8 comes first and is its own piece of work: stop the audit and report it.
@@ -61,7 +65,7 @@ Apple's pattern list is UIKit and SwiftUI; each has a web equivalent that breaks
 
 Native code beside the web view (an `AppDelegate`, a custom plugin) follows Apple's own list. Xcode 27.1 ships a resizability skill for it: ask Xcode's assistant to "get my app ready for iPhone Duo", or export it for another agent with `xcrun agent skills export`.
 
-Install this plugin and its polyfill if the app does not have them yet (the `capacitor-foldable` skill, "Install" and "Start here"), and keep content that reads or takes taps clear of the 40 point fold band when open; that skill's hard rules cover how.
+Keep content that reads or takes taps clear of the 40 point fold band when open; the `capacitor-foldable` skill's hard rules cover how.
 
 **Passes when** every pattern above is either absent or fixed, listed with the file it was in.
 

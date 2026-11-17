@@ -69,9 +69,12 @@ Prefer CSS? `installFoldablePolyfill()` fills in the Device Posture and Viewport
 
 ```bash
 npx skills add erkamyaman/capacitor-foldable@capacitor-foldable
+npx skills add erkamyaman/capacitor-foldable@iphone-duo-capacitor-optimized
 ```
 
-Also ships in the npm package under [`skills/`](skills/capacitor-foldable), and on its own at [iphone-duo-capacitor-skills](https://github.com/erkamyaman/iphone-duo-capacitor-skills).
+The second one audits an app against what Apple calls optimized for iPhone Duo (the iOS 27.1 SDK locally and in CI, layout that survives resizing, bars on the vertical edge, every pose in the simulator) and fixes what fails with this plugin.
+
+Also ships in the npm package under [`skills/`](skills), and on its own at [iphone-duo-capacitor-skills](https://github.com/erkamyaman/iphone-duo-capacitor-skills).
 
 ## Used by
 
