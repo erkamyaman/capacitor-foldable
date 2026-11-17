@@ -27,7 +27,7 @@ Measured in the iPhone Duo simulator from Xcode 27.1 beta:
 
 ## How much of the screen your app gets
 
-iPhone Duo treats an app by the SDK it was built with: apps older than iOS 27 run in a compatibility mode inside a black border, apps built with iOS 27.0 fill more of the inner display but still leave gaps, and apps built with the iOS 27.1 SDK get the whole display. So `npx cap sync ios` with Xcode 27.1 matters as much as the code in this plugin.
+iPhone Duo treats an app by the SDK it was built with ([Apple](https://developer.apple.com/iphone-duo/prepare/)): apps built with the iOS 26 SDK or earlier sit centered on the inner display with empty space around them, apps built with the iOS 27 SDK fill most of the inner display but still leave a gap by the status bar, and apps built with the iOS 27.1 SDK or later get the whole display, which Apple calls optimized for iPhone Duo. So `npx cap sync ios` with Xcode 27.1 matters as much as the code in this plugin.
 
 Apple also requires every app and game uploaded to App Store Connect from [April 2027](https://developer.apple.com/news/?id=k1mtkt1k) to be built with the iOS 27 SDK or later, so every app meets the second tier by then whether or not it adapts to the fold.
 
