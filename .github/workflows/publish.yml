@@ -29,7 +29,9 @@ jobs:
             exit 1
           fi
           case "$version" in
+            *-*) echo "name=next" >> "$GITHUB_OUTPUT" ;;
             7.*) echo "name=latest-7" >> "$GITHUB_OUTPUT" ;;
+            8.*) echo "name=latest-8" >> "$GITHUB_OUTPUT" ;;
             *) echo "name=latest" >> "$GITHUB_OUTPUT" ;;
           esac
 
