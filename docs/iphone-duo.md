@@ -104,7 +104,6 @@ On iPhone Duo, native tab bars move to the side of the display as a small floati
 | Without the plugin | With `ionic-tabs.css` |
 | --- | --- |
 | <img src="images/ionic-before-closed.png" width="260" alt="Ionic tab bar at the bottom of the closed iPhone Duo"> | <img src="images/ionic-after-closed.png" width="260" alt="Ionic tab bar as a pill under the clock on the closed iPhone Duo"> |
-| <img src="images/ionic-before-book.png" width="360" alt="Ionic tab bar across the fold in book posture"> | <img src="images/ionic-after-book.png" width="360" alt="Ionic tab bar as a pill on the side in book posture"> |
 | <img src="images/ionic-before-open.png" width="360" alt="Ionic tab bar at the bottom of the open inner display"> | <img src="images/ionic-after-open.png" width="360" alt="Ionic tab bar as a pill on the side of the open inner display"> |
 
 The plugin ships a stylesheet that turns `ion-tabs` into that pill wherever iPhone Duo puts bars on the side:
