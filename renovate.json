@@ -13,6 +13,10 @@
     {
       "matchManagers": ["swift"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["@ionic/eslint-config"],
+      "enabled": false
     }
   ]
 }

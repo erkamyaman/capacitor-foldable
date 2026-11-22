@@ -170,11 +170,13 @@ window.viewport.segments;     // two DOMRects when the fold splits the view</cod
 <section id="skills" class="skills">
   <h2>Agent skill</h2>
   <p>Using Claude Code, Codex or another coding agent? Give it the skill, so it uses the plugin correctly instead of guessing at the API: laying out around the crease, the full API, Ionic specifics, iPhone Duo, Android foldables, and how to test on both.</p>
-<pre><code>npx skills add erkamyaman/capacitor-foldable@capacitor-foldable</code></pre>
+<pre><code>npx skills add erkamyaman/capacitor-foldable@capacitor-foldable
+npx skills add erkamyaman/capacitor-foldable@iphone-duo-capacitor-optimized</code></pre>
+  <p>The second skill audits an app against what Apple calls <a href="https://developer.apple.com/iphone-duo/prepare/">optimized for iPhone Duo</a>: the iOS 27.1 SDK locally and in CI, layout that survives resizing, bars on the vertical edge, and every pose in the simulator. It fixes what fails with this plugin.</p>
   <div class="grid">
-    <div class="card"><h3>In your project already</h3><p>The skill ships inside the npm package under <code>skills/</code>, so an agent can find it in <code>node_modules</code>.</p></div>
-    <div class="card"><h3><a href="https://github.com/erkamyaman/iphone-duo-capacitor-skills">iphone-duo-capacitor-skills</a></h3><p>The same skill on its own, next to the iPhone Duo skills for SwiftUI and UIKit.</p></div>
-    <div class="card"><h3><a href="https://github.com/erkamyaman/ionic-capacitor-skills">ionic-capacitor-skills</a></h3><p>A full set of Ionic and Capacitor skills, this one included.</p></div>  </div>
+    <div class="card"><h3>In your project already</h3><p>Both skills ship inside the npm package under <code>skills/</code>, so an agent can find them in <code>node_modules</code>.</p></div>
+    <div class="card"><h3><a href="https://github.com/erkamyaman/iphone-duo-capacitor-skills">iphone-duo-capacitor-skills</a></h3><p>The same skills on their own, next to the iPhone Duo skills for SwiftUI and UIKit.</p></div>
+    <div class="card"><h3><a href="https://github.com/erkamyaman/ionic-capacitor-skills">ionic-capacitor-skills</a></h3><p>A full set of Ionic and Capacitor skills, <code>capacitor-foldable</code> included.</p></div>  </div>
   <h3 id="agent-prompt" class="agent-prompt-title">Agent prompt</h3>
   <p>Paste this into Claude Code, Cursor, Codex or any other coding agent working on your Capacitor app:</p>
 <pre class="agent-prompt"><code>Task: Make this Capacitor app fold-aware on iPhone Duo and Android foldables

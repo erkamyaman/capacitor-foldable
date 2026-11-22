@@ -2,7 +2,7 @@
 
 ## iPhone Duo simulator
 
-Needs the iOS 27.1 runtime, which the device type refuses to go below. Any Xcode builds and the fold is reported either way, since the plugin falls back to the Objective-C runtime when the SDK predates 27.1. The SDK still decides the window: against 27.1 the app fills the inner display, against 27.0 it leaves gaps, and against anything older it runs in compatibility mode inside a black border. In Xcode 27 the simulator lives inside **DeviceHub.app**, not `Simulator.app`.
+Needs the iOS 27.1 runtime, which the device type refuses to go below. Any Xcode builds and the fold is reported either way, since the plugin falls back to the Objective-C runtime when the SDK predates 27.1. The SDK still decides the window: against 27.1 or later the app fills the display, against 27 it leaves a gap by the status bar, and against 26 or earlier it sits centered with empty space around it. In Xcode 27 the simulator lives inside **DeviceHub.app**, not `Simulator.app`.
 
 ```bash
 open "$(dirname "$(xcode-select -p)")/Applications/DeviceHub.app"
