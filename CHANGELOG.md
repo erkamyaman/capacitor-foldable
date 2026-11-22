@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.5.4 (2026-11-23)
+
+- Docs: the README and docs now show Ionic tabs on iPhone Duo before and after the plugin in a real mail app, open and closed.
+- No code changes.
+
 ## 8.5.3 (2026-11-17)
 
 - **New agent skill: `iphone-duo-capacitor-optimized`.** It audits a Capacitor or Ionic app against what Apple calls [optimized for iPhone Duo](https://developer.apple.com/iphone-duo/prepare/): the iOS 27.1 SDK locally and in CI, layout that survives resizing, bars on the vertical edge, and every pose in the simulator. Fixes go through the `capacitor-foldable` skill. Ships in the package under `skills/`, or `npx skills add erkamyaman/iphone-duo-capacitor-skills@iphone-duo-capacitor-optimized`.
