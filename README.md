@@ -23,7 +23,7 @@ Fold state, posture, hinge angle, size classes and bar placement for foldable ph
 
 | Ionic tabs on iPhone Duo without the plugin | With the plugin |
 | --- | --- |
-| <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-book.png" width="360" alt="Ionic tab bar across the fold in book posture"> | <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-book.png" width="360" alt="Ionic tab bar moved to the side in book posture"> |
+| <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-before-open.png" width="360" alt="Ionic tab bar along the bottom of the open iPhone Duo"> | <img src="https://raw.githubusercontent.com/erkamyaman/capacitor-foldable/main/docs/images/ionic-after-open.png" width="360" alt="Ionic tab bar moved to the side on the open iPhone Duo"> |
 
 ## Install
 

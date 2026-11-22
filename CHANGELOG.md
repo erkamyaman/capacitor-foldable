@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.5.3 (2026-11-17)
+
+- **New agent skill: `iphone-duo-capacitor-optimized`.** It audits a Capacitor or Ionic app against what Apple calls [optimized for iPhone Duo](https://developer.apple.com/iphone-duo/prepare/): the iOS 27.1 SDK locally and in CI, layout that survives resizing, bars on the vertical edge, and every pose in the simulator. Fixes go through the `capacitor-foldable` skill. Ships in the package under `skills/`, or `npx skills add erkamyaman/iphone-duo-capacitor-skills@iphone-duo-capacitor-optimized`.
+- Docs: what apps built with older SDKs look like on iPhone Duo now matches Apple's wording.
+- No code changes.
+
+## 8.5.2 (2026-11-16)
+
+- **Node ESM: `import '@erkamyaman/capacitor-foldable'` no longer throws `ERR_MODULE_NOT_FOUND`.** Since 8.4.0 the package's `exports` map points ESM imports at `dist/esm/`, whose files imported each other without `.js` extensions. Bundlers resolved them, but Node did not, so SSR, prerendering and `node --test` failed. App builds were not affected. Thanks @trackoor for the report (#30).
+
 ## 8.5.1 (2026-11-05)
 
 - **iOS: `isDeviceFoldable()` no longer reads `false` on iPhone Duo during startup.** The check relied on the first hinge update, which arrives a few hundred milliseconds after the plugin loads. iPhone Duo is now recognized by its model straight away. A foldable iPhone model this plugin doesn't recognize can still read `false` until that first update.
