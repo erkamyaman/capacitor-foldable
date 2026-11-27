@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/maintenance/yes/2026?style=for-the-badge" />
   <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/v/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
   <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/dw/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
+  <a href="https://www.npmjs.com/package/@erkamyaman/capacitor-foldable"><img src="https://img.shields.io/npm/dt/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/npm/l/@erkamyaman/capacitor-foldable?style=for-the-badge" /></a>
   <a href="https://github.com/sponsors/erkamyaman"><img src="https://img.shields.io/badge/sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" /></a>
 </p>
